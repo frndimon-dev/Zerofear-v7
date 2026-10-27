@@ -1,6 +1,6 @@
 ---
 import Icon from '../Icon.astro';
-import { reviews, site, gallery as galleryPhotos } from '../../data/site';
+import { reviews, site } from '../../data/site';
 
 const videoLinks = [
   { label: 'YouTube', href: site.social.youtube },
@@ -12,7 +12,7 @@ const videoLinks = [
     <div class="reviews__head">
       <div class="section-head">
         <span class="eyebrow">Reviews</span>
-        <h2>What our learners say.</h2>
+        <h2>They were scared too. <mark>Now they ride.</mark></h2>
       </div>
       <a class="rating card" href={site.googleReviewsUrl} target="_blank" rel="noopener">
         <strong>4.9</strong>
@@ -37,15 +37,6 @@ const videoLinks = [
       ))}
     </ul>
 
-    <div class="gallery" data-gallery hidden={galleryPhotos.length < 4}>
-      <h3>From our classes</h3>
-      <ul class="gallery__list" data-gallery-list>
-        {galleryPhotos.map((p) => (
-          <li><img src={p.src} alt={p.alt} loading="lazy" decoding="async" width="800" height="800" /></li>
-        ))}
-      </ul>
-    </div>
-
     {videoLinks.length > 0 && (
       <p class="reviews__more">
         Watch real classes on{' '}
@@ -61,11 +52,8 @@ const videoLinks = [
   import { fetchTable } from '../../scripts/supabase';
 
   type ReviewRow = { name?: string; meta?: string; location?: string; review_text?: string; quote?: string; rating?: number };
-  type PhotoRow = { image_url?: string; url?: string; alt?: string };
 
   const list = document.querySelector<HTMLUListElement>('[data-reviews]');
-  const gallery = document.querySelector<HTMLElement>('[data-gallery]');
-  const galleryList = document.querySelector<HTMLUListElement>('[data-gallery-list]');
 
   // Built with DOM APIs (textContent), never innerHTML, so database text can't inject markup.
   const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className?: string, text?: string) => {
@@ -96,23 +84,6 @@ const videoLinks = [
     );
   });
 
-  fetchTable<PhotoRow>('training_gallery', 'select=*&active=eq.true&limit=8').then((rows) => {
-    const photos = rows.filter((p) => /^https:\/\//.test(p.image_url || p.url || ''));
-    if (!gallery || !galleryList || photos.length < 4) return;
-    galleryList.replaceChildren(
-      ...photos.map((p) => {
-        const li = el('li');
-        const img = el('img');
-        img.src = (p.image_url || p.url)!;
-        img.alt = p.alt || 'Zero Fear training class';
-        img.loading = 'lazy';
-        img.decoding = 'async';
-        li.append(img);
-        return li;
-      }),
-    );
-    gallery.hidden = false;
-  });
 </script>
 
 <style>
@@ -134,17 +105,11 @@ const videoLinks = [
   :global(.review__person small) { color: var(--muted); font-size: 0.85rem; }
   :global(.review__avatar) { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: var(--navy); color: #fff; font-weight: 700; }
 
-  .gallery { margin-top: 48px; }
-  .gallery h3 { margin-bottom: 16px; }
-  .gallery__list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-  .gallery__list :global(li) { aspect-ratio: 1; border-radius: var(--radius-sm); overflow: hidden; background: var(--border); }
-  .gallery__list :global(img) { width: 100%; height: 100%; object-fit: cover; }
 
   .reviews__more { margin-top: 32px; text-align: center; color: var(--muted); }
   .reviews__more a { color: var(--blue); font-weight: 600; }
 
   @media (max-width: 900px) {
     .reviews { grid-template-columns: 1fr; }
-    .gallery__list { grid-template-columns: repeat(2, 1fr); }
   }
 </style>

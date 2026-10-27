@@ -35,7 +35,7 @@ const breadcrumbSchema = {
         </ol>
       </nav>
       {eyebrow && <span class="eyebrow">{eyebrow}</span>}
-      <h1>{title}</h1>
+      <h1 set:html={title} />
       <p class="page-hero__lead">{lead}</p>
       <div class="page-hero__actions"><slot /></div>
     </div>

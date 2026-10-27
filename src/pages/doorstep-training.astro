@@ -26,7 +26,7 @@ const doorstepFaqs = [
   <PageHero
     crumbs={[{ href: '/doorstep-training', label: 'Doorstep training' }]}
     eyebrow="Doorstep training"
-    title="Learn to ride near your home."
+    title="Learn to ride <mark>near your home.</mark>"
     lead={`Your trainer comes to you, anywhere within ${doorstep.radiusKm} km of ${doorstep.from}. Same patient, step-by-step course, without the travel.`}
     photo={photos.doorstep}
   >
@@ -47,7 +47,7 @@ const doorstepFaqs = [
       <div>
         <div class="section-head">
           <span class="eyebrow">Areas</span>
-          <h2>Where we come.</h2>
+          <h2>Where we <mark>come.</mark></h2>
           <p>Anywhere within {doorstep.radiusKm} km of {doorstep.from}. These are some of the areas we visit most:</p>
         </div>
         <ul class="areas">
@@ -69,7 +69,7 @@ const doorstepFaqs = [
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">How it works</span>
-        <h2>From message to first class.</h2>
+        <h2>From message to <mark>first class.</mark></h2>
       </div>
       <ol class="steps">
         {doorstep.steps.map((s, i) => (
@@ -88,7 +88,7 @@ const doorstepFaqs = [
       <div>
         <div class="section-head">
           <span class="eyebrow">Questions</span>
-          <h2>Doorstep training FAQ.</h2>
+          <h2>Doorstep <mark>FAQ.</mark></h2>
         </div>
         <div class="faq-photo"><Photo src="/images/gallery-proud-moment.webp" alt="Family filming a learner’s ride on a quiet lane near home" /></div>
       </div>

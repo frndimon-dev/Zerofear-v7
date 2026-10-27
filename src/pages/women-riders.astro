@@ -31,7 +31,7 @@ const photos = [
   <PageHero
     crumbs={[{ href: '/women-riders', label: 'Women riders' }]}
     eyebrow="Women riders"
-    title="Any age. Any background. You can learn to ride."
+    title="Any age. Any background. <mark>You can ride.</mark>"
     lead="To work, to college, to the market, to your child’s school: riding means going where you need to, without waiting for anyone. We help you get there, one calm step at a time."
     photo={{ src: '/images/bike-clutch-practice.webp', alt: 'Woman learning clutch control on a motorcycle with her trainer', position: '50% 40%' }}
   >
@@ -43,7 +43,7 @@ const photos = [
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">You’re not alone</span>
-        <h2>Worries we hear every week.</h2>
+        <h2>Worries we hear <mark>every week.</mark></h2>
       </div>
       <ul class="concerns">
         {concerns.map((c) => <li class="card"><h3>{c.q}</h3><p>{c.a}</p></li>)}
@@ -56,7 +56,7 @@ const photos = [
       <div>
         <div class="section-head">
           <span class="eyebrow">How we help</span>
-          <h2>Confidence first. Speed later.</h2>
+          <h2>Confidence first. <mark>Speed later.</mark></h2>
         </div>
         <ul class="support">
           {support.map((s) => (
@@ -72,7 +72,7 @@ const photos = [
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">Our learners</span>
-        <h2>Scooty or bike, it’s your choice.</h2>
+        <h2>Scooty or bike, <mark>your choice.</mark></h2>
         <p>Many of our women learners go on to ride motorcycles too.</p>
       </div>
       <ul class="photos">

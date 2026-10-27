@@ -49,9 +49,20 @@ img { max-width: 100%; display: block; }
 a { color: inherit; }
 button, input, select, textarea { font: inherit; color: inherit; }
 
-h1, h2, h3 { margin: 0; line-height: 1.15; letter-spacing: -0.02em; font-weight: 800; }
-h1 { font-size: clamp(2.25rem, 5.2vw, 3.75rem); }
-h2 { font-size: clamp(1.75rem, 3.6vw, 2.6rem); }
+h1, h2, h3 { margin: 0; line-height: 1.08; letter-spacing: -0.03em; font-weight: 800; color: var(--navy); }
+.section--navy h1, .section--navy h2, .section--navy h3 { color: #fff; }
+h1 { font-size: clamp(2.4rem, 5.6vw, 4rem); }
+h2 { font-size: clamp(2rem, 4.6vw, 3.25rem); }
+
+/* Highlighted words in headings: yellow marker underline */
+mark {
+  background: linear-gradient(transparent 58%, var(--yellow) 58%, var(--yellow) 92%, transparent 92%);
+  color: inherit;
+  padding: 0 0.06em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.section--navy mark, .hero mark { background: none; color: var(--yellow); padding: 0; }
 h3 { font-size: 1.2rem; letter-spacing: -0.01em; }
 p { margin: 0; }
 
@@ -61,18 +72,21 @@ p { margin: 0; }
 .section--navy { background: var(--navy); color: #fff; }
 
 .eyebrow {
-  display: inline-block;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--blue);
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
+.eyebrow::before { content: ''; width: 22px; height: 3px; border-radius: 2px; background: var(--yellow); }
 .section--navy .eyebrow { color: var(--yellow); }
 
 .section-head { max-width: 640px; margin-bottom: clamp(32px, 5vw, 48px); }
-.section-head p { margin-top: 14px; color: var(--muted); font-size: 1.075rem; }
+.section-head p { margin-top: 16px; color: var(--muted); font-size: 1.05rem; max-width: 52ch; }
 .section--navy .section-head p { color: #c5d2e6; }
 .section-head--center { margin-inline: auto; text-align: center; }
 
@@ -103,6 +117,9 @@ p { margin: 0; }
 .btn--whatsapp { background: #e9f8ef; color: var(--success); }
 .btn--whatsapp:hover { background: #d8f2e2; }
 .btn--block { width: 100%; }
+.btn--lg { min-height: 54px; padding: 0 26px; font-size: 1.02rem; }
+.btn--glass { background: rgba(255, 255, 255, 0.14); color: #fff; border-color: rgba(255, 255, 255, 0.28); backdrop-filter: blur(6px); }
+.btn--glass:hover { background: rgba(255, 255, 255, 0.24); }
 
 .card {
   background: #fff;

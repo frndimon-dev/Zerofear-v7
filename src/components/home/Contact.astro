@@ -5,7 +5,7 @@ import { site, waLink } from '../../data/site';
 
 interface Props { title?: string; lead?: string; course?: string }
 const {
-  title = 'Book your first class.',
+  title = 'Your first ride <mark>starts here.</mark>',
   lead = 'Tell us what you want to learn and when you’re free. We’ll call you back to fix a slot.',
   course,
 } = Astro.props;
@@ -15,7 +15,7 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(site.mapQuery
   <div class="container contact">
     <div class="contact__info">
       <span class="eyebrow">Contact</span>
-      <h2>{title}</h2>
+      <h2 set:html={title} />
       <p class="contact__lead">{lead}</p>
 
       <ul class="contact__list">

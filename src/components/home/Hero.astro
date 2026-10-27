@@ -1,80 +1,93 @@
 ---
 import Icon from '../Icon.astro';
-import Photo from '../Photo.astro';
-import { site, photos, courses, formatINR, waLink } from '../../data/site';
+import { site, courses, formatINR, waLink } from '../../data/site';
 const prices = courses.map((c) => c.price).filter((p): p is number => p !== null);
 const fromPrice = prices.length ? Math.min(...prices) : null;
 ---
 <section class="hero">
-  <div class="container hero__grid">
-    <div class="hero__copy">
-      <p class="hero__place"><Icon name="pin" /> {site.area}, {site.city}</p>
-      <h1>Scooty & bike training in Kolkata. <span>Even if you can’t ride a cycle.</span></h1>
-      <p class="hero__lead">
-        One-to-one classes for complete beginners. Learn at our practice area near Netaji Metro, or at your doorstep within 10 km.
-      </p>
+  <picture class="hero__bg">
+    <source media="(max-width: 760px)" srcset="/images/hero-tall.webp" />
+    <img src="/images/hero-wide.webp" alt="Zero Fear learners on their scooties with their trainers in a Kolkata lane" fetchpriority="high" decoding="async" />
+  </picture>
 
-      <ul class="hero__points">
-        <li><Icon name="check" /> No cycling needed</li>
-        <li><Icon name="check" /> Patient, trainer-led classes</li>
-        <li><Icon name="check" /> Practice ground → real roads</li>
-      </ul>
+  <div class="container hero__content">
+    <p class="hero__tag"><Icon name="pin" /> Scooty & Bike Training · {site.city}</p>
+    <h1>Can’t ride a cycle?<br /><mark>You can still ride.</mark></h1>
+    <p class="hero__lead">One-to-one classes for complete beginners. At Netaji Metro, or at your doorstep.</p>
 
-      <div class="hero__actions">
-        <a class="btn btn--primary" href="/book">Book a class <Icon name="arrow" /></a>
-        <a class="btn btn--whatsapp" href={waLink('Hi Zero Fear, I want to learn to ride.')} target="_blank" rel="noopener"><Icon name="whatsapp" /> WhatsApp us</a>
-      </div>
-      {fromPrice && <p class="hero__price">Courses from <strong>{formatINR(fromPrice)}</strong></p>}
+    <div class="hero__actions">
+      <a class="btn btn--primary btn--lg" href="/book">Book a class <Icon name="arrow" /></a>
+      <a class="btn btn--glass btn--lg" href={waLink('Hi Zero Fear, I want to learn to ride.')} target="_blank" rel="noopener"><Icon name="whatsapp" /> WhatsApp</a>
     </div>
 
-    <div class="hero__media">
-      <Photo src={photos.hero.src} alt={photos.hero.alt} position={photos.hero.position} eager />
-      <div class="hero__badge card">
-        <span class="hero__stars" aria-hidden="true">★★★★★</span>
-        <strong>4.9 on Google</strong>
-        <span>300+ learner reviews</span>
-      </div>
-    </div>
+    <ul class="hero__proof">
+      <li><strong>4.9★</strong> Google</li>
+      <li><strong>5000+</strong> learners</li>
+      {fromPrice && <li><strong>{formatINR(fromPrice)}</strong> onwards</li>}
+    </ul>
   </div>
 </section>
 
 <style>
-  .hero { padding-block: clamp(40px, 7vw, 88px) clamp(48px, 7vw, 96px); }
-  .hero__grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(32px, 6vw, 72px); align-items: center; }
-
-  .hero__place {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 0.9rem; font-weight: 600; color: var(--muted); margin-bottom: 18px;
+  .hero {
+    position: relative;
+    isolation: isolate;
+    min-height: min(88vh, 760px);
+    display: flex;
+    align-items: center;
+    color: #fff;
+    overflow: hidden;
   }
-  .hero__place :global(svg) { width: 16px; height: 16px; color: var(--blue); }
-  h1 span { color: var(--blue); }
-  .hero__lead { margin-top: 20px; font-size: 1.15rem; color: var(--muted); max-width: 52ch; }
+  .hero__bg, .hero__bg img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero__bg { z-index: -1; }
+  .hero__bg img { object-fit: cover; object-position: 50% 55%; }
+  .hero::after {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(90deg, rgba(8, 22, 44, 0.92) 0%, rgba(8, 22, 44, 0.75) 42%, rgba(8, 22, 44, 0.15) 75%);
+  }
+  .hero__content { padding-block: clamp(56px, 9vw, 104px); }
 
-  .hero__points { list-style: none; padding: 0; margin: 24px 0 0; display: flex; flex-wrap: wrap; gap: 10px 20px; }
-  .hero__points li { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.95rem; }
-  .hero__points :global(svg) { width: 18px; height: 18px; color: var(--success); }
+  .hero__tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px; border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.02em;
+  }
+  .hero__tag :global(svg) { width: 15px; height: 15px; color: var(--yellow); }
+
+  h1 {
+    color: #fff;
+    margin-top: 22px;
+    font-size: clamp(2.6rem, 6.4vw, 5rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    max-width: 13ch;
+  }
+  .hero__lead { margin-top: 20px; font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: #d7e1ef; max-width: 40ch; }
 
   .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
-  .hero__price { margin-top: 16px; color: var(--muted); font-size: 0.95rem; }
-  .hero__price strong { color: var(--navy); }
 
-  .hero__media { position: relative; aspect-ratio: 4 / 5; border-radius: var(--radius-lg); }
-  .hero__media > :global(.photo) { border-radius: var(--radius-lg); }
-  .hero__badge {
-    position: absolute; left: -20px; bottom: 28px;
-    display: grid; gap: 2px; padding: 14px 18px;
-    box-shadow: var(--shadow);
+  .hero__proof { list-style: none; padding: 0; margin: 36px 0 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .hero__proof li {
+    padding: 8px 14px; border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.16);
+    font-size: 0.9rem; color: #d7e1ef;
   }
-  .hero__stars { color: #f5a500; letter-spacing: 2px; font-size: 0.9rem; }
-  .hero__badge strong { font-size: 1rem; }
-  .hero__badge span:last-child { font-size: 0.85rem; color: var(--muted); }
+  .hero__proof strong { color: #fff; font-weight: 800; margin-right: 4px; }
 
-  @media (max-width: 860px) {
-    .hero__grid { grid-template-columns: 1fr; }
-    .hero__media { aspect-ratio: 4 / 3; }
-    .hero__badge { display: none; }
-  }
-  @media (max-width: 480px) {
-    .hero__actions .btn { flex: 1 1 100%; }
+  @media (max-width: 760px) {
+    /* Photo sits clear at the top; text below on navy. */
+    .hero { min-height: 0; display: block; background: var(--navy); }
+    .hero__bg { position: relative; display: block; height: 52svh; min-height: 300px; }
+    .hero__bg img { object-position: 50% 15%; }
+    .hero::after { inset: auto 0 auto 0; top: calc(52svh - 120px); height: 121px; background: linear-gradient(180deg, rgba(11, 31, 58, 0) 0%, var(--navy) 100%); }
+    .hero__content { position: relative; margin-top: -56px; padding-block: 0 32px; }
+    h1 { margin-top: 0; font-size: clamp(2.2rem, 10.5vw, 2.9rem); }
+    .hero__lead { margin-top: 14px; }
+    .hero__actions { margin-top: 22px; }
+    .hero__actions .btn { flex: 1 1 0; }
+    .hero__proof { margin-top: 18px; gap: 6px; flex-wrap: nowrap; }
+    .hero__proof li { padding: 6px 9px; font-size: 0.76rem; white-space: nowrap; }
+    .hero__tag { display: none; }
   }
 </style>

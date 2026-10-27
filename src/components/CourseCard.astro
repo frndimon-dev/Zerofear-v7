@@ -6,7 +6,10 @@ interface Props { course: Course }
 const { course: c } = Astro.props;
 ---
 <article class="course card">
-  <span class="chip">{c.level}</span>
+  <div class="course__photo">
+    <img src={c.photo.src} alt={c.photo.alt} loading="lazy" decoding="async" style={`object-position:${c.photo.position ?? '50% 35%'}`} />
+    <span class="chip course__level">{c.level}</span>
+  </div>
   <h3><a href={`/courses/${c.slug}`}>{c.name}</a></h3>
   <p class="course__summary">{c.summary}</p>
   <p class="course__for"><strong>For:</strong> {c.forWho}</p>
@@ -23,10 +26,12 @@ const { course: c } = Astro.props;
 </article>
 
 <style>
-  .course { position: relative; display: flex; flex-direction: column; padding: 24px; transition: border-color 0.15s, box-shadow 0.15s; }
-  .course:hover { border-color: #c9d3e1; box-shadow: var(--shadow); }
-  .course .chip { align-self: flex-start; }
-  .course h3 { margin-top: 14px; }
+  .course { position: relative; display: flex; flex-direction: column; padding: 0 22px 22px; overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s; }
+  .course:hover { border-color: #c9d3e1; box-shadow: var(--shadow); transform: translateY(-2px); }
+  .course__photo { position: relative; margin: 0 -22px; aspect-ratio: 4 / 3; overflow: hidden; background: var(--border); }
+  .course__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .course__level { position: absolute; left: 14px; top: 14px; background: var(--yellow); border-color: var(--yellow); color: var(--navy); font-weight: 800; }
+  .course h3 { margin-top: 18px; font-size: 1.3rem; }
   .course h3 a { text-decoration: none; }
   /* Whole card is clickable via the title link */
   .course h3 a::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }

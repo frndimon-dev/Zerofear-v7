@@ -21,7 +21,7 @@ const values = [
   <PageHero
     crumbs={[{ href: '/about', label: 'About' }]}
     eyebrow="About Zero Fear"
-    title="We don’t just teach riding. We build the confidence to ride on your own."
+    title="We don’t just teach riding. <mark>We build confidence.</mark>"
     lead={`Zero Fear is a new name built on years of hands-on two-wheeler training in Kolkata since ${site.since}. Thousands of beginners, many of whom had never ridden a cycle, now ride on their own.`}
   >
     <a class="btn btn--primary" href="/courses">See our courses <Icon name="arrow" /></a>
@@ -35,7 +35,7 @@ const values = [
     <div class="container split">
       <div class="section-head">
         <span class="eyebrow">Our mission</span>
-        <h2>Make riding feel possible.</h2>
+        <h2>Make riding feel <mark>possible.</mark></h2>
         <p>
           For some learners the first challenge is balance. For others it’s braking, turning or facing traffic.
           We don’t expect everyone to start from the same place. We start from where you are and build the skills step by step,
@@ -53,7 +53,7 @@ const values = [
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">What we believe</span>
-        <h2>How we train.</h2>
+        <h2>How we <mark>train.</mark></h2>
       </div>
       <ul class="values">
         {values.map((v) => <li class="card"><h3>{v.title}</h3><p>{v.text}</p></li>)}

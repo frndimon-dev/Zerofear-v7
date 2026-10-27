@@ -89,7 +89,7 @@ export const courses: Course[] = [
     classes: '15 classes · 30 min each',
     points: ['No cycling needed', 'One-to-one with a trainer', 'Practice ground → real road'],
     price: 2500,
-    headline: 'Start from zero. Build control before speed.',
+    headline: 'Start from zero. <mark>Build control before speed.</mark>',
     intro:
       'Made for complete beginners, including people who have never ridden a cycle. You move from getting to know the scooty to balance, turning and riding on real roads, one step at a time.',
     facts: [
@@ -116,7 +116,7 @@ export const courses: Course[] = [
     classes: '10 classes',
     points: ['Traffic & lane practice', 'Turning and overtaking', 'Good as a refresher'],
     price: 2500,
-    headline: 'You can ride. Now ride with confidence in traffic.',
+    headline: 'You can ride. <mark>Now own the traffic.</mark>',
     intro:
       'For riders who already have basic control but feel nervous in traffic, or haven’t ridden in a long time. You practise real Kolkata road situations with a trainer beside you.',
     facts: [
@@ -142,7 +142,7 @@ export const courses: Course[] = [
     classes: '15 classes',
     points: ['Clutch & gear control', 'Smooth starts and stops', 'Road riding'],
     price: 2500,
-    headline: 'Learn clutch, gears and road riding, step by step.',
+    headline: 'Clutch, gears, road. <mark>Step by step.</mark>',
     intro:
       'A 15-class course that takes you from getting to know the bike to clutch and gear control, smooth acceleration, braking and riding on the road.',
     facts: [
@@ -170,7 +170,7 @@ export const courses: Course[] = [
     classes: 'Flexible',
     points: ['Figure-8 track drills', 'Slow-speed balance', 'Mock test'],
     price: 2500,
-    headline: 'Practise the movements your driving test asks for.',
+    headline: 'Walk into your RTO test <mark>ready.</mark>',
     intro:
       'Test-focused practice for your two-wheeler driving test: control, turning, braking, starting and stopping, and the figure 8, with your weak spots fixed before test day.',
     facts: [
