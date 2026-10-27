@@ -9,7 +9,6 @@ const year = new Date().getFullYear();
     <div class="footer__brand">
       <Logo light />
       <p>Beginner-first scooty and bike training in Kolkata since {site.since}. {site.tagline}</p>
-      <p class="footer__formerly">Formerly {site.formerly}</p>
       <div class="footer__social">
         <a href={site.social.youtube} target="_blank" rel="noopener" aria-label="YouTube"><Icon name="youtube" /></a>
         <a href={site.social.instagram} target="_blank" rel="noopener" aria-label="Instagram"><Icon name="instagram" /></a>
@@ -46,7 +45,6 @@ const year = new Date().getFullYear();
   .footer { background: var(--navy); color: #c5d2e6; padding: 64px 0 28px; font-size: 0.95rem; }
   .footer__grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.2fr; gap: 40px; }
   .footer__brand p { margin-top: 16px; max-width: 34ch; }
-  .footer__formerly { font-size: 0.85rem; color: #8ea2c0; }
   .footer h3 { color: #fff; font-size: 0.95rem; margin-bottom: 14px; }
   .footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
   .footer a { text-decoration: none; }

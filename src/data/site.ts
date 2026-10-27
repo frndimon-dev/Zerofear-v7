@@ -4,7 +4,6 @@
 export const site = {
   name: 'Zero Fear',
   tagline: 'Fear Out. Freedom In.',
-  formerly: 'Kolkata Scooty & Bike Training Centre',
   since: 2018,
   url: 'https://zerofear-v7.vercel.app',
   description:
