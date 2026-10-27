@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import FaqList from '../components/FaqList.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import { faqs, moreFaqs, site, waLink } from '../data/site';
+---
+<Base
+  title={`FAQ: Scooty & Bike Training in Kolkata | ${site.name}`}
+  description="Answers for beginners: learning a scooty without cycling, class length, fees from ₹2,500, doorstep training areas, bike training and RTO test preparation."
+>
+  <PageHero
+    crumbs={[{ href: '/faq', label: 'FAQ' }]}
+    eyebrow="FAQ"
+    title="Questions beginners ask."
+    lead="Honest answers before you start. If yours isn’t here, call or WhatsApp us."
+  >
+    <a class="btn btn--whatsapp" href={waLink('Hi Zero Fear, I have a question.')} target="_blank" rel="noopener"><Icon name="whatsapp" /> Ask on WhatsApp</a>
+    <a class="btn btn--outline" href={`tel:${site.phone.tel}`}><Icon name="phone" /> {site.phone.display}</a>
+  </PageHero>
+
+  <section class="section faq-page">
+    <div class="container narrow">
+      <FaqList items={[...faqs, ...moreFaqs]} />
+    </div>
+  </section>
+
+  <CtaBand title="Ready to try your first class?" text="Book a slot and we’ll call you back to fix a time." />
+</Base>
+
+<style>
+  .faq-page { padding-top: 0; }
+  .narrow { max-width: 820px; }
+</style>

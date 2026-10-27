@@ -18,7 +18,7 @@ const year = new Date().getFullYear();
 
     <div>
       <h3>Courses</h3>
-      <ul>{courses.map((c) => <li><a href="#courses">{c.name}</a></li>)}</ul>
+      <ul>{courses.map((c) => <li><a href={`/courses/${c.slug}`}>{c.name}</a></li>)}</ul>
     </div>
 
     <div>

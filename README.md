@@ -13,6 +13,16 @@ Almost everything on the site comes from **`src/data/site.ts`**:
 
 Fields set to `null` (address, hours, prices) are hidden until filled in.
 
+## Pages
+
+| URL | File |
+|---|---|
+| `/` | `src/pages/index.astro` |
+| `/courses`, `/courses/<slug>` | `src/pages/courses/` (one template, content from `courses` in `site.ts`) |
+| `/doorstep-training`, `/women-riders`, `/about`, `/faq`, `/book` | `src/pages/*.astro` |
+
+Old `#hash` links from the previous site (e.g. `/#courses/bike-training`) redirect to the new pages.
+
 ## Photos
 
 Put image files in `public/images/` and set the paths in `photos` inside `src/data/site.ts`,

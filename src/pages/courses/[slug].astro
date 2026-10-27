@@ -1,0 +1,151 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CourseCard from '../../components/CourseCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import { courses, site, formatINR, waLink, type Course } from '../../data/site';
+
+export function getStaticPaths() {
+  return courses.map((course) => ({ params: { slug: course.slug }, props: { course } }));
+}
+
+interface Props { course: Course }
+const { course } = Astro.props;
+const others = courses.filter((c) => c.slug !== course.slug);
+
+const courseSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: course.name,
+  description: course.intro,
+  provider: { '@type': 'Organization', name: site.name, sameAs: site.url },
+  ...(course.price !== null && {
+    offers: { '@type': 'Offer', category: 'Paid', price: course.price, priceCurrency: 'INR' },
+  }),
+};
+---
+<Base
+  title={`${course.name} in Kolkata | ${site.name}`}
+  description={`${course.summary} ${course.classes}. ${course.price !== null ? `From ${formatINR(course.price)}.` : ''} One-to-one training near Netaji Metro, Kolkata.`}
+>
+  <PageHero
+    crumbs={[{ href: '/courses', label: 'Courses' }, { href: `/courses/${course.slug}`, label: course.name }]}
+    eyebrow={course.name}
+    title={course.headline}
+    lead={course.intro}
+    photo={course.photo}
+  >
+    <a class="btn btn--primary" href={`/book?course=${course.slug}`}>Book this course <Icon name="arrow" /></a>
+    <a class="btn btn--whatsapp" href={waLink(`Hi Zero Fear, I’m interested in ${course.name}.`)} target="_blank" rel="noopener"><Icon name="whatsapp" /> Ask on WhatsApp</a>
+  </PageHero>
+
+  <section class="facts" aria-label="Course at a glance">
+    <div class="container">
+      <ul class="facts__list">
+        {course.facts.map((f) => <li><strong>{f.value}</strong><span>{f.label}</span></li>)}
+        {course.price !== null && <li class="facts__price"><strong>From {formatINR(course.price)}</strong><span>Course fee</span></li>}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container fit">
+      <div class="section-head">
+        <span class="eyebrow">Who it’s for</span>
+        <h2>{course.forWho}.</h2>
+      </div>
+      <ul class="fit__points">
+        {course.points.map((p) => <li class="card"><Icon name="check" /> {p}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--soft">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">What you’ll learn</span>
+        <h2>Step by step, at your pace.</h2>
+        <p>Your trainer moves you to the next stage only when you’re comfortable with the current one.</p>
+      </div>
+      <ol class="timeline">
+        {course.phases.map((p, i) => (
+          <li class="timeline__item">
+            <span class="timeline__num">{i + 1}</span>
+            <div class="card timeline__card">
+              <span class="timeline__when">{p.classes}</span>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+              {p.outcome && <p class="timeline__outcome"><Icon name="check" /> {p.outcome}</p>}
+            </div>
+          </li>
+        ))}
+      </ol>
+      {course.note && <p class="note">{course.note}</p>}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Other courses</span>
+        <h2>Looking for something else?</h2>
+      </div>
+      <div class="others">
+        {others.map((c) => <CourseCard course={c} />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title={`Ready to start ${course.name}?`}
+    text="Book a slot, or message us first if you have questions. We reply quickly."
+    bookHref={`/book?course=${course.slug}`}
+    whatsappText={`Hi Zero Fear, I’m interested in ${course.name}.`}
+  />
+
+  <script type="application/ld+json" set:html={JSON.stringify(courseSchema)} />
+</Base>
+
+<style>
+  .facts { border-block: 1px solid var(--border); background: var(--bg-soft); }
+  .facts__list { list-style: none; margin: 0; padding: 24px 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  .facts__list li { display: grid; gap: 2px; text-align: center; }
+  .facts__list strong { font-size: clamp(1.25rem, 2.2vw, 1.6rem); font-weight: 800; color: var(--navy); letter-spacing: -0.02em; }
+  .facts__list span { font-size: 0.875rem; color: var(--muted); }
+  .facts__price strong { color: var(--blue); }
+
+  .fit { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 72px); align-items: center; }
+  .fit .section-head { margin-bottom: 0; }
+  .fit__points { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .fit__points li { display: flex; align-items: center; gap: 12px; padding: 18px 20px; font-weight: 600; }
+  .fit__points :global(svg) { width: 20px; height: 20px; color: var(--success); flex: none; }
+
+  .timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; position: relative; }
+  .timeline::before { content: ''; position: absolute; left: 19px; top: 8px; bottom: 8px; width: 2px; background: var(--border); }
+  .timeline__item { display: grid; grid-template-columns: 40px 1fr; gap: 20px; align-items: start; position: relative; }
+  .timeline__num {
+    display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+    background: var(--yellow); color: var(--navy); font-weight: 800; position: relative;
+  }
+  .timeline__card { padding: 20px 24px; }
+  .timeline__when { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--blue); }
+  .timeline__card h3 { margin-top: 6px; }
+  .timeline__card p { margin-top: 6px; color: var(--muted); }
+  .timeline__outcome { display: flex; gap: 8px; align-items: flex-start; color: var(--text) !important; font-weight: 600; }
+  .timeline__outcome :global(svg) { width: 18px; height: 18px; margin-top: 3px; color: var(--success); flex: none; }
+
+  .note { margin-top: 24px; padding: 16px 20px; border-radius: var(--radius-sm); background: #fff8dc; border: 1px solid #f3e2a3; font-size: 0.95rem; }
+
+  .others { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+  @media (max-width: 900px) {
+    .facts__list { grid-template-columns: repeat(3, 1fr); row-gap: 20px; }
+    .fit { grid-template-columns: 1fr; }
+    .fit .section-head { margin-bottom: 0; }
+    .others { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px) {
+    .facts__list { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

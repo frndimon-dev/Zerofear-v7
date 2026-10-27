@@ -21,7 +21,7 @@ const fromPrice = prices.length ? Math.min(...prices) : null;
       </ul>
 
       <div class="hero__actions">
-        <a class="btn btn--primary" href="#contact">Book a class <Icon name="arrow" /></a>
+        <a class="btn btn--primary" href="/book">Book a class <Icon name="arrow" /></a>
         <a class="btn btn--whatsapp" href={waLink('Hi Zero Fear, I want to learn to ride.')} target="_blank" rel="noopener"><Icon name="whatsapp" /> WhatsApp us</a>
       </div>
       {fromPrice && <p class="hero__price">Courses from <strong>{formatINR(fromPrice)}</strong></p>}

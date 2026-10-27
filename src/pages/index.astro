@@ -18,4 +18,20 @@ import Contact from '../components/home/Contact.astro';
   <Reviews />
   <Faq />
   <Contact />
+  <script is:inline>
+    // Old single-page site used #hash routes; send those visitors to the new pages.
+    (function () {
+      var map = {
+        'courses/basic-scooty-training': '/courses/basic-scooty-training',
+        'courses/advanced-scooty-training': '/courses/advanced-scooty-training',
+        'courses/bike-training': '/courses/bike-training',
+        'courses/rto-exam-preparation': '/courses/rto-exam-preparation',
+        'doorstep-training': '/doorstep-training', 'doorstep': '/doorstep-training', 'doorstep-detail': '/doorstep-training',
+        'women-detail': '/women-riders', 'about-detail': '/about', 'mission-detail': '/about',
+        'faq-detail': '/faq', 'booking': '/book',
+      };
+      var target = map[location.hash.slice(1)];
+      if (target) location.replace(target);
+    })();
+  </script>
 </Base>

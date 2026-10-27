@@ -1,7 +1,8 @@
 ---
 import Icon from '../Icon.astro';
 import Photo from '../Photo.astro';
-import { doorstep, photos, formatINR, waLink } from '../../data/site';
+import FeeCalculator from '../FeeCalculator.astro';
+import { doorstep, photos } from '../../data/site';
 ---
 <section class="section" id="doorstep">
   <div class="container doorstep">
@@ -16,80 +17,26 @@ import { doorstep, photos, formatINR, waLink } from '../../data/site';
         {doorstep.areas.map((a) => <li class="chip">{a}</li>)}
         <li class="chip">and more</li>
       </ul>
+      <a class="doorstep__more" href="/doorstep-training">How doorstep training works <Icon name="arrow" /></a>
       <div class="doorstep__media"><Photo src={photos.doorstep.src} alt={photos.doorstep.alt} position={photos.doorstep.position} /></div>
     </div>
 
-    <div class="calc card" data-calc data-tiers={JSON.stringify(doorstep.tiers)} data-max-fee={doorstep.maxFee} data-radius={doorstep.radiusKm}>
-      <h3>Fee calculator</h3>
-      <p class="calc__hint">Distance from {doorstep.from}</p>
-      <label class="calc__field">
-        <span class="sr-only">Distance in km</span>
-        <input type="range" min="0" max={doorstep.radiusKm} step="0.5" value="2" data-calc-range />
-        <output data-calc-km>2 km</output>
-      </label>
-      <div class="calc__result">
-        <span>Estimated fee</span>
-        <strong data-calc-fee>{formatINR(doorstep.tiers[0].fee)}</strong>
-      </div>
-      <ul class="calc__tiers">
-        {doorstep.tiers.map((t, i) => (
-          <li>{i === 0 ? `Up to ${t.upToKm} km` : `${doorstep.tiers[i - 1].upToKm}–${t.upToKm} km`} · {formatINR(t.fee)}</li>
-        ))}
-        <li>{doorstep.tiers[doorstep.tiers.length - 1].upToKm}–{doorstep.radiusKm} km · up to {formatINR(doorstep.maxFee)}</li>
-      </ul>
-      <a class="btn btn--primary btn--block" data-calc-cta href={waLink('Hi Zero Fear, I want doorstep training. My area is: ')} target="_blank" rel="noopener">
-        <Icon name="whatsapp" /> Check my area
-      </a>
-    </div>
+    <div class="doorstep__calc"><FeeCalculator /></div>
   </div>
 </section>
-
-<script>
-  const root = document.querySelector<HTMLElement>('[data-calc]');
-  if (root) {
-    const tiers: { upToKm: number; fee: number }[] = JSON.parse(root.dataset.tiers || '[]');
-    const maxFee = Number(root.dataset.maxFee);
-    const radius = Number(root.dataset.radius);
-    const range = root.querySelector<HTMLInputElement>('[data-calc-range]')!;
-    const kmOut = root.querySelector<HTMLElement>('[data-calc-km]')!;
-    const feeOut = root.querySelector<HTMLElement>('[data-calc-fee]')!;
-    const last = tiers[tiers.length - 1];
-
-    const feeFor = (km: number) => {
-      const tier = tiers.find((t) => km <= t.upToKm);
-      if (tier) return tier.fee;
-      // Linear between the last tier and the max fee at the edge of the radius.
-      return Math.round(last.fee + ((km - last.upToKm) / (radius - last.upToKm)) * (maxFee - last.fee));
-    };
-    const update = () => {
-      const km = Number(range.value);
-      kmOut.textContent = `${km} km`;
-      feeOut.textContent = '₹' + feeFor(km).toLocaleString('en-IN');
-    };
-    range.addEventListener('input', update);
-    update();
-  }
-</script>
 
 <style>
   .doorstep { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: clamp(32px, 6vw, 72px); align-items: start; }
   .doorstep__lead { margin-top: 14px; color: var(--muted); font-size: 1.075rem; max-width: 52ch; }
   .doorstep__areas-label { margin-top: 24px; font-weight: 700; font-size: 0.9rem; }
   .doorstep__areas { list-style: none; padding: 0; margin: 10px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .doorstep__more { display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; font-weight: 700; color: var(--blue); text-decoration: none; }
+  .doorstep__more :global(svg) { width: 16px; height: 16px; }
   .doorstep__media { margin-top: 28px; aspect-ratio: 5 / 4; border-radius: var(--radius); overflow: hidden; }
-
-  .calc { padding: 28px; box-shadow: var(--shadow); position: sticky; top: calc(var(--header-h) + 20px); }
-  .calc__hint { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
-  .calc__field { display: flex; align-items: center; gap: 14px; margin-top: 20px; }
-  .calc__field input { flex: 1; accent-color: var(--blue); height: 28px; }
-  .calc__field output { min-width: 56px; text-align: right; font-weight: 700; }
-  .calc__result { margin-top: 18px; padding: 18px; border-radius: var(--radius-sm); background: var(--bg-soft); display: grid; gap: 2px; text-align: center; }
-  .calc__result span { font-size: 0.85rem; color: var(--muted); }
-  .calc__result strong { font-size: 2rem; font-weight: 800; color: var(--navy); letter-spacing: -0.02em; }
-  .calc__tiers { list-style: none; padding: 0; margin: 16px 0 20px; display: grid; gap: 4px; font-size: 0.85rem; color: var(--muted); }
+  .doorstep__calc { position: sticky; top: calc(var(--header-h) + 20px); }
 
   @media (max-width: 900px) {
     .doorstep { grid-template-columns: 1fr; }
-    .calc { position: static; }
+    .doorstep__calc { position: static; }
   }
 </style>

@@ -1,0 +1,46 @@
+---
+import Icon from './Icon.astro';
+import { formatINR, type Course } from '../data/site';
+
+interface Props { course: Course }
+const { course: c } = Astro.props;
+---
+<article class="course card">
+  <span class="chip">{c.level}</span>
+  <h3><a href={`/courses/${c.slug}`}>{c.name}</a></h3>
+  <p class="course__summary">{c.summary}</p>
+  <p class="course__for"><strong>For:</strong> {c.forWho}</p>
+  <ul class="course__points">
+    {c.points.map((p) => <li><Icon name="check" /> {p}</li>)}
+  </ul>
+  <div class="course__foot">
+    <div>
+      <span class="course__classes">{c.classes}</span>
+      <span class="course__price">{c.price !== null ? <>From {formatINR(c.price)}</> : 'Ask for fee'}</span>
+    </div>
+    <a class="btn btn--dark" href={`/courses/${c.slug}`} aria-label={`${c.name} details`}>Details</a>
+  </div>
+</article>
+
+<style>
+  .course { position: relative; display: flex; flex-direction: column; padding: 24px; transition: border-color 0.15s, box-shadow 0.15s; }
+  .course:hover { border-color: #c9d3e1; box-shadow: var(--shadow); }
+  .course .chip { align-self: flex-start; }
+  .course h3 { margin-top: 14px; }
+  .course h3 a { text-decoration: none; }
+  /* Whole card is clickable via the title link */
+  .course h3 a::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+  .course__summary { margin-top: 8px; color: var(--muted); font-size: 0.95rem; }
+  .course__for { margin-top: 14px; font-size: 0.9rem; }
+  .course__points { list-style: none; padding: 0; margin: 16px 0 20px; display: grid; gap: 8px; font-size: 0.92rem; }
+  .course__points li { display: flex; gap: 8px; align-items: flex-start; }
+  .course__points :global(svg) { width: 16px; height: 16px; margin-top: 4px; color: var(--success); flex: none; }
+  .course__foot {
+    margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .course__foot > div { display: grid; }
+  .course__classes { font-size: 0.82rem; color: var(--muted); }
+  .course__price { font-weight: 800; font-size: 1.1rem; color: var(--navy); }
+  .course__foot .btn { position: relative; z-index: 1; min-height: 42px; padding: 0 18px; font-size: 0.9rem; }
+</style>

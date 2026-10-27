@@ -1,59 +1,27 @@
 ---
-import Icon from '../Icon.astro';
-import { courses, formatINR, waLink } from '../../data/site';
+import CourseCard from '../CourseCard.astro';
+import { courses } from '../../data/site';
+
+interface Props { heading?: boolean }
+const { heading = true } = Astro.props;
 ---
 <section class="section" id="courses">
   <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Courses</span>
-      <h2>Pick where you want to start.</h2>
-      <p>Every course is one-to-one with a trainer. Not sure which one fits? Message us and we’ll suggest one.</p>
-    </div>
-
+    {heading && (
+      <div class="section-head">
+        <span class="eyebrow">Courses</span>
+        <h2>Pick where you want to start.</h2>
+        <p>Every course is one-to-one with a trainer. Not sure which one fits? Message us and we’ll suggest one.</p>
+      </div>
+    )}
     <div class="courses">
-      {courses.map((c) => (
-        <article class="course card">
-          <span class="chip">{c.level}</span>
-          <h3>{c.name}</h3>
-          <p class="course__summary">{c.summary}</p>
-          <p class="course__for"><strong>For:</strong> {c.forWho}</p>
-          <ul class="course__points">
-            {c.points.map((p) => <li><Icon name="check" /> {p}</li>)}
-          </ul>
-          <div class="course__foot">
-            <div>
-              <span class="course__classes">{c.classes}</span>
-              <span class="course__price">{c.price !== null ? <>From {formatINR(c.price)}</> : 'Ask for fee'}</span>
-            </div>
-            <a class="btn btn--dark" href={waLink(`Hi Zero Fear, I’m interested in ${c.name}.`)} target="_blank" rel="noopener">Enquire</a>
-          </div>
-        </article>
-      ))}
+      {courses.map((c) => <CourseCard course={c} />)}
     </div>
   </div>
 </section>
 
 <style>
   .courses { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-  .course { display: flex; flex-direction: column; padding: 24px; transition: border-color 0.15s, box-shadow 0.15s; }
-  .course:hover { border-color: #c9d3e1; box-shadow: var(--shadow); }
-  .course .chip { align-self: flex-start; }
-  .course h3 { margin-top: 14px; }
-  .course__summary { margin-top: 8px; color: var(--muted); font-size: 0.95rem; }
-  .course__for { margin-top: 14px; font-size: 0.9rem; }
-  .course__points { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 8px; font-size: 0.92rem; }
-  .course__points li { display: flex; gap: 8px; align-items: flex-start; }
-  .course__points :global(svg) { width: 16px; height: 16px; margin-top: 4px; color: var(--success); flex: none; }
-  .course__foot {
-    margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  }
-  .course__points { margin-bottom: 20px; }
-  .course__foot > div { display: grid; }
-  .course__classes { font-size: 0.82rem; color: var(--muted); }
-  .course__price { font-weight: 800; font-size: 1.1rem; color: var(--navy); }
-  .course__foot .btn { min-height: 42px; padding: 0 18px; font-size: 0.9rem; }
-
   @media (max-width: 1080px) { .courses { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 600px) { .courses { grid-template-columns: 1fr; } }
 </style>

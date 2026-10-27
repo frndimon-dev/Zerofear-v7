@@ -59,6 +59,8 @@ export const gallery = [
   { src: '/images/gallery-proud-moment.webp', alt: 'Family filming a learner’s ride on a quiet tree-lined road' },
 ];
 
+export type Phase = { title: string; classes: string; text: string; outcome?: string };
+
 export type Course = {
   slug: string;
   level: string;
@@ -68,6 +70,13 @@ export type Course = {
   classes: string;
   points: string[];
   price: number | null; // starting fee in ₹
+  // Course page
+  headline: string;
+  intro: string;
+  facts: { value: string; label: string }[];
+  photo: { src: string; alt: string; position?: string };
+  phases: Phase[];
+  note?: string;
 };
 
 export const courses: Course[] = [
@@ -80,6 +89,23 @@ export const courses: Course[] = [
     classes: '15 classes · 30 min each',
     points: ['No cycling needed', 'One-to-one with a trainer', 'Practice ground → real road'],
     price: 2500,
+    headline: 'Start from zero. Build control before speed.',
+    intro:
+      'Made for complete beginners, including people who have never ridden a cycle. You move from getting to know the scooty to balance, turning and riding on real roads, one step at a time.',
+    facts: [
+      { value: '15', label: 'Classes' },
+      { value: '30 min', label: 'Per class' },
+      { value: '1-to-1', label: 'With a trainer' },
+      { value: 'No cycle', label: 'Needed' },
+    ],
+    photo: { src: '/images/trainers-walk-alongside.webp', alt: 'Two trainers walking beside a beginner on her first scooty ride', position: '50% 25%' },
+    phases: [
+      { title: 'Get to know the scooty', classes: 'Classes 1–3', text: 'Sitting posture, handle, throttle and both brakes. Your trainer moves the scooty with you so nothing feels sudden.', outcome: 'The scooty stops feeling scary.' },
+      { title: 'Balance and basic control', classes: 'Classes 4–6', text: 'Riding in a straight line, slow-speed control, smooth starts and controlled stops. Start → move → stop, again and again.', outcome: 'You can balance and ride straight with your feet up.' },
+      { title: 'Turning', classes: 'Classes 7–9', text: 'Left and right turns, speed control in turns, using indicators, and braking while turning.', outcome: 'You can turn into lanes and corners smoothly.' },
+      { title: 'Riding on the road', classes: 'Classes 10–12', text: 'Quiet residential roads with your trainer: looking ahead, road awareness and fixing weak spots.', outcome: 'You feel comfortable riding on a calm road.' },
+      { title: 'Confidence', classes: 'Classes 13–15', text: 'More practice, safe riding habits and getting ready to ride on your own.', outcome: 'You can ride the scooty independently.' },
+    ],
   },
   {
     slug: 'advanced-scooty-training',
@@ -90,6 +116,22 @@ export const courses: Course[] = [
     classes: '10 classes',
     points: ['Traffic & lane practice', 'Turning and overtaking', 'Good as a refresher'],
     price: 2500,
+    headline: 'You can ride. Now ride with confidence in traffic.',
+    intro:
+      'For riders who already have basic control but feel nervous in traffic, or haven’t ridden in a long time. You practise real Kolkata road situations with a trainer beside you.',
+    facts: [
+      { value: '10', label: 'Classes' },
+      { value: '4', label: 'Stages' },
+      { value: 'Real', label: 'Roads' },
+      { value: '1-to-1', label: 'With a trainer' },
+    ],
+    photo: { src: '/images/trainer-demo-scooter.webp', alt: 'Trainer showing two learners how to handle a scooter' },
+    phases: [
+      { title: 'Busy-road introduction', classes: 'Classes 1–2', text: 'Reading the road, traffic awareness, speed awareness, braking decisions and road position.' },
+      { title: 'Real road situations', classes: 'Classes 3–5', text: 'Turning in traffic, junctions, speed control, braking response and making decisions on the move.' },
+      { title: 'Advanced confidence', classes: 'Classes 6–8', text: 'Busy roads, speed breakers, defensive riding, safe overtaking and riding with a pillion where needed.' },
+      { title: 'Final practice', classes: 'Classes 9–10', text: 'Fixing weak spots, building traffic confidence and RTO test practice if you need it.' },
+    ],
   },
   {
     slug: 'bike-training',
@@ -100,6 +142,24 @@ export const courses: Course[] = [
     classes: '15 classes',
     points: ['Clutch & gear control', 'Smooth starts and stops', 'Road riding'],
     price: 2500,
+    headline: 'Learn clutch, gears and road riding, step by step.',
+    intro:
+      'A 15-class course that takes you from getting to know the bike to clutch and gear control, smooth acceleration, braking and riding on the road.',
+    facts: [
+      { value: '15', label: 'Classes' },
+      { value: '30 min', label: 'Per class' },
+      { value: 'Clutch', label: '& gear control' },
+      { value: 'Road', label: 'Riding practice' },
+    ],
+    photo: { src: '/images/bike-royal-enfield.webp', alt: 'Learner riding a motorcycle with her trainer beside her', position: '50% 40%' },
+    phases: [
+      { title: 'Get to know the bike', classes: 'Classes 1–3', text: 'Posture, handle, brakes, balance, starting and stopping.' },
+      { title: 'Clutch and gears', classes: 'Classes 4–6', text: 'Releasing the clutch, choosing gears, moving off from a stop and low-speed control.' },
+      { title: 'Clutch + gear + throttle', classes: 'Classes 7–9', text: 'Smooth acceleration, changing gears, braking and turning together.' },
+      { title: 'Riding on the road', classes: 'Classes 10–12', text: 'Observation, traffic awareness, turning, speed control and road position.' },
+      { title: 'Confidence and test practice', classes: 'Classes 13–15', text: 'Fixing weak spots, more road practice and RTO test practice if you need it.' },
+    ],
+    note: 'You need basic cycle balance for this course. Finishing it does not mean you can safely ride high-power bikes; every bike’s weight and power is different.',
   },
   {
     slug: 'rto-exam-preparation',
@@ -110,6 +170,23 @@ export const courses: Course[] = [
     classes: 'Flexible',
     points: ['Figure-8 track drills', 'Slow-speed balance', 'Mock test'],
     price: 2500,
+    headline: 'Practise the movements your driving test asks for.',
+    intro:
+      'Test-focused practice for your two-wheeler driving test: control, turning, braking, starting and stopping, and the figure 8, with your weak spots fixed before test day.',
+    facts: [
+      { value: 'Figure 8', label: 'Track practice' },
+      { value: 'Mock', label: 'Test run' },
+      { value: 'Flexible', label: 'Number of classes' },
+      { value: '1-to-1', label: 'With a trainer' },
+    ],
+    photo: { src: '/images/gallery-trainer-explaining.webp', alt: 'Trainer explaining controls to a learner before practice' },
+    phases: [
+      { title: 'Understand the test', classes: 'Stage 1', text: 'What the test checks, the movements involved, and where you stand today.' },
+      { title: 'Practical control', classes: 'Stage 2', text: 'Starting, stopping, balance, braking and turning.' },
+      { title: 'Test practice', classes: 'Stage 3', text: 'Figure-8 drills and other test movements, repeated until they feel easy.' },
+      { title: 'Final preparation', classes: 'Stage 4', text: 'A full practice run, last corrections and getting you ready for test day.' },
+    ],
+    note: 'We prepare you properly for the test. We do not promise a guaranteed licence.',
   },
 ];
 
@@ -137,6 +214,19 @@ export const doorstep = {
   radiusKm: 10,
   from: 'Netaji Metro / Kudghat',
   areas: ['New Alipore', 'Behala', 'Jadavpur', 'Bagha Jatin', 'Thakurpukur', 'Hazra'],
+  allAreas: ['Garia', 'Jadavpur', 'Ranikuthi', 'Behala', 'Haridevpur', 'Naktala', 'Bansdroni', 'Kudghat', 'New Alipore', 'Bagha Jatin', 'Thakurpukur', 'Hazra'],
+  stats: [
+    { value: '500+', label: 'Doorstep learners' },
+    { value: '1000+', label: 'Home classes' },
+    { value: '10 km', label: 'Service radius' },
+  ],
+  steps: [
+    { title: 'Share your area', text: 'Send your area or a landmark on WhatsApp.' },
+    { title: 'We check the distance', text: 'We measure the distance from Netaji Metro / Kudghat and confirm the fee.' },
+    { title: 'Pick a course and time', text: 'Scooty or bike, morning or evening: whatever suits your routine.' },
+    { title: 'Your trainer arrives', text: 'Your trainer comes to you at the agreed time.' },
+    { title: 'Training begins', text: 'You start on a quiet lane near home and follow the same step-by-step course as at our centre.' },
+  ],
   tiers: [
     { upToKm: 2, fee: 4500 },
     { upToKm: 3, fee: 5000 },
@@ -191,17 +281,45 @@ export const faqs = [
   },
   {
     q: 'How do I book?',
-    a: 'Call us, message us on WhatsApp, or fill in the form below and we’ll get back to you.',
+    a: 'Call us, message us on WhatsApp, or fill in the booking form and we’ll call you back to fix a slot.',
+  },
+];
+
+// Extra questions shown on the FAQ page (after the home-page ones).
+export const moreFaqs = [
+  {
+    q: 'How long is each class?',
+    a: 'About 30 minutes for Basic Scooty and Bike Training. Every class is one-to-one with a trainer.',
+  },
+  {
+    q: 'Do I need my own scooty or bike?',
+    a: 'No. Training vehicles are provided. If you prefer, you can also learn on your own scooty, which is common with doorstep training.',
+  },
+  {
+    q: 'Is it too late to learn at my age?',
+    a: 'No. We regularly train older beginners, homemakers and working professionals. The pace is set by you, not by the trainer.',
+  },
+  {
+    q: 'What does a course cost?',
+    a: 'Courses start from ₹2,500. Doorstep training is priced by distance from Netaji Metro / Kudghat; you can check it with the fee calculator on the Doorstep page.',
+  },
+  {
+    q: 'Which areas does doorstep training cover?',
+    a: 'Places within 10 km of Netaji Metro / Kudghat, such as Garia, Jadavpur, Behala, Naktala, Bansdroni, New Alipore and Thakurpukur. Send us your area to confirm.',
+  },
+  {
+    q: 'Will you teach me to ride in real traffic?',
+    a: 'Yes. Every course ends with practice on real roads with your trainer, starting with quiet lanes and moving to normal traffic when you’re ready.',
   },
 ];
 
 export const nav = [
-  { href: '#courses', label: 'Courses' },
-  { href: '#how-it-works', label: 'How it works' },
-  { href: '#doorstep', label: 'Doorstep' },
-  { href: '#reviews', label: 'Reviews' },
-  { href: '#faq', label: 'FAQ' },
-  { href: '#contact', label: 'Contact' },
+  { href: '/courses', label: 'Courses' },
+  { href: '/doorstep-training', label: 'Doorstep' },
+  { href: '/women-riders', label: 'Women riders' },
+  { href: '/about', label: 'About' },
+  { href: '/faq', label: 'FAQ' },
+  { href: '/#contact', label: 'Contact' },
 ];
 
 export const waLink = (text: string) =>

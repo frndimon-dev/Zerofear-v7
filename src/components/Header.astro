@@ -2,6 +2,9 @@
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import { nav, site } from '../data/site';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isCurrent = (href: string) => !href.includes('#') && (path === href || path.startsWith(href + '/'));
 ---
 <header class="header" data-header>
   <div class="container header__inner">
@@ -9,7 +12,7 @@ import { nav, site } from '../data/site';
 
     <nav class="header__nav" id="site-nav" aria-label="Main">
       <ul>
-        {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        {nav.map((item) => <li><a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>)}
       </ul>
       <a class="btn btn--outline header__call-mobile" href={`tel:${site.phone.tel}`}>
         <Icon name="phone" /> Call {site.phone.display}
@@ -20,7 +23,7 @@ import { nav, site } from '../data/site';
       <a class="header__phone" href={`tel:${site.phone.tel}`}>
         <Icon name="phone" /> {site.phone.display}
       </a>
-      <a class="btn btn--primary header__cta" href="#contact">Book a class</a>
+      <a class="btn btn--primary header__cta" href="/book">Book a class</a>
       <button class="header__toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
         <span class="sr-only">Menu</span>
         <Icon name="menu" class="icon-open" />
@@ -58,6 +61,7 @@ import { nav, site } from '../data/site';
   .header__nav ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
   .header__nav a { text-decoration: none; font-weight: 600; font-size: 0.95rem; color: var(--muted); padding: 8px 12px; border-radius: 8px; }
   .header__nav ul a:hover { color: var(--navy); background: var(--bg-soft); }
+  .header__nav a[aria-current='page'] { color: var(--navy); background: var(--bg-soft); }
   .header__call-mobile { display: none; }
 
   .header__actions { display: flex; align-items: center; gap: 16px; }
