@@ -209,6 +209,21 @@ export const steps = [
   },
 ];
 
+export const journey = [
+  { year: '2018', title: 'Where it began', text: 'Our first two-wheeler classes in Tollygunge, with one simple rule: start from the learner.' },
+  { year: '2020', title: 'A structured course', text: 'Training becomes a step-by-step course with more real-road practice.' },
+  { year: '2024', title: 'Thousands of learners', text: 'Doorstep training, bike training and RTO preparation grow from what learners asked for.' },
+  { year: '2026', title: 'Zero Fear', text: 'A new name for the same patient training: learning, experience, confidence and freedom.' },
+];
+
+export const womenPoints = [
+  { title: 'Patient, never rushed', text: 'Calm, trainer-led classes. No pressure, no shouting.' },
+  { title: 'Control before roads', text: 'You master balance in a quiet place before any traffic.' },
+  { title: 'Any age, any background', text: 'College students, working women, mothers and grandmothers.' },
+];
+
+export const ticker = ['No cycling needed', 'One-to-one classes', 'Women-friendly trainers', 'Doorstep within 10 km', 'From ₹2,500', 'Real Kolkata roads'];
+
 // Doorstep fee by distance (km) from Netaji Metro / Kudghat.
 export const doorstep = {
   radiusKm: 10,

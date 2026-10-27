@@ -1,0 +1,51 @@
+---
+import Icon from '../Icon.astro';
+import { site } from '../../data/site';
+const links = [
+  { label: 'Instagram', handle: 'Training reels', href: site.social.instagram, icon: 'instagram' as const, cls: 'ig' },
+  { label: 'Facebook', handle: 'Learner stories', href: site.social.facebook, icon: 'facebook' as const, cls: 'fb' },
+  { label: 'YouTube', handle: 'Full lessons', href: site.social.youtube, icon: 'youtube' as const, cls: 'yt' },
+].filter((l) => l.href);
+---
+{links.length > 0 && (
+  <section class="section social" id="social">
+    <div class="container social__grid">
+      <div class="section-head">
+        <span class="eyebrow">Follow us</span>
+        <h2>Watch real classes, <mark>every week.</mark></h2>
+        <p>See first rides, nervous starts and proud finishes from our learners.</p>
+      </div>
+      <ul class="social__links">
+        {links.map((l) => (
+          <li>
+            <a class:list={['social__card', l.cls]} href={l.href!} target="_blank" rel="noopener">
+              <Icon name={l.icon} />
+              <span><strong>{l.label}</strong><small>{l.handle}</small></span>
+              <Icon name="arrow" class="social__arrow" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+<style>
+  .social__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 72px); align-items: center; }
+  .social .section-head { margin-bottom: 0; }
+  .social__links { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .social__card {
+    display: flex; align-items: center; gap: 16px; padding: 20px 22px; border-radius: var(--radius);
+    color: #fff; text-decoration: none; transition: transform 0.15s;
+  }
+  .social__card:hover { transform: translateX(4px); }
+  .social__card :global(svg) { width: 28px; height: 28px; flex: none; }
+  .social__card span { display: grid; flex: 1; }
+  .social__card strong { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; }
+  .social__card small { opacity: 0.85; }
+  .social__card :global(.social__arrow) { width: 20px; height: 20px; }
+  .ig { background: linear-gradient(120deg, #833ab4, #e1306c 55%, #f77737); }
+  .fb { background: #1877f2; }
+  .yt { background: #e62117; }
+  @media (max-width: 860px) { .social__grid { grid-template-columns: 1fr; } }
+</style>

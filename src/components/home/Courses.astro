@@ -23,5 +23,14 @@ const { heading = true } = Astro.props;
 <style>
   .courses { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
   @media (max-width: 1080px) { .courses { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 600px) { .courses { grid-template-columns: 1fr; } }
+  /* Mobile: swipeable row instead of a long stack */
+  @media (max-width: 600px) {
+    .courses {
+      grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 82%;
+      overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+      margin-inline: calc(var(--gutter) * -1); padding: 4px var(--gutter) 12px; scroll-padding-inline: var(--gutter);
+    }
+    .courses::-webkit-scrollbar { display: none; }
+    .courses > :global(*) { scroll-snap-align: start; }
+  }
 </style>

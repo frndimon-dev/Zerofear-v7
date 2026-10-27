@@ -6,8 +6,8 @@ import { steps, photos } from '../../data/site';
   <div class="container">
     <div class="how__intro">
       <div class="section-head">
-        <span class="eyebrow">How it works</span>
-        <h2>Confidence first. <mark>Speed later.</mark></h2>
+        <span class="eyebrow">Why Zero Fear</span>
+        <h2>Built around <mark>the learner.</mark></h2>
         <p>No fixed formula. Your trainer starts from where you are and moves on only when you’re ready.</p>
       </div>
       <div class="how__photo">
@@ -35,11 +35,17 @@ import { steps, photos } from '../../data/site';
   .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; counter-reset: none; }
   .step { padding: 24px; border-radius: var(--radius); background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); }
   .step__num {
-    display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px;
-    background: var(--yellow); color: var(--navy); font-weight: 800; font-size: 0.95rem;
+    display: block; font-family: var(--font-display); font-weight: 800; font-size: 3rem; line-height: 1;
+    color: var(--yellow); letter-spacing: -0.04em;
   }
   .step h3 { margin-top: 18px; color: #fff; }
   .step p { margin-top: 8px; color: #c5d2e6; font-size: 0.95rem; }
   @media (max-width: 960px) { .steps { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) {
+    .steps { gap: 10px; }
+    .step { padding: 16px; }
+    .step__num { font-size: 2.2rem; }
+    .step h3 { margin-top: 10px; font-size: 1.05rem; }
+    .step p { font-size: 0.85rem; }
+  }
 </style>

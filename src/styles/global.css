@@ -14,7 +14,8 @@
   --border: #e3e8ef;
   --success: #128c4a;
 
-  --font: 'Plus Jakarta Sans', 'Noto Sans Bengali', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font: 'Inter', 'Noto Sans Bengali', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif;
 
   --radius-sm: 10px;
   --radius: 16px;
@@ -49,7 +50,7 @@ img { max-width: 100%; display: block; }
 a { color: inherit; }
 button, input, select, textarea { font: inherit; color: inherit; }
 
-h1, h2, h3 { margin: 0; line-height: 1.08; letter-spacing: -0.03em; font-weight: 800; color: var(--navy); }
+h1, h2, h3 { margin: 0; font-family: var(--font-display); font-optical-sizing: auto; line-height: 1.02; letter-spacing: -0.035em; font-weight: 800; color: var(--navy); }
 .section--navy h1, .section--navy h2, .section--navy h3 { color: #fff; }
 h1 { font-size: clamp(2.4rem, 5.6vw, 4rem); }
 h2 { font-size: clamp(2rem, 4.6vw, 3.25rem); }
@@ -63,7 +64,8 @@ mark {
   box-decoration-break: clone;
 }
 .section--navy mark, .hero mark { background: none; color: var(--yellow); padding: 0; }
-h3 { font-size: 1.2rem; letter-spacing: -0.01em; }
+h3 { font-size: 1.3rem; letter-spacing: -0.02em; line-height: 1.15; }
+.display { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.03em; }
 p { margin: 0; }
 
 .container { width: min(100% - var(--gutter) * 2, var(--container)); margin-inline: auto; }
