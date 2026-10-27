@@ -42,9 +42,17 @@ export const site = {
 // Photos: drop files into /public/images and set `src` (e.g. '/images/hero.jpg').
 // An empty src renders a branded tile instead of a broken image.
 export const photos = {
-  hero: { src: '', alt: 'Zero Fear trainer guiding a beginner on a scooty in Kolkata' },
-  doorstep: { src: '', alt: 'Doorstep scooty training near the learner’s home' },
+  hero: { src: '/images/hero-trainer-guiding.webp', alt: 'Zero Fear trainer guiding a beginner on a scooty in Kolkata', position: '50% 40%' },
+  doorstep: { src: '/images/doorstep-lane-training.webp', alt: 'Trainer walking beside a learner on a quiet residential lane', position: '50% 30%' },
 };
+
+// Shown in "From our classes" until photos are loaded from the database.
+export const gallery = [
+  { src: '/images/gallery-first-ride.webp', alt: 'Learner on her first scooty ride, feet ready on the ground' },
+  { src: '/images/gallery-trainer-guiding.webp', alt: 'Trainer showing a beginner how to start the scooty' },
+  { src: '/images/gallery-road-practice.webp', alt: 'Trainer walking alongside a learner during lane practice' },
+  { src: '/images/gallery-bike-riding.webp', alt: 'Learner riding a motorcycle on her own' },
+];
 
 export type Course = {
   slug: string;

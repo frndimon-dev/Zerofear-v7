@@ -16,7 +16,7 @@ import { doorstep, photos, formatINR, waLink } from '../../data/site';
         {doorstep.areas.map((a) => <li class="chip">{a}</li>)}
         <li class="chip">and more</li>
       </ul>
-      <div class="doorstep__media"><Photo src={photos.doorstep.src} alt={photos.doorstep.alt} /></div>
+      <div class="doorstep__media"><Photo src={photos.doorstep.src} alt={photos.doorstep.alt} position={photos.doorstep.position} /></div>
     </div>
 
     <div class="calc card" data-calc data-tiers={JSON.stringify(doorstep.tiers)} data-max-fee={doorstep.maxFee} data-radius={doorstep.radiusKm}>
@@ -76,7 +76,7 @@ import { doorstep, photos, formatINR, waLink } from '../../data/site';
   .doorstep__lead { margin-top: 14px; color: var(--muted); font-size: 1.075rem; max-width: 52ch; }
   .doorstep__areas-label { margin-top: 24px; font-weight: 700; font-size: 0.9rem; }
   .doorstep__areas { list-style: none; padding: 0; margin: 10px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .doorstep__media { margin-top: 28px; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; }
+  .doorstep__media { margin-top: 28px; aspect-ratio: 5 / 4; border-radius: var(--radius); overflow: hidden; }
 
   .calc { padding: 28px; box-shadow: var(--shadow); position: sticky; top: calc(var(--header-h) + 20px); }
   .calc__hint { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }

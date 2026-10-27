@@ -28,7 +28,7 @@ const fromPrice = prices.length ? Math.min(...prices) : null;
     </div>
 
     <div class="hero__media">
-      <Photo src={photos.hero.src} alt={photos.hero.alt} eager />
+      <Photo src={photos.hero.src} alt={photos.hero.alt} position={photos.hero.position} eager />
       <div class="hero__badge card">
         <span class="hero__stars" aria-hidden="true">★★★★★</span>
         <strong>4.9 on Google</strong>
@@ -71,8 +71,8 @@ const fromPrice = prices.length ? Math.min(...prices) : null;
 
   @media (max-width: 860px) {
     .hero__grid { grid-template-columns: 1fr; }
-    .hero__media { aspect-ratio: 16 / 10; }
-    .hero__badge { left: 12px; bottom: 12px; }
+    .hero__media { aspect-ratio: 4 / 3; }
+    .hero__badge { display: none; }
   }
   @media (max-width: 480px) {
     .hero__actions .btn { flex: 1 1 100%; }

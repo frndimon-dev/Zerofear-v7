@@ -1,6 +1,6 @@
 ---
 import Icon from '../Icon.astro';
-import { reviews, site } from '../../data/site';
+import { reviews, site, gallery as galleryPhotos } from '../../data/site';
 
 const videoLinks = [
   { label: 'YouTube', href: site.social.youtube },
@@ -37,9 +37,13 @@ const videoLinks = [
       ))}
     </ul>
 
-    <div class="gallery" data-gallery hidden>
+    <div class="gallery" data-gallery hidden={galleryPhotos.length < 4}>
       <h3>From our classes</h3>
-      <ul class="gallery__list" data-gallery-list></ul>
+      <ul class="gallery__list" data-gallery-list>
+        {galleryPhotos.map((p) => (
+          <li><img src={p.src} alt={p.alt} loading="lazy" decoding="async" width="800" height="800" /></li>
+        ))}
+      </ul>
     </div>
 
     {videoLinks.length > 0 && (

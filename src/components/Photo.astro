@@ -3,11 +3,11 @@ import Icon from './Icon.astro';
 
 // Renders the photo when a src is set, otherwise a branded tile so the
 // layout never shows a broken image or an empty grey box.
-interface Props { src: string; alt: string; class?: string; eager?: boolean }
-const { src, alt, class: className, eager = false } = Astro.props;
+interface Props { src: string; alt: string; class?: string; eager?: boolean; position?: string }
+const { src, alt, class: className, eager = false, position = '50% 50%' } = Astro.props;
 ---
 {src ? (
-  <img class:list={['photo', className]} src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+  <img class:list={['photo', className]} src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} decoding="async" style={`object-position:${position}`} />
 ) : (
   <div class:list={['photo photo--tile', className]} role="img" aria-label={alt}>
     <Icon name="scooter" class="photo__icon" />
