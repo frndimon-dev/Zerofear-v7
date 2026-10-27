@@ -23,7 +23,8 @@ const localBusiness = {
   areaServed: 'Kolkata',
   address: {
     '@type': 'PostalAddress',
-    ...(site.address ? { streetAddress: site.address } : {}),
+    streetAddress: site.streetAddress,
+    postalCode: site.postalCode,
     addressLocality: 'Kolkata',
     addressRegion: 'West Bengal',
     addressCountry: 'IN',

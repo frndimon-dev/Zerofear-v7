@@ -9,14 +9,18 @@ export const site = {
   description:
     'Scooty and bike training in Kolkata for complete beginners — even if you cannot ride a cycle. One-to-one classes near Netaji Metro, Tollygunge, plus doorstep training within 10 km.',
 
-  phone: { display: '79801 08587', tel: '+917980108587' },
-  whatsapp: { display: '97484 85630', number: '919748485630' },
+  // Main number for calls and WhatsApp (same as the Google Business Profile).
+  phone: { display: '79801 10273', tel: '+917980110273' },
+  whatsapp: { display: '79801 10273', number: '917980110273' },
 
   area: 'Tollygunge · Netaji Metro · Kudghat',
   city: 'Kolkata',
-  address: null as string | null, // e.g. 'Near Netaji Metro Station, Tollygunge, Kolkata 700040'
-  hours: null as string | null, // e.g. 'Mon–Sun · 6:00 AM – 8:00 PM'
-  mapQuery: 'Netaji Metro Station, Tollygunge, Kolkata',
+  // Copied exactly from the Google Business Profile so name/address/phone match everywhere.
+  address: 'Near, 12, post, Samargarh, Paschim Putiary, Kolkata, West Bengal 700041' as string | null,
+  streetAddress: 'Near, 12, post, Samargarh, Paschim Putiary',
+  postalCode: '700041',
+  hours: null as string | null, // e.g. 'Mon–Sun · 6:00 AM – 10:00 PM'
+  mapQuery: 'Near, 12, post, Samargarh, Paschim Putiary, Kolkata, West Bengal 700041',
 
   stats: [
     { value: '4.9★', label: 'Google rating' },
@@ -32,10 +36,6 @@ export const site = {
     facebook: 'https://www.facebook.com/freelancetwowheelertraining.co.in',
   },
 
-  supabase: {
-    url: 'https://fhsslykxcwbpzqusouii.supabase.co',
-    publishableKey: 'sb_publishable_QC_9-e0uIV2EEzJUwr4plg_TdhK8ozF',
-  },
 };
 
 // Photos: drop files into /public/images and set `src` (e.g. '/images/hero.jpg').
