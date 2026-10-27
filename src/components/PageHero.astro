@@ -66,7 +66,8 @@ const breadcrumbSchema = {
 
   @media (max-width: 860px) {
     .page-hero__grid { grid-template-columns: 1fr; }
-    .page-hero__media { aspect-ratio: 4 / 3; justify-self: stretch; }
+    .page-hero__media { aspect-ratio: 16 / 11; justify-self: stretch; order: -1; border-radius: var(--radius); }
+    .page-hero__grid { gap: 24px; }
   }
   @media (max-width: 480px) {
     .page-hero__actions :global(.btn) { flex: 1 1 100%; }
