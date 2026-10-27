@@ -29,7 +29,7 @@ All are 1080×1080 and safe for the round crop.
 - **About (max 139):**
   Can't ride a cycle? You can still ride. 🛵 One-to-one scooty & bike training in Kolkata.
 - **Description (max 512):**
-  Zero Fear teaches complete beginners to ride a scooty or bike with confidence, even if you
+  Zero Fear's trainers have 8+ years of experience teaching complete beginners to ride a scooty or bike with confidence, even if you
   have never ridden a cycle. One-to-one classes with a patient trainer near Netaji Metro,
   Tollygunge, or doorstep training within 10 km. Courses: Basic Scooty, Advanced Scooty,
   Bike Training and RTO test preparation. Courses from ₹2,500. Message us to book your first class.
@@ -48,7 +48,7 @@ All are 1080×1080 and safe for the round crop.
 - **Bio (max 150):**
   🛵 Scooty & bike training, Kolkata
   🚲 No cycling needed
-  👩 Patient 1-to-1 trainers
+  👩 Patient 1-to-1 trainers · 8+ yrs exp
   🏠 Doorstep within 10 km
   👇 Book your first class
 - **Link:** website (after launch) or WhatsApp link `https://wa.me/917980110273`
@@ -62,7 +62,8 @@ All are 1080×1080 and safe for the round crop.
 - **Intro / bio (max 101):**
   Scooty & bike training in Kolkata for complete beginners. No cycling needed. Fear out. Freedom in.
 - **About (long):**
-  Zero Fear is a beginner-first two-wheeler training school in Kolkata. We teach people who
+  Zero Fear is a beginner-first two-wheeler training school in Kolkata, run by trainers with
+  8+ years of experience. We teach people who
   have never ridden before, including those who can't ride a cycle, to ride a scooty or bike
   on their own. Every class is one-to-one with a patient trainer: balance and control on a calm
   practice ground first, then real Kolkata roads when you're ready. Train near Netaji Metro,

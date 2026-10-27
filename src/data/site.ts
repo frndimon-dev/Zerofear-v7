@@ -4,7 +4,9 @@
 export const site = {
   name: 'Zero Fear',
   tagline: 'Fear Out. Freedom In.',
-  since: 2018,
+  // Trainers' hands-on experience (Zero Fear itself launched in 2026).
+  experienceYears: 8,
+  founded: 2026,
   url: 'https://zerofear-v7.vercel.app',
   description:
     'Scooty and bike training in Kolkata for complete beginners — even if you cannot ride a cycle. One-to-one classes near Netaji Metro, Tollygunge, plus doorstep training within 10 km.',
@@ -26,7 +28,7 @@ export const site = {
     { value: '4.9★', label: 'Google rating' },
     { value: '300+', label: 'Google reviews' },
     { value: '5000+', label: 'Learners trained' },
-    { value: 'Since 2018', label: 'Training in Kolkata' },
+    { value: '8+ Years', label: 'Training experience' },
   ],
 
   googleReviewsUrl: 'https://www.google.com/maps/search/?api=1&query=Zero%20Fear%20Kolkata',
@@ -210,10 +212,10 @@ export const steps = [
 ];
 
 export const journey = [
-  { year: '2018', title: 'Where it began', text: 'Our first two-wheeler classes in Tollygunge, with one simple rule: start from the learner.' },
-  { year: '2020', title: 'A structured course', text: 'Training becomes a step-by-step course with more real-road practice.' },
-  { year: '2024', title: 'Thousands of learners', text: 'Doorstep training, bike training and RTO preparation grow from what learners asked for.' },
-  { year: '2026', title: 'Zero Fear', text: 'A new name for the same patient training: learning, experience, confidence and freedom.' },
+  { year: '2018', title: 'First classes', text: 'Our trainers start teaching two-wheeler riding in Kolkata, with one rule: start from the learner.' },
+  { year: '2020', title: 'A proper method', text: 'Teaching becomes a step-by-step course: balance first, then control, then real roads.' },
+  { year: '2024', title: 'Thousands of learners', text: 'Doorstep classes, bike training and RTO preparation grow from what learners asked for.' },
+  { year: '2026', title: 'Zero Fear begins', text: 'Our trainers launch Zero Fear: a beginner-first school built on 8 years of experience.' },
 ];
 
 export const womenPoints = [

@@ -21,7 +21,7 @@ const localBusiness = {
   description: site.description,
   url: site.url,
   telephone: site.phone.tel,
-  foundingDate: String(site.since),
+  foundingDate: String(site.founded),
   areaServed: 'Kolkata',
   address: {
     '@type': 'PostalAddress',
@@ -44,6 +44,7 @@ const localBusiness = {
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#0c0f16" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="alternate" type="application/rss+xml" title="Zero Fear Blog" href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
