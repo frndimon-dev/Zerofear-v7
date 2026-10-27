@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Noto+Sans+Bengali:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
 /* =========================================================
    ZERO FEAR — MASTER PRODUCTION STYLESHEET
@@ -1996,6 +1996,15 @@ footer #footerGrid>div>strong{font-weight:950!important;letter-spacing:-.45px!im
   .blog-takeaway-list p{font-size:14px!important;line-height:1.5!important}
 }
 </style>
+
+<style id="zf-cleanup-fixes">
+html,body{overflow-x:clip}
+.gallery-chip{cursor:pointer;font:inherit;border:1px solid var(--border)}
+.gallery-chip.active{background:var(--yellow)!important;color:#111!important}
+.review-initial{display:grid;place-items:center;width:84px;height:84px;margin:0 auto 10px;border-radius:50%;background:linear-gradient(135deg,#1557a8,#0b2d5c);color:#fff;font-size:34px;letter-spacing:0}
+a.social-reel-fallback{text-decoration:none;color:var(--muted)}
+.social-reel-cta{display:inline-block;margin-top:14px;padding:9px 16px;border-radius:999px;background:var(--blue,#1557a8);color:#fff;font-style:normal;font-weight:800;font-size:12px}
+</style>
 </head>
 <body>
 <!-- 01. HEADER -->
@@ -2230,7 +2239,7 @@ footer #footerGrid>div>strong{font-weight:950!important;letter-spacing:-.45px!im
 <div class="section-head">
 <span class="section-tag">OUR COURSES &amp; TRAINING</span>
 <h2>Choose your <span class="highlight">starting point.</span></h2>
-<p class="zf-support">Choose a starting point. Explore the full curriculum and practical progression inside each course.</p>
+<p class="zf-support">Explore the full curriculum and practical progression inside each course.</p>
 </div>
 <div class="course-carousel" data-3d-scroller="courses">
 <!-- 1. Basic Scooty -->
@@ -2364,7 +2373,7 @@ footer #footerGrid>div>strong{font-weight:950!important;letter-spacing:-.45px!im
 <div class="review-feature" id="reviewFeature" aria-live="polite">
   <div class="review-photo-frame">
     <img id="reviewPhoto" alt="Real Zero Fear learner" loading="lazy"/>
-    <div class="review-photo-placeholder" id="reviewPhotoPlaceholder">REAL LEARNER<br/><small>Add learner photo</small></div>
+    <div class="review-photo-placeholder" id="reviewPhotoPlaceholder" aria-hidden="true"><span class="review-initial" id="reviewInitial">ZF</span><small>Zero Fear Learner</small></div>
     <span class="review-photo-badge" id="reviewPhotoBadge">Learner Story</span>
   </div>
   <div class="review-copy-panel">
@@ -2372,8 +2381,8 @@ footer #footerGrid>div>strong{font-weight:950!important;letter-spacing:-.45px!im
     <div class="review-stars" id="reviewStars">★★★★★</div>
     <blockquote id="reviewQuote">“Step-by-step practice made the learning process feel much easier and more comfortable.”</blockquote>
     <div class="review-person">
-      <strong id="reviewName">Learner Review</strong>
-      <span id="reviewMeta">Real learner feedback</span>
+      <strong id="reviewName">Zero Fear Learner</strong>
+      <span id="reviewMeta">Google review</span>
     </div>
     <a id="reviewGoogleLink" class="btn btn-blue review-detail-btn" href="https://www.google.com/maps/search/?api=1&amp;query=Zero%20Fear%20Kolkata" target="_blank" rel="noopener">View Details / Google Reviews →</a>
   </div>
@@ -2383,7 +2392,6 @@ footer #footerGrid>div>strong{font-weight:950!important;letter-spacing:-.45px!im
   <div class="review-dots" id="reviewDots"></div>
   <button type="button" class="review-arrow" id="reviewNext" aria-label="Next review">›</button>
 </div>
-<p class="review-data-note">Real learner photos and Google review data can be connected from the review data source; each slide supports its own portrait, learner type, rating and Google review link.</p>
 </div>
 </section>
 <section class="section zoom-reveal zf-surface" id="faq-sec">
@@ -2419,25 +2427,22 @@ footer #footerGrid>div>strong{font-weight:950!important;letter-spacing:-.45px!im
 </div>
 </div>
 </section>
-<section class="section zoom-reveal zf-surface" style="background:#fff">
+<section class="section zoom-reveal zf-surface" id="gallery-sec" style="background:#fff">
 <div class="container">
 <div class="section-head">
 <span class="section-tag">TRAINING IN ACTION</span>
 <h2>Real moments. <span class="highlight">Real learners.</span></h2>
 <p>Real photos and videos from your training journey.</p>
 </div>
-<div class="course-meta" style="margin-bottom:20px">
-<span class="meta-chip" style="background:var(--yellow); color:#111">All</span>
-<span class="meta-chip">Scooty</span>
-<span class="meta-chip">Women</span>
-<span class="meta-chip">Bike</span>
-<span class="meta-chip">Success</span>
-<span class="meta-chip">Road</span>
-<span class="meta-chip">Training</span>
+<div class="course-meta" id="galleryFilters" style="margin-bottom:20px">
+<button type="button" class="meta-chip gallery-chip active" data-filter="all">All</button>
+<button type="button" class="meta-chip gallery-chip" data-filter="women">Women</button>
+<button type="button" class="meta-chip gallery-chip" data-filter="bike">Bike</button>
+<button type="button" class="meta-chip gallery-chip" data-filter="practice">Road Practice</button>
+<button type="button" class="meta-chip gallery-chip" data-filter="training">Training</button>
 </div>
 <div class="training-gallery-shell">
 <div class="training-gallery-grid" id="trainingGallery" aria-live="polite" aria-label="Five rotating training images"></div>
-<div class="training-gallery-status"><span id="trainingGalleryStatus">5 visible · 30 image pool</span><span>Five images stay visible at a time and rotate automatically while you remain on the page.</span></div>
 </div>
 </div>
 </section>
@@ -2469,7 +2474,7 @@ footer #footerGrid>div>strong{font-weight:950!important;letter-spacing:-.45px!im
 <a class="social-visit" href="https://www.instagram.com/scooty_bike_training_centre/" target="_blank" rel="noopener">Visit Us →</a>
 </div>
 <div class="social-reel-media" data-social-reel="instagram">
-<div class="social-reel-fallback"><div><strong>Instagram Reel</strong><span>Live Reel player is ready for the Reel URL.</span></div></div>
+<a class="social-reel-fallback" href="https://www.instagram.com/scooty_bike_training_centre/" target="_blank" rel="noopener"><div><strong>Instagram Reels</strong><span>Instagram-এ আমাদের লেটেস্ট training reels দেখুন।</span><em class="social-reel-cta">Watch on Instagram →</em></div></a>
 </div>
 </div>
 
@@ -2479,7 +2484,7 @@ footer #footerGrid>div>strong{font-weight:950!important;letter-spacing:-.45px!im
 <a class="social-visit" href="https://www.facebook.com/freelancetwowheelertraining.co.in" target="_blank" rel="noopener">Visit Us →</a>
 </div>
 <div class="social-reel-media" data-social-reel="facebook">
-<div class="social-reel-fallback"><div><strong>Facebook Reel</strong><span>Live Reel player is ready for the Reel URL.</span></div></div>
+<a class="social-reel-fallback" href="https://www.facebook.com/freelancetwowheelertraining.co.in" target="_blank" rel="noopener"><div><strong>Facebook Reels</strong><span>Facebook-এ learner stories ও training videos দেখুন।</span><em class="social-reel-cta">Watch on Facebook →</em></div></a>
 </div>
 </div>
 </div>
@@ -2565,11 +2570,11 @@ footer #footerGrid>div>strong{font-weight:950!important;letter-spacing:-.45px!im
 <div style="display:grid; gap:14px">
 <div style="background:rgba(255,255,255,0.06); padding:12px 16px; border-radius:12px; border:1px solid rgba(255,255,255,0.1)">
 <span style="font-size:11px; color:var(--yellow); font-weight:800; display:block">CALL</span>
-<strong style="font-size:18px">7980108587</strong>
+<strong style="font-size:18px"><a href="tel:7980108587" style="color:inherit">7980108587</a></strong>
 </div>
 <div style="background:rgba(255,255,255,0.06); padding:12px 16px; border-radius:12px; border:1px solid rgba(255,255,255,0.1)">
-<span style="font-size:11px; color:#BACDE8; font-weight:800; display:block">CALL</span>
-<strong style="font-size:18px">7980108587</strong>
+<span style="font-size:11px; color:#BACDE8; font-weight:800; display:block">WHATSAPP</span>
+<strong style="font-size:18px"><a href="https://wa.me/919748485630" target="_blank" rel="noopener" style="color:inherit">9748485630</a></strong>
 </div>
 <div style="padding:6px 0; font-size:13px; color:#BACDE8">
               📍 Tollygunge · Netaji Metro · Kudghat · Up to 10 KM Doorstep
@@ -3329,8 +3334,7 @@ footer #footerGrid>div>strong{font-weight:950!important;letter-spacing:-.45px!im
 </div>
 <div>
 <strong>Connect</strong>
-<p style="margin-top:8px"><a class="muted" href="tel:7980108587">7980108587</a></p>
-<p><a class="muted" href="tel:7980108587">7980108587</a></p>
+<p style="margin-top:8px"><a class="muted" href="tel:7980108587">Call: 7980108587</a></p>
 <p><a class="muted" href="https://wa.me/919748485630" target="_blank">WhatsApp</a></p>
 </div>
 </div>
@@ -3354,10 +3358,13 @@ footer #footerGrid>div>strong{font-weight:950!important;letter-spacing:-.45px!im
 // ১. Supabase ইনিশিয়ালাইজেশন
 const SUPABASE_URL = 'https://fhsslykxcwbpzqusouii.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_QC_9-e0uIV2EEzJUwr4plg_TdhK8ozF';
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// CDN ব্লক/ফেল হলেও পুরো সাইট (routing, menu, slider, form) যেন কাজ করে।
+const sb = window.supabase?.createClient ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+window.sb = sb;
 
 // ডাটাবেস সেটিংস সিঙ্ক
 async function syncFromSupabase(){
+  if(!sb) return;
   try{
     const { data: settings } = await sb.from('site_settings').select('*');
     if(settings){
@@ -3593,35 +3600,34 @@ const ZERO_FEAR_GALLERY = [
   {id:'g03',category:'bike',url:'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=900&q=82',focalX:50,focalY:42,alt:'Bike training'},
   {id:'g04',category:'practice',url:'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?auto=format&fit=crop&w=900&q=82',focalX:50,focalY:42,alt:'Practical riding'},
   {id:'g05',category:'training',url:'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=900&q=82',focalX:50,focalY:42,alt:'Two-wheeler training'},
-  {id:'g06',category:'training',url:'',focalX:50,focalY:50,alt:'Training training photo 06'},
-  {id:'g07',category:'women',url:'',focalX:50,focalY:50,alt:'Women training photo 07'},
-  {id:'g08',category:'men',url:'',focalX:50,focalY:50,alt:'Men training photo 08'},
-  {id:'g09',category:'rto',url:'',focalX:50,focalY:50,alt:'Rto training photo 09'},
-  {id:'g10',category:'practice',url:'',focalX:50,focalY:50,alt:'Practice training photo 10'},
-  {id:'g11',category:'training',url:'',focalX:50,focalY:50,alt:'Training training photo 11'},
-  {id:'g12',category:'women',url:'',focalX:50,focalY:50,alt:'Women training photo 12'},
-  {id:'g13',category:'men',url:'',focalX:50,focalY:50,alt:'Men training photo 13'},
-  {id:'g14',category:'rto',url:'',focalX:50,focalY:50,alt:'Rto training photo 14'},
-  {id:'g15',category:'practice',url:'',focalX:50,focalY:50,alt:'Practice training photo 15'},
-  {id:'g16',category:'training',url:'',focalX:50,focalY:50,alt:'Training training photo 16'},
-  {id:'g17',category:'women',url:'',focalX:50,focalY:50,alt:'Women training photo 17'},
-  {id:'g18',category:'men',url:'',focalX:50,focalY:50,alt:'Men training photo 18'},
-  {id:'g19',category:'rto',url:'',focalX:50,focalY:50,alt:'Rto training photo 19'},
-  {id:'g20',category:'practice',url:'',focalX:50,focalY:50,alt:'Practice training photo 20'},
-  {id:'g21',category:'training',url:'',focalX:50,focalY:50,alt:'Training training photo 21'},
-  {id:'g22',category:'women',url:'',focalX:50,focalY:50,alt:'Women training photo 22'},
-  {id:'g23',category:'men',url:'',focalX:50,focalY:50,alt:'Men training photo 23'},
-  {id:'g24',category:'rto',url:'',focalX:50,focalY:50,alt:'Rto training photo 24'},
-  {id:'g25',category:'practice',url:'',focalX:50,focalY:50,alt:'Practice training photo 25'},
-  {id:'g26',category:'training',url:'',focalX:50,focalY:50,alt:'Training training photo 26'},
-  {id:'g27',category:'women',url:'',focalX:50,focalY:50,alt:'Women training photo 27'},
-  {id:'g28',category:'men',url:'',focalX:50,focalY:50,alt:'Men training photo 28'},
-  {id:'g29',category:'rto',url:'',focalX:50,focalY:50,alt:'Rto training photo 29'},
-  {id:'g30',category:'practice',url:'',focalX:50,focalY:50,alt:'Practice training photo 30'},
+  {id:'g06',category:'training',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g07',category:'women',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g08',category:'men',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g09',category:'rto',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g10',category:'practice',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g11',category:'training',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g12',category:'women',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g13',category:'men',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g14',category:'rto',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g15',category:'practice',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g16',category:'training',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g17',category:'women',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g18',category:'men',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g19',category:'rto',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g20',category:'practice',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g21',category:'training',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g22',category:'women',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g23',category:'men',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g24',category:'rto',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g25',category:'practice',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g26',category:'training',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g27',category:'women',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g28',category:'men',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g29',category:'rto',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
+  {id:'g30',category:'practice',url:'',focalX:50,focalY:50,alt:'Zero Fear training photo'},
 ]
 
 const galleryEl = document.getElementById('trainingGallery');
-const galleryStatus = document.getElementById('trainingGalleryStatus');
 const promisePanel = document.getElementById('promisePanel');
 let galleryPool = ZERO_FEAR_GALLERY.filter(x => x.url);
 let galleryShown = new Set();
@@ -3644,7 +3650,7 @@ async function syncTrainingGalleryFromSupabase(){
     const {data,error}=await sb.from('training_gallery').select('*').eq('active',true);
     if(error || !Array.isArray(data) || !data.length) return;
     const remote=data.map(normalizeGalleryItem).filter(x=>x.url).slice(0,30);
-    if(remote.length >= 5){
+    if(remote.length){
       galleryPool=remote;
       galleryShown=new Set();
       renderGallery(true);
@@ -3662,15 +3668,23 @@ function seededShuffle(items, seed){
   return a;
 }
 
+let galleryFilter='all';
+function activeGalleryPool(){
+  const f=galleryFilter==='all'?galleryPool:galleryPool.filter(x=>x.category===galleryFilter);
+  return f.length?f:galleryPool;
+}
 function renderGallery(resetCycle=false){
-  if(!galleryEl || galleryPool.length < 5) return;
+  const gallerySec=document.getElementById('gallery-sec');
+  if(gallerySec) gallerySec.hidden=!galleryPool.length;
+  if(!galleryEl || !galleryPool.length) return;
   if(resetCycle) galleryCycle=0;
   const seed=(Date.now() ^ ((galleryCycle+1)*2654435761))>>>0;
-  let candidates=seededShuffle(galleryPool,seed).filter(x=>!galleryShown.has(x.id));
-  if(candidates.length<5){
+  const pool=activeGalleryPool();
+  let candidates=seededShuffle(pool,seed).filter(x=>!galleryShown.has(x.id));
+  if(candidates.length<Math.min(5,pool.length)){
     // Start a new pool cycle only after the current set has been exhausted.
     galleryShown=new Set();
-    candidates=seededShuffle(galleryPool,seed^0x9e3779b9);
+    candidates=seededShuffle(pool,seed^0x9e3779b9);
   }
   const selected=candidates.slice(0,5);
   selected.forEach(x=>galleryShown.add(x.id));
@@ -3684,7 +3698,6 @@ function renderGallery(resetCycle=false){
       img.style.visibility='hidden';
     },{once:true});
   });
-  if(galleryStatus) galleryStatus.textContent=`5 visible · ${galleryPool.length} image pool`;
   galleryCycle++;
 }
 
@@ -3696,6 +3709,14 @@ function applyPromiseBackground(){
   promisePanel.style.backgroundImage=`url("${item.url}")`;
 }
 
+document.querySelectorAll('#galleryFilters .gallery-chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    galleryFilter=chip.dataset.filter||'all';
+    document.querySelectorAll('#galleryFilters .gallery-chip').forEach(c=>c.classList.toggle('active',c===chip));
+    galleryShown=new Set();
+    renderGallery(true);
+  });
+});
 if(galleryEl){
   renderGallery(true);
   applyPromiseBackground();
@@ -3822,7 +3843,7 @@ initDoorstepSlider();
 /* ১০. REAL LEARNER REVIEW SLIDER — four learner-story slots, portrait media, Google detail links. */
 const ZERO_FEAR_REVIEWS = [
   {id:'r01',type:'NON-CYCLIST LEARNER',badge:'Learner Story',name:'Sneha Mukherjee',meta:'Tollygunge Trainee · Non-cyclist beginner',rating:5,quote:'আমি আগে cycle-ও চালাতে পারতাম না। Step-by-step practice-এর পরে riding-এর ভয় অনেকটাই কমেছে।',image:'',focalX:50,focalY:50,googleUrl:'https://www.google.com/maps/search/?api=1&query=Zero%20Fear%20Kolkata'},
-  {id:'r02',type:'WOMEN LEARNER',badge:'Women Learner',name:'Women Learner Review',meta:'Women learner · Practical road training',rating:5,quote:'Patient guidance and practical road exposure helped build confidence progressively.',image:'',focalX:50,focalY:50,googleUrl:'https://www.google.com/maps/search/?api=1&query=Zero%20Fear%20Kolkata'},
+  {id:'r02',type:'WOMEN LEARNER',badge:'Women Learner',name:'Zero Fear Learner',meta:'Women learner · Practical road training',rating:5,quote:'Patient guidance and practical road exposure helped build confidence progressively.',image:'',focalX:50,focalY:50,googleUrl:'https://www.google.com/maps/search/?api=1&query=Zero%20Fear%20Kolkata'},
   {id:'r03',type:'BIKE LEARNER',badge:'Bike Training',name:'Arindam Ghosh',meta:'Bike Trainee · South Kolkata',rating:5,quote:'Clutch and gear controls made very easy. Learned safely in 5 sessions. Highly recommended in South Kolkata.',image:'',focalX:50,focalY:50,googleUrl:'https://www.google.com/maps/search/?api=1&query=Zero%20Fear%20Kolkata'},
   {id:'r04',type:'DOORSTEP LEARNER',badge:'Doorstep Training',name:'Priyanka Sen',meta:'Doorstep Learner · Behala',rating:5,quote:'Doorstep training was awesome. They came to Behala and taught me on my own scooter. Very patient trainers!',image:'',focalX:50,focalY:50,googleUrl:'https://www.google.com/maps/search/?api=1&query=Zero%20Fear%20Kolkata'}
 ];
@@ -3861,6 +3882,8 @@ function renderReview(resetTimer=false){
     reviewEls.photo.removeAttribute('src');
     reviewEls.photo.style.display='none';
     reviewEls.placeholder.style.display='grid';
+    const initial=document.getElementById('reviewInitial');
+    if(initial) initial.textContent=(r.name||'Z').trim().charAt(0).toUpperCase();
   }
   reviewEls.dots.innerHTML='';
   zeroFearReviews.forEach((_,i)=>{const b=document.createElement('button');b.type='button';b.className='review-dot'+(i===reviewIndex?' active':'');b.setAttribute('aria-label',`Show learner review ${i+1}`);b.addEventListener('click',()=>goReview(i,true));reviewEls.dots.appendChild(b)});
