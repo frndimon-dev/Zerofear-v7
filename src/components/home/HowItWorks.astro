@@ -1,12 +1,18 @@
 ---
-import { steps } from '../../data/site';
+import Photo from '../Photo.astro';
+import { steps, photos } from '../../data/site';
 ---
 <section class="section section--navy" id="how-it-works">
   <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">How it works</span>
-      <h2>Confidence first. Speed later.</h2>
-      <p>No fixed formula. Your trainer starts from where you are and moves on only when you’re ready.</p>
+    <div class="how__intro">
+      <div class="section-head">
+        <span class="eyebrow">How it works</span>
+        <h2>Confidence first. Speed later.</h2>
+        <p>No fixed formula. Your trainer starts from where you are and moves on only when you’re ready.</p>
+      </div>
+      <div class="how__photo">
+        <Photo src={photos.howItWorks.src} alt={photos.howItWorks.alt} position={photos.howItWorks.position} />
+      </div>
     </div>
 
     <ol class="steps">
@@ -22,6 +28,10 @@ import { steps } from '../../data/site';
 </section>
 
 <style>
+  .how__intro { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 72px); align-items: center; margin-bottom: clamp(32px, 5vw, 48px); }
+  .how__intro .section-head { margin-bottom: 0; }
+  .how__photo { aspect-ratio: 3 / 2; border-radius: var(--radius); overflow: hidden; }
+  @media (max-width: 860px) { .how__intro { grid-template-columns: 1fr; } }
   .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; counter-reset: none; }
   .step { padding: 24px; border-radius: var(--radius); background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); }
   .step__num {

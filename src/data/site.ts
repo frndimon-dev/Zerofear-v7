@@ -43,6 +43,7 @@ export const site = {
 // An empty src renders a branded tile instead of a broken image.
 export const photos = {
   hero: { src: '/images/hero-trainer-guiding.webp', alt: 'Zero Fear trainer guiding a beginner on a scooty in Kolkata', position: '50% 40%' },
+  howItWorks: { src: '/images/how-it-works-briefing.webp', alt: 'Trainer explaining scooty controls to new learners before the first ride', position: '50% 50%' },
   doorstep: { src: '/images/doorstep-lane-training.webp', alt: 'Trainer walking beside a learner on a quiet residential lane', position: '50% 30%' },
 };
 
@@ -52,6 +53,10 @@ export const gallery = [
   { src: '/images/gallery-trainer-explaining.webp', alt: 'Trainer explaining throttle and brake control to a beginner' },
   { src: '/images/gallery-any-age.webp', alt: 'Trainer walking beside a learner on a quiet lane' },
   { src: '/images/gallery-bike-with-trainer.webp', alt: 'Bike learner with her trainer before a practice ride' },
+  { src: '/images/gallery-hands-on.webp', alt: 'Trainer guiding a learner’s hand on the throttle' },
+  { src: '/images/gallery-family-support.webp', alt: 'Older learner on a scooty while her family watches the lesson' },
+  { src: '/images/gallery-group-lesson.webp', alt: 'Trainer explaining the scooty controls to a group of learners' },
+  { src: '/images/gallery-proud-moment.webp', alt: 'Family filming a learner’s ride on a quiet tree-lined road' },
 ];
 
 export type Course = {
