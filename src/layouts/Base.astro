@@ -29,7 +29,7 @@ const localBusiness = {
     addressRegion: 'West Bengal',
     addressCountry: 'IN',
   },
-  sameAs: Object.values(site.social),
+  sameAs: Object.values(site.social).filter(Boolean),
 };
 ---
 <!doctype html>

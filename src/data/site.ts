@@ -30,10 +30,11 @@ export const site = {
   ],
 
   googleReviewsUrl: 'https://www.google.com/maps/search/?api=1&query=Zero%20Fear%20Kolkata',
+  // Set a link to null to hide it everywhere.
   social: {
-    youtube: 'https://www.youtube.com/@kolkatascootybiketrainingcentr',
-    instagram: 'https://www.instagram.com/scooty_bike_training_centre/',
-    facebook: 'https://www.facebook.com/freelancetwowheelertraining.co.in',
+    youtube: null as string | null,
+    instagram: 'https://www.instagram.com/scooty_bike_training_centre/' as string | null,
+    facebook: 'https://www.facebook.com/freelancetwowheelertraining.co.in' as string | null,
   },
 
 };

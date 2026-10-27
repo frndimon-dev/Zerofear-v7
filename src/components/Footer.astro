@@ -10,9 +10,9 @@ const year = new Date().getFullYear();
       <Logo light />
       <p>Beginner-first scooty and bike training in Kolkata since {site.since}. {site.tagline}</p>
       <div class="footer__social">
-        <a href={site.social.youtube} target="_blank" rel="noopener" aria-label="YouTube"><Icon name="youtube" /></a>
-        <a href={site.social.instagram} target="_blank" rel="noopener" aria-label="Instagram"><Icon name="instagram" /></a>
-        <a href={site.social.facebook} target="_blank" rel="noopener" aria-label="Facebook"><Icon name="facebook" /></a>
+        {site.social.youtube && <a href={site.social.youtube} target="_blank" rel="noopener" aria-label="YouTube"><Icon name="youtube" /></a>}
+        {site.social.instagram && <a href={site.social.instagram} target="_blank" rel="noopener" aria-label="Instagram"><Icon name="instagram" /></a>}
+        {site.social.facebook && <a href={site.social.facebook} target="_blank" rel="noopener" aria-label="Facebook"><Icon name="facebook" /></a>}
       </div>
     </div>
 

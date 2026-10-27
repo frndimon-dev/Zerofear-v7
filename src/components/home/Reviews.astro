@@ -1,6 +1,11 @@
 ---
 import Icon from '../Icon.astro';
 import { reviews, site } from '../../data/site';
+
+const videoLinks = [
+  { label: 'YouTube', href: site.social.youtube },
+  { label: 'Instagram', href: site.social.instagram },
+].filter((l): l is { label: string; href: string } => Boolean(l.href));
 ---
 <section class="section section--soft" id="reviews">
   <div class="container">
@@ -37,10 +42,14 @@ import { reviews, site } from '../../data/site';
       <ul class="gallery__list" data-gallery-list></ul>
     </div>
 
-    <p class="reviews__more">
-      Watch real classes on <a href={site.social.youtube} target="_blank" rel="noopener">YouTube</a>{' and '}
-      <a href={site.social.instagram} target="_blank" rel="noopener">Instagram</a>.
-    </p>
+    {videoLinks.length > 0 && (
+      <p class="reviews__more">
+        Watch real classes on{' '}
+        {videoLinks.map((l, i) => (
+          <>{i > 0 && ' and '}<a href={l.href} target="_blank" rel="noopener">{l.label}</a></>
+        ))}.
+      </p>
+    )}
   </div>
 </section>
 
