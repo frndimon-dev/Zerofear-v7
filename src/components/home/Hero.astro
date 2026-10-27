@@ -5,66 +5,65 @@ const prices = courses.map((c) => c.price).filter((p): p is number => p !== null
 const fromPrice = prices.length ? Math.min(...prices) : null;
 ---
 <section class="hero dark">
-  <picture class="hero__bg">
-    <source media="(max-width: 760px)" srcset="/images/hero-tall.webp" />
-    <img src="/images/hero-wide.webp" alt="Zero Fear learners on their scooties with their trainers in a Kolkata lane" fetchpriority="high" decoding="async" />
-  </picture>
-
-  <div class="container hero__content">
-    <div class="hero__top">
+  <!-- Photo with only the headline on it, so the photo stays visible -->
+  <div class="hero__media">
+    <picture>
+      <source media="(max-width: 760px)" srcset="/images/hero-tall.webp" />
+      <img src="/images/hero-wide.webp" alt="Zero Fear learners on their scooties with their trainers in a Kolkata lane" fetchpriority="high" decoding="async" />
+    </picture>
+    <div class="container hero__top">
       <p class="hero__kicker"><span class="dot"></span> Scooty & bike training · {site.city}</p>
       <h1 class="hero__title">Ride without <span>fear.</span></h1>
     </div>
+  </div>
 
-    <div class="hero__bottom">
-      <p class="hero__lead">Can’t ride a cycle? <strong>You can still ride.</strong></p>
-      <div class="hero__actions">
-        <a class="btn btn--primary btn--lg" href="/book">Book a class <Icon name="arrow" /></a>
-        <a class="btn btn--glass btn--lg" href={waLink('Hi Zero Fear, I want to learn to ride.')} target="_blank" rel="noopener"><Icon name="whatsapp" /> WhatsApp</a>
-      </div>
-      <ul class="hero__proof">
-        <li><strong>4.9★</strong> Google</li>
-        <li><strong>5000+</strong> learners</li>
-        {fromPrice && <li><strong>{formatINR(fromPrice)}</strong> onwards</li>}
-      </ul>
+  <!-- Copy and actions sit below the photo -->
+  <div class="container hero__bar">
+    <p class="hero__lead">Can’t ride a cycle? <strong>You can still ride.</strong></p>
+    <div class="hero__actions">
+      <a class="btn btn--primary btn--lg" href="/book">Book a class <Icon name="arrow" /></a>
+      <a class="btn btn--glass btn--lg" href={waLink('Hi Zero Fear, I want to learn to ride.')} target="_blank" rel="noopener"><Icon name="whatsapp" /> WhatsApp</a>
     </div>
+    <ul class="hero__proof">
+      <li><strong>4.9★</strong> Google</li>
+      <li><strong>5000+</strong> learners</li>
+      {fromPrice && <li><strong>{formatINR(fromPrice)}</strong> onwards</li>}
+    </ul>
   </div>
 </section>
 
 <style>
-  .hero { position: relative; isolation: isolate; min-height: calc(100svh - var(--header-h)); display: flex; overflow: hidden; }
-  .hero__bg, .hero__bg img { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .hero__bg { z-index: -2; }
-  .hero__bg img { object-fit: cover; object-position: 30% 55%; animation: hero-zoom 14s ease-out both; }
-  @keyframes hero-zoom { from { transform: scale(1.08); } to { transform: scale(1); } }
-  .hero::after {
+  .hero { background: var(--navy); }
+  .hero__media { position: relative; isolation: isolate; height: min(72svh, 680px); min-height: 340px; overflow: hidden; }
+  .hero__media picture, .hero__media img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero__media img { object-fit: cover; object-position: 50% 55%; z-index: -2; animation: hero-zoom 14s ease-out both; }
+  @keyframes hero-zoom { from { transform: scale(1.06); } to { transform: scale(1); } }
+  /* Thin shade only at the top for the headline, and a fade into the bar below */
+  .hero__media::after {
     content: ''; position: absolute; inset: 0; z-index: -1;
-    background:
-      linear-gradient(180deg, rgba(12, 15, 22, 0.65) 0%, rgba(12, 15, 22, 0) 28%, rgba(12, 15, 22, 0) 55%, rgba(12, 15, 22, 0.88) 100%);
+    background: linear-gradient(180deg, rgba(12,15,22,.7) 0%, rgba(12,15,22,0) 26%, rgba(12,15,22,0) 82%, var(--navy) 100%);
   }
-  .hero__content { display: flex; flex-direction: column; justify-content: space-between; padding-block: clamp(24px, 4vw, 44px); }
+  .hero__top { padding-top: clamp(18px, 3vw, 32px); }
 
-  .hero__kicker { display: inline-flex; align-items: center; gap: 10px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #e9ebf0; }
+  .hero__kicker { display: inline-flex; align-items: center; gap: 10px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #e9ebf0; }
   .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 5px rgba(255, 214, 10, 0.3); animation: pulse 2s infinite; }
   @keyframes pulse { 50% { box-shadow: 0 0 0 9px rgba(255, 214, 10, 0); } }
-
-  .hero__title { margin-top: 12px; font-size: clamp(2.4rem, 4.4vw, 4.2rem); line-height: 0.95; color: #fff; }
+  .hero__title { margin-top: 8px; font-size: clamp(2.2rem, 4vw, 3.8rem); line-height: 0.95; color: #fff; text-shadow: 0 2px 18px rgba(0,0,0,.35); }
   .hero__title span { color: var(--yellow); }
 
-  .hero__bottom { display: grid; gap: 16px; justify-items: start; }
-  .hero__lead { font-size: clamp(1.15rem, 1.8vw, 1.4rem); font-weight: 600; color: #eef0f4; text-shadow: 0 1px 12px rgba(0,0,0,.5); }
+  .hero__bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px 28px; padding-block: 22px 32px; }
+  .hero__lead { font-size: clamp(1.15rem, 1.8vw, 1.4rem); font-weight: 700; color: #fff; }
   .hero__lead strong { color: var(--yellow); }
   .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
-  .hero__proof { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .hero__proof li { padding: 6px 12px; border-radius: 999px; background: rgba(12,15,22,.55); border: 1px solid rgba(255,255,255,.18); font-size: 0.82rem; color: #d2d6de; backdrop-filter: blur(6px); }
+  .hero__proof { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; width: 100%; }
+  .hero__proof li { padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.18); font-size: 0.82rem; color: #d2d6de; }
   .hero__proof strong { color: #fff; font-weight: 800; }
 
   @media (max-width: 760px) {
-    .hero { min-height: calc(100svh - var(--header-h) - 70px); }
-    .hero__bg img { object-position: 50% 30%; }
-    /* Dark only at the very top and bottom so the photo stays clear in the middle */
-    .hero::after { background: linear-gradient(180deg, rgba(12,15,22,.75) 0%, rgba(12,15,22,0) 22%, rgba(12,15,22,0) 55%, rgba(12,15,22,.92) 82%); }
+    .hero__media { height: 58svh; }
+    .hero__media img { object-position: 50% 30%; }
     .hero__title { font-size: clamp(2rem, 9vw, 2.6rem); }
+    .hero__bar { padding-block: 16px 24px; gap: 14px; }
     .hero__actions { width: 100%; }
     .hero__actions .btn { flex: 1 1 0; padding: 0 12px; min-height: 50px; }
     .hero__proof li { font-size: 0.75rem; padding: 5px 10px; }

@@ -43,3 +43,11 @@ npm run build   # outputs to dist/
 
 `legacy/index.html` is the previous single-file site, kept for reference while the
 inner pages are rebuilt. It is not deployed.
+
+## Blog
+
+Add a new post by creating a Markdown file in `src/content/blog/`, for example
+`scooty-training-in-behala.md`. The file name becomes the URL (`/blog/scooty-training-in-behala`).
+Start the file with the same header block (title, description, date, category, image, imageAlt,
+keywords) as the existing posts. The post appears on `/blog`, the home page, the footer, the
+sitemap and the RSS feed automatically after the next deploy.

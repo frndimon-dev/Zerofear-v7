@@ -332,9 +332,9 @@ export const nav = [
   { href: '/courses', label: 'Courses' },
   { href: '/doorstep-training', label: 'Doorstep' },
   { href: '/women-riders', label: 'Women riders' },
+  { href: '/blog', label: 'Blog' },
   { href: '/about', label: 'About' },
   { href: '/faq', label: 'FAQ' },
-  { href: '/#contact', label: 'Contact' },
 ];
 
 export const waLink = (text: string) =>

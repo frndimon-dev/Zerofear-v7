@@ -9,9 +9,8 @@ import Women from '../components/home/Women.astro';
 import Doorstep from '../components/home/Doorstep.astro';
 import PhotoStrip from '../components/home/PhotoStrip.astro';
 import Reviews from '../components/home/Reviews.astro';
-import Journey from '../components/home/Journey.astro';
 import MissionBand from '../components/home/MissionBand.astro';
-import Social from '../components/home/Social.astro';
+import BlogTeaser from '../components/home/BlogTeaser.astro';
 import Faq from '../components/home/Faq.astro';
 import Contact from '../components/home/Contact.astro';
 ---
@@ -20,14 +19,13 @@ import Contact from '../components/home/Contact.astro';
   <Ticker />
   <AboutIntro />
   <Courses />
-  <HowItWorks />
   <Women />
+  <HowItWorks />
   <PhotoStrip />
   <Doorstep />
   <Reviews />
-  <Journey />
   <MissionBand />
-  <Social />
+  <BlogTeaser />
   <Faq />
   <Contact />
   <script is:inline>
@@ -40,7 +38,11 @@ import Contact from '../components/home/Contact.astro';
         'courses/rto-exam-preparation': '/courses/rto-exam-preparation',
         'doorstep-training': '/doorstep-training', 'doorstep': '/doorstep-training', 'doorstep-detail': '/doorstep-training',
         'women-detail': '/women-riders', 'about-detail': '/about', 'mission-detail': '/about',
-        'faq-detail': '/faq', 'booking': '/book',
+        'faq-detail': '/faq', 'booking': '/book', 'blog-sec': '/blog',
+        'blog/cycle-na-janle-scooty': '/blog/learn-scooty-without-cycle',
+        'blog/beginner-scooty-mistakes': '/blog/beginner-scooty-mistakes',
+        'blog/real-road-riding-checklist': '/blog/road-riding-checklist',
+        'blog/confidence-before-speed': '/blog/learn-scooty-without-cycle',
       };
       var target = map[location.hash.slice(1)];
       if (target) location.replace(target);

@@ -1,0 +1,120 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import { getPosts, formatDate, readingTime, type Post } from '../../lib/blog';
+import { site, waLink } from '../../data/site';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
+}
+
+interface Props { post: Post; posts: Post[] }
+const { post, posts } = Astro.props;
+const { Content } = await render(post);
+const { title, description, date, updated, category, image, imageAlt, keywords } = post.data;
+const related = posts.filter((p) => p.id !== post.id).sort((a, b) => Number(b.data.category === category) - Number(a.data.category === category)).slice(0, 3);
+const url = new URL(`/blog/${post.id}`, site.url).href;
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    image: new URL(image, site.url).href,
+    datePublished: date.toISOString(),
+    dateModified: (updated ?? date).toISOString(),
+    author: { '@type': 'Organization', name: site.name, url: site.url },
+    publisher: { '@type': 'Organization', name: site.name, logo: { '@type': 'ImageObject', url: new URL('/favicon.svg', site.url).href } },
+    mainEntityOfPage: url,
+    keywords: keywords.join(', '),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: new URL('/blog', site.url).href },
+      { '@type': 'ListItem', position: 3, name: title, item: url },
+    ],
+  },
+];
+---
+<Base title={`${title} | ${site.name}`} description={description} image={image} type="article">
+  <article class="article">
+    <header class="container article__head">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/blog">Blog</a></nav>
+      <div class="article__meta"><span class="cat">{category}</span><time datetime={date.toISOString()}>{formatDate(date)}</time><span>{readingTime(post.body)} min read</span></div>
+      <h1>{title}</h1>
+      <p class="article__lead">{description}</p>
+    </header>
+    <div class="container article__img"><img src={image} alt={imageAlt} fetchpriority="high" /></div>
+
+    <div class="container article__layout">
+      <div class="prose"><Content /></div>
+      <aside class="side">
+        <div class="side__box">
+          <p class="side__title">Learn with Zero Fear</p>
+          <p>One-to-one scooty & bike training in Kolkata. No cycling needed. From ₹2,500.</p>
+          <a class="btn btn--primary btn--block" href="/book">Book a class <Icon name="arrow" /></a>
+          <a class="btn btn--whatsapp btn--block" href={waLink(`Hi Zero Fear, I read "${title}" and want to know more.`)} target="_blank" rel="noopener"><Icon name="whatsapp" /> WhatsApp</a>
+        </div>
+      </aside>
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="section related">
+      <div class="container">
+        <h2>Keep <mark>reading.</mark></h2>
+        <ul>{related.map((p) => <li><PostCard post={p} /></li>)}</ul>
+      </div>
+    </section>
+  )}
+
+  <CtaBand title="Reading is step one." text="Step two is your first class with a patient trainer." />
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+</Base>
+
+<style>
+  .article__head { max-width: 860px; padding-top: clamp(28px, 5vw, 56px); }
+  .crumbs { font-size: 0.875rem; color: var(--muted); }
+  .crumbs a { text-decoration: none; }
+  .article__meta { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-top: 18px; font-size: 0.88rem; color: var(--muted); }
+  .cat { padding: 3px 10px; border-radius: 999px; background: var(--yellow); color: var(--navy); font-weight: 800; text-transform: uppercase; font-size: 0.72rem; }
+  .article h1 { margin-top: 14px; font-family: var(--font-serif); text-transform: none; font-weight: 600; letter-spacing: -0.02em; font-size: clamp(2rem, 4.4vw, 3.3rem); line-height: 1.1; }
+  .article__lead { margin-top: 16px; font-size: 1.15rem; color: var(--muted); }
+  .article__img { max-width: 1060px; margin-top: 32px; }
+  .article__img img { width: 100%; aspect-ratio: 16 / 8; object-fit: cover; border-radius: var(--radius-lg); }
+
+  .article__layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 56px; margin-top: 48px; max-width: 1060px; }
+  .side__box { position: sticky; top: calc(var(--header-h) + 24px); padding: 24px; border-radius: var(--radius); background: var(--navy); color: #dfe3ea; display: grid; gap: 12px; }
+  .side__title { font-family: var(--font-display); text-transform: uppercase; font-size: 1.6rem; color: #fff; line-height: 1; }
+
+  .prose { font-size: 1.1rem; line-height: 1.75; color: #23272f; }
+  .prose :global(h2) { font-family: var(--font-serif); text-transform: none; font-weight: 600; letter-spacing: -0.01em; font-size: 1.75rem; line-height: 1.2; margin: 44px 0 12px; }
+  .prose :global(h3) { font-size: 1.25rem; margin: 28px 0 8px; }
+  .prose :global(p) { margin: 0 0 18px; }
+  .prose :global(ul), .prose :global(ol) { margin: 0 0 20px; padding-left: 1.3em; }
+  .prose :global(li) { margin-bottom: 8px; }
+  .prose :global(a) { color: var(--blue); font-weight: 600; }
+  .prose :global(strong) { color: var(--navy); }
+  .prose :global(table) { width: 100%; border-collapse: collapse; margin: 0 0 24px; font-size: 1rem; }
+  .prose :global(th), .prose :global(td) { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .prose :global(th) { background: var(--bg-soft); }
+  .prose :global(em) { color: var(--muted); }
+
+  .related { background: var(--bg-soft); }
+  .related h2 { margin-bottom: 32px; }
+  .related ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+
+  @media (max-width: 900px) {
+    .article__layout { grid-template-columns: 1fr; gap: 32px; }
+    .side__box { position: static; }
+    .related ul { grid-template-columns: 1fr; }
+  }
+</style>
