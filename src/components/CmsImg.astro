@@ -1,0 +1,19 @@
+---
+// A photo from the admin panel: separate crop position for computer and phone,
+// a smaller copy for phones, and an optional different photo on phones.
+import { focusStyle } from '../cms';
+import type { Photo } from '../cms/schema';
+
+interface Props { photo: Photo; eager?: boolean; sizes?: string; alt?: string; class?: string }
+const { photo, eager = false, sizes = '100vw', alt, class: className } = Astro.props;
+const srcset = photo.srcSm ? `${photo.srcSm} 960w, ${photo.src} ${photo.w ?? 1920}w` : undefined;
+const loading = eager ? 'eager' : 'lazy';
+---
+{photo.mobileSrc ? (
+  <picture class:list={['cms-pic', className]}>
+    <source media="(max-width: 760px)" srcset={photo.mobileSrc} />
+    <img class="cms-img" src={photo.src} srcset={srcset} sizes={srcset && sizes} alt={alt ?? photo.alt} loading={loading} fetchpriority={eager ? 'high' : 'auto'} decoding="async" style={focusStyle(photo)} />
+  </picture>
+) : (
+  <img class:list={['cms-img', className]} src={photo.src} srcset={srcset} sizes={srcset && sizes} alt={alt ?? photo.alt} loading={loading} fetchpriority={eager ? 'high' : 'auto'} decoding="async" style={focusStyle(photo)} />
+)}

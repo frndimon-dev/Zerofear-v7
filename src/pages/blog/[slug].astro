@@ -1,10 +1,12 @@
 ---
-import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PostCard from '../../components/PostCard.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Icon from '../../components/Icon.astro';
-import { getPosts, formatDate, readingTime, type Post } from '../../lib/blog';
+import CmsImg from '../../components/CmsImg.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import { fonts } from '../../cms/fonts';
+import { getPosts, formatDate, readingTime, renderMarkdown, type Post } from '../../lib/blog';
 import { site, waLink } from '../../data/site';
 
 export async function getStaticPaths() {
@@ -14,8 +16,9 @@ export async function getStaticPaths() {
 
 interface Props { post: Post; posts: Post[] }
 const { post, posts } = Astro.props;
-const { Content } = await render(post);
-const { title, description, date, updated, category, image, imageAlt, keywords } = post.data;
+const html = renderMarkdown(post.body);
+const { title, description, date, updated, category, image, imageAlt, cover, keywords, gallery, headingFont } = post.data;
+const fontVars = headingFont ? `--font-blog:${fonts[headingFont].css};--font-blog-weight:${fonts[headingFont].weight}` : undefined;
 const related = posts.filter((p) => p.id !== post.id).sort((a, b) => Number(b.data.category === category) - Number(a.data.category === category)).slice(0, 3);
 const url = new URL(`/blog/${post.id}`, site.url).href;
 
@@ -45,17 +48,32 @@ const schema = [
 ];
 ---
 <Base title={`${title} | ${site.name}`} description={description} image={image} type="article">
-  <article class="article">
+  <article class="article" style={fontVars}>
     <header class="container article__head">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/blog">Blog</a></nav>
       <div class="article__meta"><span class="cat">{category}</span><time datetime={date.toISOString()}>{formatDate(date)}</time><span>{readingTime(post.body)} min read</span></div>
       <h1>{title}</h1>
       <p class="article__lead">{description}</p>
     </header>
-    <div class="container article__img"><img src={image} alt={imageAlt} fetchpriority="high" /></div>
+    <div class="container article__img"><CmsImg photo={cover ?? { src: image, alt: imageAlt }} eager sizes="(max-width: 1100px) 100vw, 1060px" /></div>
 
     <div class="container article__layout">
-      <div class="prose"><Content /></div>
+      <div>
+        <div class="prose" set:html={html} />
+        {gallery.length > 0 && (
+          <section class="strip" aria-label="Photos">
+            <div class="strip__head">
+              <h2>Photos from <mark>this class.</mark></h2>
+              <a class="btn btn--dark" href="/gallery">See all photos <Icon name="arrow" /></a>
+            </div>
+            <ul class="strip__list" data-lightbox>
+              {gallery.map((g) => (
+                <li><a href={g.src} data-full><CmsImg photo={g} sizes="280px" /></a></li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
       <aside class="side">
         <div class="side__box">
           <p class="side__title">Learn with Zero Fear</p>
@@ -77,6 +95,7 @@ const schema = [
   )}
 
   <CtaBand title="Reading is step one." text="Step two is your first class with a patient trainer." />
+  <Lightbox />
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 </Base>
 
@@ -86,17 +105,18 @@ const schema = [
   .crumbs a { text-decoration: none; }
   .article__meta { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-top: 18px; font-size: 0.88rem; color: var(--muted); }
   .cat { padding: 3px 10px; border-radius: 999px; background: var(--yellow); color: var(--navy); font-weight: 800; text-transform: uppercase; font-size: 0.72rem; }
-  .article h1 { margin-top: 14px; font-family: var(--font-serif); text-transform: none; font-weight: 600; letter-spacing: -0.02em; font-size: clamp(2rem, 4.4vw, 3.3rem); line-height: 1.1; }
+  .article h1 { margin-top: 14px; font-family: var(--font-blog); text-transform: none; font-weight: var(--font-blog-weight); letter-spacing: -0.035em; font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1.02; }
   .article__lead { margin-top: 16px; font-size: 1.15rem; color: var(--muted); }
   .article__img { max-width: 1060px; margin-top: 32px; }
-  .article__img img { width: 100%; aspect-ratio: 16 / 8; object-fit: cover; border-radius: var(--radius-lg); }
+  .article__img { aspect-ratio: 16 / 8; }
+  .article__img :global(img) { border-radius: var(--radius-lg); }
 
   .article__layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 56px; margin-top: 48px; max-width: 1060px; }
   .side__box { position: sticky; top: calc(var(--header-h) + 24px); padding: 24px; border-radius: var(--radius); background: var(--navy); color: #dfe3ea; display: grid; gap: 12px; }
   .side__title { font-family: var(--font-display); text-transform: uppercase; font-size: 1.6rem; color: #fff; line-height: 1; }
 
   .prose { font-size: 1.1rem; line-height: 1.75; color: #23272f; }
-  .prose :global(h2) { font-family: var(--font-serif); text-transform: none; font-weight: 600; letter-spacing: -0.01em; font-size: 1.75rem; line-height: 1.2; margin: 44px 0 12px; }
+  .prose :global(h2) { font-family: var(--font-blog); text-transform: none; font-weight: var(--font-blog-weight); letter-spacing: -0.025em; font-size: clamp(1.6rem, 2.6vw, 2rem); line-height: 1.1; margin: 48px 0 14px; }
   .prose :global(h3) { font-size: 1.25rem; margin: 28px 0 8px; }
   .prose :global(p) { margin: 0 0 18px; }
   .prose :global(ul), .prose :global(ol) { margin: 0 0 20px; padding-left: 1.3em; }
@@ -107,6 +127,15 @@ const schema = [
   .prose :global(th), .prose :global(td) { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
   .prose :global(th) { background: var(--bg-soft); }
   .prose :global(em) { color: var(--muted); }
+
+  .strip { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+  .strip__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+  .strip__head h2 { font-family: var(--font-blog); font-weight: var(--font-blog-weight); text-transform: none; letter-spacing: -0.025em; font-size: clamp(1.5rem, 2.4vw, 1.9rem); }
+  .strip__list { list-style: none; margin: 0; padding: 0 0 8px; display: grid; grid-auto-flow: column; grid-auto-columns: min(260px, 72%); gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; }
+  .strip__list li { aspect-ratio: 4 / 3; border-radius: var(--radius); overflow: hidden; scroll-snap-align: start; }
+  .strip__list a { display: block; height: 100%; }
+  .strip__list :global(img) { transition: transform 0.4s; }
+  .strip__list a:hover :global(img) { transform: scale(1.05); }
 
   .related { background: var(--bg-soft); }
   .related h2 { margin-bottom: 32px; }

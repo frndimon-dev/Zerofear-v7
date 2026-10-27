@@ -14,6 +14,7 @@ const blog = defineCollection({
     category: z.enum(['Guide', 'Area', 'Safety', 'Women', 'Bike', 'RTO']),
     image: z.string(),
     imageAlt: z.string(),
+    imagePosition: z.string().optional(), // e.g. '50% 20%'
     keywords: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
   }),

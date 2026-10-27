@@ -1,27 +1,29 @@
 ---
 import Icon from '../Icon.astro';
-import { womenPoints } from '../../data/site';
+import CmsImg from '../CmsImg.astro';
+import { text as t, photo } from '../../cms';
+const points = [1, 2, 3].map((i) => ({ title: t(`women.p${i}t`).plain, text: t(`women.p${i}`).plain }));
 ---
 <section class="women dark" id="women">
-  <img class="women__bg" src="/images/bike-royal-enfield.webp" alt="Woman riding a motorcycle while her trainer walks beside her" loading="lazy" decoding="async" />
+  <CmsImg photo={photo('women.main')} class="women__bg" sizes="(max-width: 760px) 100vw, 52vw" />
   <div class="container women__inner">
     <div class="women__copy" data-reveal>
-      <span class="eyebrow">For women riders</span>
-      <h2>She decides<br />where she <mark>goes.</mark></h2>
-      <p class="women__lead">Work, college, the market, your child’s school. Riding means going where you need to, without waiting for anyone.</p>
+      <span class="eyebrow" set:html={t('women.eyebrow').html} />
+      <h2 set:html={t('women.title').html} />
+      <p class="women__lead" set:html={t('women.lead').html} />
       <ul class="women__points">
-        {womenPoints.map((p) => (
+        {points.map((p) => (
           <li><Icon name="check" /><span><strong>{p.title}.</strong> {p.text}</span></li>
         ))}
       </ul>
-      <a class="btn btn--primary btn--lg" href="/women-riders">For women riders <Icon name="arrow" /></a>
+      <a class="btn btn--primary btn--lg" href="/women-riders">{t('women.button').plain} <Icon name="arrow" /></a>
     </div>
   </div>
 </section>
 
 <style>
   .women { position: relative; isolation: isolate; overflow: hidden; padding-block: clamp(80px, 12vw, 160px); }
-  .women__bg { position: absolute; top: 0; right: 0; width: 52%; height: 100%; object-fit: cover; object-position: 50% 30%; z-index: -2; }
+  .women :global(.women__bg) { position: absolute; top: 0; right: 0; width: 52%; height: 100%; z-index: -2; }
   .women::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, var(--navy) 0%, var(--navy) 46%, rgba(12,15,22,0) 62%); }
   .women__copy { max-width: 560px; }
   .women h2 { font-size: clamp(3rem, 7vw, 6rem); }
@@ -32,7 +34,7 @@ import { womenPoints } from '../../data/site';
   .women__points :global(svg) { width: 20px; height: 20px; margin-top: 2px; color: var(--yellow); flex: none; }
   @media (max-width: 760px) {
     .women { padding-top: 0; }
-    .women__bg { position: relative; display: block; width: 100%; height: 420px; }
+    .women :global(.women__bg) { position: relative; display: block; width: 100%; height: 420px; }
     .women::after { background: linear-gradient(180deg, rgba(12,15,22,0) 0%, rgba(12,15,22,0) 260px, var(--navy) 420px); }
     .women__inner { margin-top: -90px; }
   }

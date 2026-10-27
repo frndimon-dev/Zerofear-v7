@@ -13,21 +13,18 @@ import MissionBand from '../components/home/MissionBand.astro';
 import BlogTeaser from '../components/home/BlogTeaser.astro';
 import Faq from '../components/home/Faq.astro';
 import Contact from '../components/home/Contact.astro';
+import { homeOrder } from '../cms';
+
+// Section order and visibility are set in the admin panel.
+const blocks: Record<string, any> = {
+  ticker: Ticker, about: AboutIntro, courses: Courses, women: Women, how: HowItWorks, gallery: PhotoStrip,
+  doorstep: Doorstep, reviews: Reviews, mission: MissionBand, blog: BlogTeaser, faq: Faq, contact: Contact,
+};
+const order = homeOrder().map((id) => blocks[id]).filter(Boolean);
 ---
 <Base>
   <Hero />
-  <Ticker />
-  <AboutIntro />
-  <Courses />
-  <Women />
-  <HowItWorks />
-  <PhotoStrip />
-  <Doorstep />
-  <Reviews />
-  <MissionBand />
-  <BlogTeaser />
-  <Faq />
-  <Contact />
+  {order.map((Block) => <Block />)}
   <script is:inline>
     // Old single-page site used #hash routes; send those visitors to the new pages.
     (function () {

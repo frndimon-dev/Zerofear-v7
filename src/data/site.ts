@@ -76,7 +76,7 @@ export type Course = {
   headline: string;
   intro: string;
   facts: { value: string; label: string }[];
-  photo: { src: string; alt: string; position?: string };
+  photo: { src: string; alt: string; position?: string; cms?: import('../cms/schema').Photo };
   phases: Phase[];
   note?: string;
 };

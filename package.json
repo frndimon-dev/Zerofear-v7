@@ -4,15 +4,20 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "dev": "node scripts/copy-admin-assets.mjs && astro dev",
+    "build": "node scripts/copy-admin-assets.mjs && astro build",
     "preview": "astro preview",
     "check": "astro check"
   },
   "dependencies": {
+    "@astrojs/preact": "6.0.6",
     "@astrojs/rss": "4.0.19",
     "@astrojs/sitemap": "3.7.4",
-    "astro": "7.4.2"
+    "@mediapipe/tasks-vision": "1.1.1",
+    "@supabase/supabase-js": "2.117.0",
+    "astro": "7.4.2",
+    "marked": "18.0.14",
+    "preact": "10.29.2"
   },
   "engines": {
     "node": "24.x"

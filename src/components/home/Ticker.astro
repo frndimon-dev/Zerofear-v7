@@ -1,5 +1,6 @@
 ---
-import { ticker } from '../../data/site';
+import { text as t } from '../../cms';
+const ticker = ['t1', 't2', 't3', 't4', 't5', 't6'].map((k) => t(`ticker.${k}`).plain);
 const items = [...ticker, ...ticker];
 ---
 <div class="ticker" aria-label={ticker.join(', ')}>

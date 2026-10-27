@@ -2,14 +2,15 @@
 import Icon from '../Icon.astro';
 import FaqList from '../FaqList.astro';
 import { faqs } from '../../data/site';
+import { text as t } from '../../cms';
 ---
 <section class="section" id="faq">
   <div class="container faq">
     <div class="section-head">
-      <span class="eyebrow">FAQ</span>
-      <h2>Nervous? <mark>Read this first.</mark></h2>
-      <p>Can’t find your answer? Call or WhatsApp us. We’re happy to help.</p>
-      <a class="faq__more" href="/faq">See all questions <Icon name="arrow" /></a>
+      <span class="eyebrow" set:html={t('faq.eyebrow').html} />
+      <h2 set:html={t('faq.title').html} />
+      <p set:html={t('faq.lead').html} />
+      <a class="faq__more" href="/faq">{t('faq.link').plain} <Icon name="arrow" /></a>
     </div>
     <FaqList items={faqs} />
   </div>

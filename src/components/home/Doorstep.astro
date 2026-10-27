@@ -1,24 +1,25 @@
 ---
 import Icon from '../Icon.astro';
-import Photo from '../Photo.astro';
+import CmsImg from '../CmsImg.astro';
 import FeeCalculator from '../FeeCalculator.astro';
-import { doorstep, photos } from '../../data/site';
+import { doorstep } from '../../data/site';
+import { text as t, photo } from '../../cms';
 ---
 <section class="section section--soft" id="doorstep">
   <div class="container doorstep">
     <div class="doorstep__copy">
-      <span class="eyebrow">Doorstep training</span>
-      <h2>Your lane. Your scooty. <mark>Your trainer.</mark></h2>
+      <span class="eyebrow" set:html={t('doorstep.eyebrow').html} />
+      <h2 set:html={t('doorstep.title').html} />
       <p class="doorstep__lead">
-        Learn near your home, on your own scooty if you like. Available within {doorstep.radiusKm} km of {doorstep.from}.
+        <span set:html={t('doorstep.lead').html} /> Available within {doorstep.radiusKm} km of {doorstep.from}.
       </p>
-      <p class="doorstep__areas-label">Areas we often cover</p>
+      <p class="doorstep__areas-label">{t('doorstep.areas').plain}</p>
       <ul class="doorstep__areas">
         {doorstep.areas.map((a) => <li class="chip">{a}</li>)}
         <li class="chip">and more</li>
       </ul>
-      <a class="doorstep__more" href="/doorstep-training">How doorstep training works <Icon name="arrow" /></a>
-      <div class="doorstep__media"><Photo src={photos.doorstep.src} alt={photos.doorstep.alt} position={photos.doorstep.position} /></div>
+      <a class="doorstep__more" href="/doorstep-training">{t('doorstep.link').plain} <Icon name="arrow" /></a>
+      <div class="doorstep__media"><CmsImg photo={photo('doorstep.main')} sizes="(max-width: 900px) 100vw, 55vw" /></div>
     </div>
 
     <div class="doorstep__calc"><FeeCalculator /></div>

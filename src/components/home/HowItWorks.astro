@@ -1,13 +1,15 @@
 ---
-import { steps } from '../../data/site';
+import CmsImg from '../CmsImg.astro';
+import { text as t, photo } from '../../cms';
+const steps = [1, 2, 3, 4].map((i) => ({ title: t(`how.s${i}t`).plain, text: t(`how.s${i}`).plain }));
 ---
 <section class="section method" id="how-it-works">
   <div class="container method__grid">
     <div class="method__side">
-      <span class="eyebrow">Why Zero Fear</span>
-      <h2>Confidence first. <mark>Speed later.</mark></h2>
-      <p>No fixed formula. Your trainer starts from where you are and moves on only when you’re ready.</p>
-      <div class="method__photo"><img src="/images/how-it-works-briefing.webp" alt="Trainer explaining scooty controls to new learners before the first ride" loading="lazy" /></div>
+      <span class="eyebrow" set:html={t('how.eyebrow').html} />
+      <h2 set:html={t('how.title').html} />
+      <p set:html={t('how.lead').html} />
+      <div class="method__photo"><CmsImg photo={photo('how.main')} sizes="(max-width: 860px) 100vw, 45vw" /></div>
     </div>
     <ol class="method__list">
       {steps.map((s, i) => (
@@ -28,8 +30,7 @@ import { steps } from '../../data/site';
   .method__side { position: sticky; top: calc(var(--header-h) + 32px); }
   .method__side p { margin-top: 18px; color: var(--muted); font-size: 1.08rem; max-width: 42ch; }
   .method__photo { margin-top: 28px; aspect-ratio: 3 / 2; border-radius: var(--radius-lg); overflow: hidden; }
-  .method__photo img { width: 100%; height: 100%; object-fit: cover; }
-
+  
   .method__list { list-style: none; margin: 0; padding: 0; counter-reset: none; }
   .method__list li { display: grid; grid-template-columns: auto 1fr; gap: clamp(20px, 3vw, 40px); padding: clamp(28px, 4vw, 44px) 0; border-top: 1px solid var(--border); }
   .method__list li:last-child { border-bottom: 1px solid var(--border); }

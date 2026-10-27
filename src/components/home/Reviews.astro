@@ -1,6 +1,9 @@
 ---
 import Icon from '../Icon.astro';
 import { reviews, site } from '../../data/site';
+import { text as t } from '../../cms';
+const reviewCount = site.stats[1]?.value ?? '300+';
+const ratingValue = (site.stats[0]?.value ?? '4.9').replace('★', '');
 
 const videoLinks = [
   { label: 'YouTube', href: site.social.youtube },
@@ -11,14 +14,14 @@ const videoLinks = [
   <div class="container">
     <div class="reviews__head">
       <div class="section-head">
-        <span class="eyebrow">Reviews</span>
-        <h2>They were scared too. <mark>Now they ride.</mark></h2>
+        <span class="eyebrow" set:html={t('reviews.eyebrow').html} />
+        <h2 set:html={t('reviews.title').html} />
       </div>
       <a class="rating card" href={site.googleReviewsUrl} target="_blank" rel="noopener">
-        <strong>4.9</strong>
+        <strong>{ratingValue}</strong>
         <span>
           <span class="rating__stars" aria-hidden="true">★★★★★</span>
-          <span>300+ Google reviews</span>
+          <span>{reviewCount} Google reviews</span>
         </span>
         <Icon name="arrow" />
       </a>

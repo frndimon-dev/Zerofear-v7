@@ -2,6 +2,7 @@
 import Icon from '../Icon.astro';
 import PostCard from '../PostCard.astro';
 import { getPosts } from '../../lib/blog';
+import { text as t } from '../../cms';
 
 const posts = (await getPosts()).slice(0, 3);
 ---
@@ -10,10 +11,10 @@ const posts = (await getPosts()).slice(0, 3);
     <div class="container">
       <div class="head" data-reveal>
         <div>
-          <span class="eyebrow">Riding tips & guides</span>
-          <h2>From our <mark>blog.</mark></h2>
+          <span class="eyebrow" set:html={t('blog.eyebrow').html} />
+          <h2 set:html={t('blog.title').html} />
         </div>
-        <a class="btn btn--dark" href="/blog">All articles <Icon name="arrow" /></a>
+        <a class="btn btn--dark" href="/blog">{t('blog.button').plain} <Icon name="arrow" /></a>
       </div>
       <ul class="grid">
         {posts.map((p) => <li data-reveal><PostCard post={p} /></li>)}

@@ -166,3 +166,8 @@ p { margin: 0; }
 @media (max-width: 760px) {
   body { padding-bottom: 76px; }
 }
+
+/* Photos from the admin panel: crop position per screen size (see CmsImg.astro) */
+.cms-img { width: 100%; height: 100%; object-fit: cover; object-position: var(--fd, 50% 50%); }
+.cms-pic { display: block; }
+@media (max-width: 760px) { .cms-img { object-position: var(--fm, var(--fd, 50% 50%)); } }
