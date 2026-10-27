@@ -10,7 +10,7 @@ import { journey } from '../../data/site';
     </div>
     <ol class="journey__list">
       {journey.map((j) => (
-        <li>
+        <li data-reveal>
           <span class="journey__year">{j.year}</span>
           <h3>{j.title}</h3>
           <p>{j.text}</p>
@@ -22,11 +22,11 @@ import { journey } from '../../data/site';
 
 <style>
   .journey__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; position: relative; }
-  .journey__list::before { content: ''; position: absolute; left: 0; right: 0; top: 34px; height: 2px; background: rgba(255, 255, 255, 0.18); }
+  .journey__list::before { content: ''; position: absolute; left: 0; right: 0; top: 40px; height: 2px; background: rgba(255, 255, 255, 0.18); }
   .journey__list li { position: relative; padding-top: 0; }
   .journey__year {
     display: inline-block; position: relative; padding-right: 14px; background: var(--navy);
-    font-family: var(--font-display); font-weight: 800; font-size: clamp(2.6rem, 4.6vw, 3.6rem); line-height: 1.1;
+    font-family: var(--font-display); font-weight: 400; font-size: clamp(3.4rem, 6vw, 5rem); line-height: 1;
     color: var(--yellow); letter-spacing: -0.04em;
   }
   .journey__list li:last-child .journey__year { color: #fff; }

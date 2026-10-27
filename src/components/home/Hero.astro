@@ -4,90 +4,75 @@ import { site, courses, formatINR, waLink } from '../../data/site';
 const prices = courses.map((c) => c.price).filter((p): p is number => p !== null);
 const fromPrice = prices.length ? Math.min(...prices) : null;
 ---
-<section class="hero">
+<section class="hero dark">
   <picture class="hero__bg">
     <source media="(max-width: 760px)" srcset="/images/hero-tall.webp" />
     <img src="/images/hero-wide.webp" alt="Zero Fear learners on their scooties with their trainers in a Kolkata lane" fetchpriority="high" decoding="async" />
   </picture>
 
   <div class="container hero__content">
-    <p class="hero__tag"><Icon name="pin" /> Scooty & Bike Training · {site.city}</p>
-    <h1>Can’t ride a cycle?<br /><mark>You can still ride.</mark></h1>
-    <p class="hero__lead">One-to-one classes for complete beginners. At Netaji Metro, or at your doorstep.</p>
+    <p class="hero__kicker"><span class="dot"></span> Scooty & bike training · {site.city}</p>
+    <h1 class="hero__title">Ride<br />without<br /><span>fear.</span></h1>
 
-    <div class="hero__actions">
-      <a class="btn btn--primary btn--lg" href="/book">Book a class <Icon name="arrow" /></a>
-      <a class="btn btn--glass btn--lg" href={waLink('Hi Zero Fear, I want to learn to ride.')} target="_blank" rel="noopener"><Icon name="whatsapp" /> WhatsApp</a>
+    <div class="hero__bottom">
+      <p class="hero__lead">Can’t ride a cycle? <strong>You can still ride.</strong> One-to-one classes for complete beginners, at Netaji Metro or at your doorstep.</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary btn--lg" href="/book">Book a class <Icon name="arrow" /></a>
+        <a class="btn btn--glass btn--lg" href={waLink('Hi Zero Fear, I want to learn to ride.')} target="_blank" rel="noopener"><Icon name="whatsapp" /> WhatsApp</a>
+      </div>
     </div>
 
     <ul class="hero__proof">
-      <li><strong>4.9★</strong> Google</li>
-      <li><strong>5000+</strong> learners</li>
-      {fromPrice && <li><strong>{formatINR(fromPrice)}</strong> onwards</li>}
+      <li><strong>4.9★</strong><span>Google rating</span></li>
+      <li><strong>5000+</strong><span>Learners</span></li>
+      {fromPrice && <li><strong>{formatINR(fromPrice)}</strong><span>Courses from</span></li>}
     </ul>
   </div>
 </section>
 
 <style>
-  .hero {
-    position: relative;
-    isolation: isolate;
-    min-height: min(88vh, 760px);
-    display: flex;
-    align-items: center;
-    color: #fff;
-    overflow: hidden;
-  }
+  .hero { position: relative; isolation: isolate; min-height: calc(100svh - var(--header-h)); display: flex; overflow: hidden; }
   .hero__bg, .hero__bg img { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .hero__bg { z-index: -1; }
-  .hero__bg img { object-fit: cover; object-position: 50% 55%; }
+  .hero__bg { z-index: -2; }
+  .hero__bg img { object-fit: cover; object-position: 30% 55%; animation: hero-zoom 14s ease-out both; }
+  @keyframes hero-zoom { from { transform: scale(1.08); } to { transform: scale(1); } }
   .hero::after {
     content: ''; position: absolute; inset: 0; z-index: -1;
-    background: linear-gradient(90deg, rgba(8, 22, 44, 0.92) 0%, rgba(8, 22, 44, 0.75) 42%, rgba(8, 22, 44, 0.15) 75%);
+    background:
+      linear-gradient(180deg, rgba(12, 15, 22, 0.55) 0%, rgba(12, 15, 22, 0.1) 35%, rgba(12, 15, 22, 0.85) 100%),
+      linear-gradient(90deg, rgba(12, 15, 22, 0.85) 0%, rgba(12, 15, 22, 0.45) 40%, rgba(12, 15, 22, 0) 65%);
   }
-  .hero__content { padding-block: clamp(56px, 9vw, 104px); }
+  .hero__content { display: flex; flex-direction: column; padding-block: clamp(28px, 5vw, 56px); }
 
-  .hero__tag {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 7px 14px; border-radius: 999px;
-    background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.2);
-    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.02em;
-  }
-  .hero__tag :global(svg) { width: 15px; height: 15px; color: var(--yellow); }
+  .hero__kicker { display: inline-flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #e9ebf0; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 5px rgba(255, 214, 10, 0.3); animation: pulse 2s infinite; }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 9px rgba(255, 214, 10, 0); } }
 
-  h1 {
+  .hero__title {
+    margin-top: clamp(16px, 3vw, 28px);
+    font-size: clamp(4.2rem, 9.2vw, 8.6rem);
+    line-height: 0.86;
     color: #fff;
-    margin-top: 22px;
-    font-size: clamp(2.6rem, 6.4vw, 5rem);
-    line-height: 1.02;
-    letter-spacing: -0.035em;
-    max-width: 13ch;
   }
-  .hero__lead { margin-top: 20px; font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: #d7e1ef; max-width: 40ch; }
+  .hero__title span { color: var(--yellow); }
 
-  .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .hero__bottom { margin-top: auto; padding-top: 32px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .hero__lead { max-width: 44ch; font-size: clamp(1.05rem, 1.5vw, 1.2rem); color: #d2d6de; }
+  .hero__lead strong { color: #fff; }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
-  .hero__proof { list-style: none; padding: 0; margin: 36px 0 0; display: flex; flex-wrap: wrap; gap: 10px; }
-  .hero__proof li {
-    padding: 8px 14px; border-radius: 12px;
-    background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.16);
-    font-size: 0.9rem; color: #d7e1ef;
-  }
-  .hero__proof strong { color: #fff; font-weight: 800; margin-right: 4px; }
+  .hero__proof { list-style: none; margin: 32px 0 0; padding: 22px 0 0; border-top: 1px solid rgba(255, 255, 255, 0.2); display: flex; gap: clamp(24px, 6vw, 72px); }
+  .hero__proof li { display: grid; }
+  .hero__proof strong { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.8rem, 3.4vw, 2.6rem); line-height: 1; color: #fff; }
+  .hero__proof span { font-size: 0.8rem; color: #aab0bc; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 6px; }
 
   @media (max-width: 760px) {
-    /* Photo sits clear at the top; text below on navy. */
-    .hero { min-height: 0; display: block; background: var(--navy); }
-    .hero__bg { position: relative; display: block; height: 52svh; min-height: 300px; }
-    .hero__bg img { object-position: 50% 15%; }
-    .hero::after { inset: auto 0 auto 0; top: calc(52svh - 120px); height: 121px; background: linear-gradient(180deg, rgba(11, 31, 58, 0) 0%, var(--navy) 100%); }
-    .hero__content { position: relative; margin-top: -56px; padding-block: 0 32px; }
-    h1 { margin-top: 0; font-size: clamp(2.2rem, 10.5vw, 2.9rem); }
-    .hero__lead { margin-top: 14px; }
-    .hero__actions { margin-top: 22px; }
-    .hero__actions .btn { flex: 1 1 0; }
-    .hero__proof { margin-top: 18px; gap: 6px; flex-wrap: nowrap; }
-    .hero__proof li { padding: 6px 9px; font-size: 0.76rem; white-space: nowrap; }
-    .hero__tag { display: none; }
+    .hero { min-height: calc(100svh - var(--header-h) - 70px); }
+    .hero__bg img { object-position: 50% 25%; }
+    .hero::after { background: linear-gradient(180deg, rgba(12, 15, 22, 0.7) 0%, rgba(12, 15, 22, 0.2) 38%, rgba(12, 15, 22, 0.94) 74%); }
+    .hero__title { font-size: clamp(4rem, 22vw, 6.5rem); }
+    .hero__actions { width: 100%; }
+    .hero__actions .btn { flex: 1 1 0; padding: 0 12px; }
+    .hero__proof { margin-top: 22px; padding-top: 16px; gap: 22px; }
   }
 </style>

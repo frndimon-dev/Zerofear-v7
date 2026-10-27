@@ -2,52 +2,53 @@
 import Icon from '../Icon.astro';
 import { site } from '../../data/site';
 ---
-<section class="section about">
-  <div class="container about__grid">
-    <div>
-      <span class="eyebrow">About Zero Fear</span>
-      <h2>We don’t just teach riding. We build the <mark>confidence</mark> to ride on your own.</h2>
-    </div>
-    <div class="about__side">
-      <p>A learner-first school built on years of hands-on training in Kolkata. Structured practice, patient trainers, and confidence before speed.</p>
-      <ul class="about__checks">
-        <li><Icon name="check" /> No cycling required</li>
-        <li><Icon name="check" /> Trainer beside you, every class</li>
-        <li><Icon name="check" /> Practice ground → real Kolkata traffic</li>
-      </ul>
-      <a class="about__more" href="/about">Our story <Icon name="arrow" /></a>
-    </div>
-  </div>
-
+<section class="section statement">
   <div class="container">
+    <span class="eyebrow" data-reveal>About Zero Fear</span>
+    <p class="statement__text" data-reveal>
+      We teach
+      <span class="pill"><img src="/images/gallery-first-ride.webp" alt="" loading="lazy" /></span>
+      complete beginners, even people who never rode a cycle, to ride
+      <span class="pill"><img src="/images/gallery-any-age.webp" alt="" loading="lazy" /></span>
+      Kolkata roads <em>on their own.</em>
+    </p>
+    <div class="statement__row" data-reveal>
+      <p>Patient trainers, one learner at a time. Practice ground first, real traffic only when you’re ready. Confidence before speed.</p>
+      <a class="btn btn--dark btn--lg" href="/about">Our story <Icon name="arrow" /></a>
+    </div>
+
     <ul class="stats">
-      {site.stats.map((s) => (
-        <li><strong>{s.value}</strong><span>{s.label}</span></li>
+      {site.stats.map((s, i) => (
+        <li data-reveal style={`transition-delay:${i * 90}ms`}><strong>{s.value}</strong><span>{s.label}</span></li>
       ))}
     </ul>
   </div>
 </section>
 
 <style>
-  .about__grid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: clamp(32px, 6vw, 80px); align-items: end; }
-  .about__side p { color: var(--muted); font-size: 1.08rem; }
-  .about__checks { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 10px; font-weight: 600; }
-  .about__checks li { display: flex; gap: 10px; align-items: center; }
-  .about__checks :global(svg) { width: 18px; height: 18px; color: var(--success); flex: none; }
-  .about__more { display: inline-flex; align-items: center; gap: 6px; margin-top: 22px; font-weight: 700; color: var(--blue); text-decoration: none; }
-  .about__more :global(svg) { width: 16px; height: 16px; }
-
-  .stats { list-style: none; margin: clamp(48px, 7vw, 80px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 2px solid var(--navy); }
-  .stats li { padding: 28px 16px 0 0; display: grid; gap: 4px; }
-  .stats li + li { padding-left: 24px; border-left: 1px solid var(--border); }
-  .stats strong { font-family: var(--font-display); font-weight: 800; font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1; letter-spacing: -0.04em; color: var(--navy); }
-  .stats span { color: var(--muted); font-weight: 500; }
-
-  @media (max-width: 860px) {
-    .about__grid { grid-template-columns: 1fr; }
-    .stats { grid-template-columns: repeat(2, 1fr); }
-    .stats li { padding: 22px 12px 18px 0; }
-    .stats li + li { padding-left: 0; border-left: 0; }
-    .stats li:nth-child(even) { padding-left: 16px; border-left: 1px solid var(--border); }
+  .statement__text {
+    font-family: var(--font-display); text-transform: uppercase; color: var(--navy);
+    font-size: clamp(2.2rem, 5.4vw, 4.6rem); line-height: 1.02; max-width: 18ch;
   }
+  .statement__text em { font-style: normal; background: var(--yellow); padding: 0 0.12em; }
+  .pill {
+    display: inline-block; vertical-align: middle; width: 1.9em; height: 0.95em; margin: -0.1em 0.06em 0;
+    border-radius: 999px; overflow: hidden; background: var(--border);
+  }
+  .pill img { width: 100%; height: 100%; object-fit: cover; }
+
+  .statement__row { margin-top: clamp(28px, 4vw, 44px); display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .statement__row p { max-width: 50ch; color: var(--muted); font-size: 1.08rem; }
+
+  .stats { list-style: none; margin: clamp(56px, 8vw, 96px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .stats li { padding: 26px 22px; border-radius: var(--radius); background: var(--bg-soft); display: grid; gap: 8px; }
+  .stats li:first-child { background: var(--yellow); }
+  .stats li:nth-child(3) { background: var(--navy); color: #fff; }
+  .stats li:nth-child(3) strong { color: #fff; }
+  .stats li:nth-child(3) span { color: #aab0bc; }
+  .stats strong { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.6rem, 5vw, 4.2rem); line-height: 0.9; color: var(--navy); }
+  .stats span { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .stats li:first-child span { color: var(--navy); }
+
+  @media (max-width: 860px) { .stats { grid-template-columns: repeat(2, 1fr); } }
 </style>

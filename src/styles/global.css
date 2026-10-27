@@ -1,21 +1,21 @@
 /* Zero Fear — design system
-   One font, two brand colours (navy + yellow), white surfaces, light borders. */
+   Ink black + electric yellow. Anton for big condensed headlines, Inter for text. */
 
 :root {
-  --navy: #0b1f3a;
-  --navy-2: #13305a;
-  --blue: #1457d9;
-  --yellow: #ffd31a;
-  --yellow-hover: #f2c400;
+  --navy: #0c0f16;
+  --navy-2: #1b2130;
+  --blue: #1e5eff;
+  --yellow: #ffd60a;
+  --yellow-hover: #ffe24d;
   --bg: #ffffff;
-  --bg-soft: #f5f7fb;
-  --text: #0f1e36;
-  --muted: #56667d;
-  --border: #e3e8ef;
+  --bg-soft: #f3f2ee;
+  --text: #0c0f16;
+  --muted: #5d6472;
+  --border: #e4e2dc;
   --success: #128c4a;
 
   --font: 'Inter', 'Noto Sans Bengali', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif;
+  --font-display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
 
   --radius-sm: 10px;
   --radius: 16px;
@@ -50,22 +50,33 @@ img { max-width: 100%; display: block; }
 a { color: inherit; }
 button, input, select, textarea { font: inherit; color: inherit; }
 
-h1, h2, h3 { margin: 0; font-family: var(--font-display); font-optical-sizing: auto; line-height: 1.02; letter-spacing: -0.035em; font-weight: 800; color: var(--navy); }
+h1, h2, h3 { margin: 0; color: var(--navy); }
+h1, h2 { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; line-height: 1.04; letter-spacing: -0.005em; }
+h3 { font-family: var(--font); font-weight: 700; }
 .section--navy h1, .section--navy h2, .section--navy h3 { color: #fff; }
-h1 { font-size: clamp(2.4rem, 5.6vw, 4rem); }
-h2 { font-size: clamp(2rem, 4.6vw, 3.25rem); }
+h1 { font-size: clamp(3rem, 7vw, 5.5rem); }
+h2 { font-size: clamp(2.5rem, 5.6vw, 4.5rem); }
 
 /* Highlighted words in headings: yellow marker underline */
 mark {
-  background: linear-gradient(transparent 58%, var(--yellow) 58%, var(--yellow) 92%, transparent 92%);
-  color: inherit;
-  padding: 0 0.06em;
+  background: linear-gradient(transparent 6%, var(--yellow) 6%, var(--yellow) 94%, transparent 94%);
+  color: var(--navy);
+  padding: 0 0.1em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
-.section--navy mark, .hero mark { background: none; color: var(--yellow); padding: 0; }
-h3 { font-size: 1.3rem; letter-spacing: -0.02em; line-height: 1.15; }
-.display { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.03em; }
+.section--navy mark, .hero mark, .dark mark { background: none; color: var(--yellow); padding: 0; }
+h3 { font-size: 1.25rem; letter-spacing: -0.015em; line-height: 1.2; }
+.display { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; letter-spacing: 0; }
+
+/* Dark surfaces */
+.dark { background: var(--navy); color: #e9ebf0; }
+.dark h1, .dark h2, .dark h3 { color: #fff; }
+
+/* Scroll reveal (enabled by a script in Base; content stays visible without JS) */
+.js [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(.2,.7,.2,1); }
+.js [data-reveal].is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .js [data-reveal] { opacity: 1; transform: none; transition: none; } }
 p { margin: 0; }
 
 .container { width: min(100% - var(--gutter) * 2, var(--container)); margin-inline: auto; }
@@ -84,8 +95,9 @@ p { margin: 0; }
   color: var(--blue);
   margin-bottom: 16px;
 }
-.eyebrow::before { content: ''; width: 22px; height: 3px; border-radius: 2px; background: var(--yellow); }
-.section--navy .eyebrow { color: var(--yellow); }
+.eyebrow::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 4px rgba(255, 214, 10, 0.25); }
+.eyebrow { color: var(--muted); }
+.section--navy .eyebrow, .dark .eyebrow { color: #c8ccd6; }
 
 .section-head { max-width: 640px; margin-bottom: clamp(32px, 5vw, 48px); }
 .section-head p { margin-top: 16px; color: var(--muted); font-size: 1.05rem; max-width: 52ch; }
