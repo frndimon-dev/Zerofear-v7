@@ -54,7 +54,7 @@ export type Course = {
   forWho: string;
   classes: string;
   points: string[];
-  price: number | null;
+  price: number | null; // starting fee in ₹
 };
 
 export const courses: Course[] = [
@@ -66,7 +66,7 @@ export const courses: Course[] = [
     forWho: 'Complete beginners and people who can’t ride a cycle',
     classes: '15 classes · 30 min each',
     points: ['No cycling needed', 'One-to-one with a trainer', 'Practice ground → real road'],
-    price: null,
+    price: 2500,
   },
   {
     slug: 'advanced-scooty-training',
@@ -76,7 +76,7 @@ export const courses: Course[] = [
     forWho: 'People who can ride but don’t feel confident on the road',
     classes: '10 classes',
     points: ['Traffic & lane practice', 'Turning and overtaking', 'Good as a refresher'],
-    price: null,
+    price: 2500,
   },
   {
     slug: 'bike-training',
@@ -86,7 +86,7 @@ export const courses: Course[] = [
     forWho: 'Learners who can balance a cycle',
     classes: '15 classes',
     points: ['Clutch & gear control', 'Smooth starts and stops', 'Road riding'],
-    price: null,
+    price: 2500,
   },
   {
     slug: 'rto-exam-preparation',
@@ -96,7 +96,7 @@ export const courses: Course[] = [
     forWho: 'Anyone with an upcoming two-wheeler driving test',
     classes: 'Flexible',
     points: ['Figure-8 track drills', 'Slow-speed balance', 'Mock test'],
-    price: null,
+    price: 2500,
   },
 ];
 

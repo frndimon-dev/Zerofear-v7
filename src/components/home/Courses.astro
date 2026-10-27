@@ -23,7 +23,7 @@ import { courses, formatINR, waLink } from '../../data/site';
           <div class="course__foot">
             <div>
               <span class="course__classes">{c.classes}</span>
-              <span class="course__price">{c.price !== null ? formatINR(c.price) : 'Ask for fee'}</span>
+              <span class="course__price">{c.price !== null ? <>From {formatINR(c.price)}</> : 'Ask for fee'}</span>
             </div>
             <a class="btn btn--dark" href={waLink(`Hi Zero Fear, I’m interested in ${c.name}.`)} target="_blank" rel="noopener">Enquire</a>
           </div>
