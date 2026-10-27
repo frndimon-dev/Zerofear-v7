@@ -10,11 +10,11 @@
   --bg: #ffffff;
   --bg-soft: #f3f2ee;
   --text: #0c0f16;
-  --muted: #5d6472;
+  --muted: #454b57;
   --border: #e4e2dc;
   --success: #128c4a;
 
-  --font: 'Inter', 'Noto Sans Bengali', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font: 'Manrope', 'Noto Sans Bengali', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
 
   --radius-sm: 10px;
@@ -40,8 +40,9 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 17px;
+  line-height: 1.65;
+  font-weight: 500;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
 }
@@ -100,8 +101,8 @@ p { margin: 0; }
 .section--navy .eyebrow, .dark .eyebrow { color: #c8ccd6; }
 
 .section-head { max-width: 640px; margin-bottom: clamp(32px, 5vw, 48px); }
-.section-head p { margin-top: 16px; color: var(--muted); font-size: 1.05rem; max-width: 52ch; }
-.section--navy .section-head p { color: #c5d2e6; }
+.section-head p { margin-top: 16px; color: var(--muted); font-size: 1.12rem; max-width: 52ch; }
+.section--navy .section-head p, .dark .section-head p { color: #dfe3ea; }
 .section-head--center { margin-inline: auto; text-align: center; }
 
 /* Buttons */

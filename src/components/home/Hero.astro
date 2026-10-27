@@ -12,7 +12,7 @@ const fromPrice = prices.length ? Math.min(...prices) : null;
 
   <div class="container hero__content">
     <p class="hero__kicker"><span class="dot"></span> Scooty & bike training · {site.city}</p>
-    <h1 class="hero__title">Ride<br />without<br /><span>fear.</span></h1>
+    <h1 class="hero__title">Ride without<br /><span>fear.</span></h1>
 
     <div class="hero__bottom">
       <p class="hero__lead">Can’t ride a cycle? <strong>You can still ride.</strong> One-to-one classes for complete beginners, at Netaji Metro or at your doorstep.</p>
@@ -50,14 +50,14 @@ const fromPrice = prices.length ? Math.min(...prices) : null;
 
   .hero__title {
     margin-top: clamp(16px, 3vw, 28px);
-    font-size: clamp(4.2rem, 9.2vw, 8.6rem);
-    line-height: 0.86;
+    font-size: clamp(3rem, 5.8vw, 5.4rem);
+    line-height: 0.92;
     color: #fff;
   }
   .hero__title span { color: var(--yellow); }
 
   .hero__bottom { margin-top: auto; padding-top: 32px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-  .hero__lead { max-width: 44ch; font-size: clamp(1.05rem, 1.5vw, 1.2rem); color: #d2d6de; }
+  .hero__lead { max-width: 44ch; font-size: clamp(1.08rem, 1.5vw, 1.25rem); color: #eef0f4; text-shadow: 0 1px 12px rgba(0,0,0,.4); }
   .hero__lead strong { color: #fff; }
   .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
@@ -70,7 +70,7 @@ const fromPrice = prices.length ? Math.min(...prices) : null;
     .hero { min-height: calc(100svh - var(--header-h) - 70px); }
     .hero__bg img { object-position: 50% 25%; }
     .hero::after { background: linear-gradient(180deg, rgba(12, 15, 22, 0.7) 0%, rgba(12, 15, 22, 0.2) 38%, rgba(12, 15, 22, 0.94) 74%); }
-    .hero__title { font-size: clamp(4rem, 22vw, 6.5rem); }
+    .hero__title { font-size: clamp(2.8rem, 13vw, 3.6rem); }
     .hero__actions { width: 100%; }
     .hero__actions .btn { flex: 1 1 0; padding: 0 12px; }
     .hero__proof { margin-top: 22px; padding-top: 16px; gap: 22px; }
