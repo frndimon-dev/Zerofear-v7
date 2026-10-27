@@ -1,0 +1,23 @@
+---
+import Icon from './Icon.astro';
+import { site, waLink } from '../data/site';
+---
+<div class="mobile-bar" aria-label="Quick contact">
+  <a class="btn btn--outline" href={`tel:${site.phone.tel}`}><Icon name="phone" /> Call</a>
+  <a class="btn btn--whatsapp" href={waLink('Hi Zero Fear, I want to know about your training.')} target="_blank" rel="noopener"><Icon name="whatsapp" /> WhatsApp</a>
+  <a class="btn btn--primary" href="#contact">Book</a>
+</div>
+
+<style>
+  .mobile-bar { display: none; }
+  @media (max-width: 760px) {
+    .mobile-bar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+      display: grid; grid-template-columns: 1fr 1.25fr 1fr; gap: 8px;
+      padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+      background: #fff; border-top: 1px solid var(--border);
+      box-shadow: 0 -6px 20px rgba(11, 31, 58, 0.06);
+    }
+    .mobile-bar .btn { min-height: 46px; padding: 0 10px; font-size: 0.92rem; }
+  }
+</style>

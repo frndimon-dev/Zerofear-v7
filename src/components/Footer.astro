@@ -1,0 +1,67 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { site, courses, nav, waLink } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <Logo light />
+      <p>Beginner-first scooty and bike training in Kolkata since {site.since}. {site.tagline}</p>
+      <p class="footer__formerly">Formerly {site.formerly}</p>
+      <div class="footer__social">
+        <a href={site.social.youtube} target="_blank" rel="noopener" aria-label="YouTube"><Icon name="youtube" /></a>
+        <a href={site.social.instagram} target="_blank" rel="noopener" aria-label="Instagram"><Icon name="instagram" /></a>
+        <a href={site.social.facebook} target="_blank" rel="noopener" aria-label="Facebook"><Icon name="facebook" /></a>
+      </div>
+    </div>
+
+    <div>
+      <h3>Courses</h3>
+      <ul>{courses.map((c) => <li><a href="#courses">{c.name}</a></li>)}</ul>
+    </div>
+
+    <div>
+      <h3>Explore</h3>
+      <ul>{nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}</ul>
+    </div>
+
+    <div>
+      <h3>Contact</h3>
+      <ul>
+        <li><a href={`tel:${site.phone.tel}`}>Call: {site.phone.display}</a></li>
+        <li><a href={waLink('Hi Zero Fear')} target="_blank" rel="noopener">WhatsApp: {site.whatsapp.display}</a></li>
+        <li>{site.address ?? site.area}</li>
+        {site.hours && <li>{site.hours}</li>}
+      </ul>
+    </div>
+  </div>
+  <div class="container footer__bottom">
+    <span>© {year} {site.name}, Kolkata</span>
+  </div>
+</footer>
+
+<style>
+  .footer { background: var(--navy); color: #c5d2e6; padding: 64px 0 28px; font-size: 0.95rem; }
+  .footer__grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.2fr; gap: 40px; }
+  .footer__brand p { margin-top: 16px; max-width: 34ch; }
+  .footer__formerly { font-size: 0.85rem; color: #8ea2c0; }
+  .footer h3 { color: #fff; font-size: 0.95rem; margin-bottom: 14px; }
+  .footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .footer a { text-decoration: none; }
+  .footer a:hover { color: #fff; }
+  .footer__social { display: flex; gap: 10px; margin-top: 20px; }
+  .footer__social a { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; background: rgba(255, 255, 255, 0.08); }
+  .footer__social a:hover { background: rgba(255, 255, 255, 0.16); }
+  .footer__social :global(svg) { width: 19px; height: 19px; }
+  .footer__bottom { margin-top: 48px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.85rem; color: #8ea2c0; }
+
+  @media (max-width: 900px) {
+    .footer__grid { grid-template-columns: 1fr 1fr; }
+    .footer__brand { grid-column: 1 / -1; }
+  }
+  @media (max-width: 480px) {
+    .footer__grid { grid-template-columns: 1fr; gap: 28px; }
+  }
+</style>

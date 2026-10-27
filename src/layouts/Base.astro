@@ -1,0 +1,77 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileBar from '../components/MobileBar.astro';
+import { site } from '../data/site';
+
+interface Props { title?: string; description?: string }
+const {
+  title = `${site.name} — Scooty & Bike Training in Kolkata`,
+  description = site.description,
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': 'DrivingSchool',
+  name: site.name,
+  alternateName: site.formerly,
+  description: site.description,
+  url: site.url,
+  telephone: site.phone.tel,
+  foundingDate: String(site.since),
+  areaServed: 'Kolkata',
+  address: {
+    '@type': 'PostalAddress',
+    ...(site.address ? { streetAddress: site.address } : {}),
+    addressLocality: 'Kolkata',
+    addressRegion: 'West Bengal',
+    addressCountry: 'IN',
+  },
+  sameAs: Object.values(site.social),
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0b1f3a" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/og.png', site.url).href} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(localBusiness)} />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <MobileBar />
+  </body>
+</html>
+
+<style>
+  .skip {
+    position: absolute; left: 12px; top: -60px; z-index: 100;
+    background: var(--navy); color: #fff; padding: 10px 14px; border-radius: 8px;
+  }
+  .skip:focus { top: 12px; }
+</style>

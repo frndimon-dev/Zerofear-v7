@@ -1,0 +1,26 @@
+---
+import { site } from '../../data/site';
+---
+<section class="trust" aria-label="Zero Fear in numbers">
+  <div class="container">
+    <ul class="trust__list">
+      {site.stats.map((s) => (
+        <li>
+          <strong>{s.value}</strong>
+          <span>{s.label}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .trust { border-block: 1px solid var(--border); background: var(--bg-soft); }
+  .trust__list { list-style: none; margin: 0; padding: 28px 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .trust__list li { display: grid; gap: 2px; text-align: center; }
+  .trust__list strong { font-size: clamp(1.4rem, 2.6vw, 1.9rem); font-weight: 800; color: var(--navy); letter-spacing: -0.02em; }
+  .trust__list span { font-size: 0.9rem; color: var(--muted); font-weight: 500; }
+  @media (max-width: 640px) {
+    .trust__list { grid-template-columns: repeat(2, 1fr); row-gap: 24px; }
+  }
+</style>

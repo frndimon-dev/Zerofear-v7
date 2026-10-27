@@ -1,0 +1,35 @@
+# Zero Fear website
+
+Scooty & bike training in Kolkata. Built with [Astro](https://astro.build) and deployed on Vercel.
+
+## Edit content
+
+Almost everything on the site comes from **`src/data/site.ts`**:
+
+- phone / WhatsApp numbers, address, opening hours (`site`)
+- course names, classes and **prices** (`courses`; `price: null` shows "Ask for fee")
+- doorstep fee tiers (`doorstep`)
+- FAQ, reviews and the "How it works" steps
+
+Fields set to `null` (address, hours, prices) are hidden until filled in.
+
+## Photos
+
+Put image files in `public/images/` and set the paths in `photos` inside `src/data/site.ts`,
+for example `src: '/images/hero.jpg'`. Without a photo, a branded tile is shown.
+
+Reviews and gallery photos are also loaded from Supabase (`learner_reviews`, `training_gallery`)
+when those tables have active rows.
+
+## Develop
+
+Requires Node 24.
+
+```sh
+npm install
+npm run dev     # http://localhost:4321
+npm run build   # outputs to dist/
+```
+
+`legacy/index.html` is the previous single-file site, kept for reference while the
+inner pages are rebuilt. It is not deployed.
