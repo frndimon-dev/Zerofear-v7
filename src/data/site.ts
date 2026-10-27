@@ -49,9 +49,9 @@ export const photos = {
 // Shown in "From our classes" until photos are loaded from the database.
 export const gallery = [
   { src: '/images/gallery-first-ride.webp', alt: 'Learner on her first scooty ride, feet ready on the ground' },
-  { src: '/images/gallery-trainer-guiding.webp', alt: 'Trainer showing a beginner how to start the scooty' },
-  { src: '/images/gallery-road-practice.webp', alt: 'Trainer walking alongside a learner during lane practice' },
-  { src: '/images/gallery-bike-riding.webp', alt: 'Learner riding a motorcycle on her own' },
+  { src: '/images/gallery-trainer-explaining.webp', alt: 'Trainer explaining throttle and brake control to a beginner' },
+  { src: '/images/gallery-any-age.webp', alt: 'Trainer walking beside a learner on a quiet lane' },
+  { src: '/images/gallery-bike-with-trainer.webp', alt: 'Bike learner with her trainer before a practice ride' },
 ];
 
 export type Course = {
