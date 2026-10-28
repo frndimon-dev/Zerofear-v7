@@ -59,4 +59,6 @@ Admin login e-mail: frndimon@gmail.com (the password is **not** stored here).
 5. Check whether Hostinger can auto-deploy on push; until then use Save and redeploy.
 6. Cover photos for Facebook / WhatsApp / Instagram.
 7. Ideas: enquiry inbox in admin, reviews manager, editable course-page details and inner pages, per-page Google titles.
-8. More area blog posts (Behala, Jadavpur, Garia, …), backlinks with the exact name/address/phone.
+8. Later (no effect on ranking): move Zero Fear's Search Console and admin login from frndimon@gmail.com
+   (kept for another business) to the owner's Zero Fear Google account, which already runs the Google Business Profile.
+9. More area blog posts (Behala, Jadavpur, Garia, …), backlinks with the exact name/address/phone.
