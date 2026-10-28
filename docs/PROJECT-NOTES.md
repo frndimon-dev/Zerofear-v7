@@ -1,0 +1,64 @@
+# Zero Fear – project notes
+
+Everything decided so far, so nothing is lost between sessions.
+(Last updated: 28 Oct 2026.)
+
+## Brand facts (use exactly these everywhere)
+
+| | |
+|---|---|
+| Name | **Zero Fear** — Scooty & Bike Training, Kolkata |
+| Tagline | Fear Out. Freedom In. |
+| Hero line | Ride without fear. / Can’t ride a cycle? You can still ride. |
+| Phone / WhatsApp | **79801 10273** (+91 79801 10273) |
+| Address (as on Google) | Near, 12, post, Samargarh, Paschim Putiary, Kolkata, West Bengal 700041 |
+| Area | Near Netaji Metro · Tollygunge · Kudghat |
+| Courses | Basic Scooty, Advanced Scooty, Bike Training, RTO Test Preparation — from **₹2,500** |
+| Doorstep | Within 10 km of Netaji Metro / Kudghat: ≤2 km ₹4,500, ≤3 km ₹5,000, max ₹8,000 |
+| Numbers | 4.9★ Google, 300+ reviews, 5000+ learners, trainers with 8+ years experience |
+| Founded | Zero Fear launched 2026 (trainers’ experience since 2018) |
+| Facebook | facebook.com/freelancetwowheelertraining.co.in (to be renamed) |
+| Instagram | instagram.com/scooty_bike_training_centre (to be renamed; correct link still needed) |
+| YouTube | none yet (hidden on the site) |
+| Planned username | @zerofearkolkata |
+
+### Rules
+- Zero Fear is a **separate brand**. Never mention or link “Kolkata Scooty Bike Training Centre 2.0”
+  or “Seekho 2 Wheeler”. Don’t reuse Seekho’s website or logo idea (trainer in the middle with two riders).
+- “8+ years experience” is about the **trainers**; Zero Fear itself is new (2026).
+- Site language: English. Talk to the owner in Bengali.
+- Owner posts 3–4 Google reviews a week → update the review count in the admin panel.
+
+## Design
+- Colours: ink black `#0c0f16`, yellow `#ffd60a`, warm grey `#f3f2ee`.
+- Fonts: Anton (big headlines), Manrope (text), Fraunces (About headline), Bricolage Grotesque (blog headlines).
+- Logo: wordmark **ZERO** + **FEAR** in a yellow block. Files in `brand/`
+  (profile pictures `zerofear-dp-dark-1080.png`, `zerofear-dp-yellow-1080.png`; social bios in `brand/social-profiles.md`).
+- Photos: real class photos, light touch-up, licence plates blurred, no camera data.
+
+## Where things live
+| What | Where |
+|---|---|
+| Website code | GitHub `frndimon-dev/Zerofear-v7`, branch `claude/website-review-modernize-3hox2w` (not merged to `main` yet) |
+| Hosting | Vercel team `kd-captain`, project **zerofear-v7** (the 7 `zerofear-v7-xxxx` duplicates should be deleted) |
+| Preview link | https://zerofear-v7-git-claude-website-review-moderni-8f0da5-kd-captain.vercel.app |
+| Admin panel | `/admin` on the site — guide in `docs/ADMIN.md` |
+| Database, login, uploaded photos | Supabase project “Zerofear web” (`fhsslykxcwbpzqusouii`), setup in `supabase/admin-setup.sql` |
+| Old single-page site | `legacy/index.html` (reference only) |
+| Default texts, courses, prices | `src/data/site.ts`, `src/cms/schema.ts` |
+| First 8 blog posts | `src/content/blog/*.md` |
+
+Admin login e-mail: frndimon@gmail.com (the password is **not** stored here).
+
+## Still to do
+1. Run the admin database setup (`supabase/admin-setup.sql`) — waiting on approval / owner paste.
+2. Deploy the latest code and test the admin panel with the real database.
+3. Delete the 7 duplicate Vercel projects (they use up the free 100 deploys/day).
+4. Correct Instagram link and opening hours from the owner.
+5. Rename Facebook / Instagram / WhatsApp to Zero Fear once the site is final.
+6. Buy the domain (recommendation: **zerofear.in** from Hostinger or Namecheap; `zerofearkolkata.com` is free on Vercel at $11.25/yr).
+   Then update `site` in `astro.config.mjs` and `src/data/site.ts`, `public/robots.txt`, Google Search Console, Google Business Profile.
+7. Cover photos for Facebook / WhatsApp / Instagram.
+8. Ideas: enquiry inbox in admin, reviews manager, editable course-page details and inner pages, per-page Google titles.
+9. More area blog posts (Behala, Jadavpur, Garia, …), backlinks with the exact name/address/phone.
+10. Merge to `main` when the owner approves.
