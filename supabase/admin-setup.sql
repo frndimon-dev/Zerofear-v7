@@ -85,22 +85,13 @@ create policy "public read posts" on public.posts for select using (draft = fals
 drop policy if exists "admins write posts" on public.posts;
 create policy "admins write posts" on public.posts for all using (public.is_admin()) with check (public.is_admin());
 
--- 4. Private admin settings (the Vercel deploy hook) ---------------------------
-create table if not exists public.admin_settings (
-  key text primary key,
-  value text not null
-);
-alter table public.admin_settings enable row level security;
-drop policy if exists "admins settings" on public.admin_settings;
-create policy "admins settings" on public.admin_settings for all using (public.is_admin()) with check (public.is_admin());
-
--- 5. Photo storage (public to view, only admins can upload or delete) ----------
+-- 4. Photo storage (public to view, only admins can upload or delete) ----------
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('site-media', 'site-media', true, 5242880, array['image/webp', 'image/jpeg', 'image/png'])
 on conflict (id) do update set public = true;
 
+-- Public buckets serve files by URL without a select policy, so the file list stays private.
 drop policy if exists "site-media public read" on storage.objects;
-create policy "site-media public read" on storage.objects for select using (bucket_id = 'site-media');
 drop policy if exists "site-media admin insert" on storage.objects;
 create policy "site-media admin insert" on storage.objects for insert with check (bucket_id = 'site-media' and public.is_admin());
 drop policy if exists "site-media admin update" on storage.objects;

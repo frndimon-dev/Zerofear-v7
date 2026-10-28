@@ -4,14 +4,11 @@ import PageHero from '../../components/PageHero.astro';
 import CourseCard from '../../components/CourseCard.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Icon from '../../components/Icon.astro';
-import { courses, site, formatINR, waLink, type Course } from '../../data/site';
+import { courses, site, formatINR, waLink } from '../../data/site';
 
-export function getStaticPaths() {
-  return courses.map((course) => ({ params: { slug: course.slug }, props: { course } }));
-}
-
-interface Props { course: Course }
-const { course } = Astro.props;
+const found = courses.find((c) => c.slug === Astro.params.slug);
+if (!found) return Astro.rewrite('/404');
+const course = found;
 const others = courses.filter((c) => c.slug !== course.slug);
 
 const courseSchema = {

@@ -2,7 +2,7 @@
 
 Open **/admin** on the website (e.g. `https://zerofear-v7.vercel.app/admin`). It is hidden from Google.
 
-## One-time setup (about 10 minutes)
+## One-time setup (already done for this site)
 
 1. **Database.** Supabase → your project → *SQL Editor* → *New query*. Paste everything from
    [`supabase/admin-setup.sql`](../supabase/admin-setup.sql), check the e-mail on the line marked
@@ -10,14 +10,12 @@ Open **/admin** on the website (e.g. `https://zerofear-v7.vercel.app/admin`). It
 2. **Your login.** Supabase → *Authentication* → *Users* → *Add user* → *Create new user*:
    the same e-mail and a strong password, tick *Auto confirm*.
    Then *Authentication* → *Sign In / Providers* → turn **off** “Allow new users to sign up”.
-3. **Publishing.** Vercel → project *zerofear-v7* → *Settings* → *Git* → *Deploy Hooks* →
-   name `admin`, branch = the branch the live site is built from → *Create Hook*. Copy the link.
-   In the admin panel open *Publishing* and paste it.
 
 ## Everyday use
 
-- **Save** stores your changes. **Publish** rebuilds the website (live in 1–2 minutes).
-- Every Save keeps the previous version (*Publishing* → *Earlier versions*).
+- **Save** stores your changes; the website shows them within about 2 minutes
+  (pages are cached by Vercel for 60 seconds, no new deploy is needed).
+- Every Save keeps the previous version (*History* tab).
 
 | Tab | What you can change |
 |---|---|
@@ -46,6 +44,7 @@ Hero headline: the preview under *Headline on the photo* warns when the headline
 
 - Content model and defaults: `src/cms/schema.ts`; build-time merge: `src/cms/index.ts`.
 - Saved content: Supabase `site_content` (key `site`), blog posts: `posts`, photos: storage bucket `site-media`.
-- If the database can’t be reached, the site builds from the defaults in code.
-- Local build with sample content: `CMS_FILE=path/to/content.json npm run build`
+- Pages are server-rendered with Vercel ISR (`astro.config.mjs`); `src/middleware.ts` refreshes the content (at most every 30 s per instance).
+- If the database can’t be reached, the site uses the defaults in code.
+- Local run with sample content: `CMS_FILE=path/to/content.json npm run dev`
   (`{ "site": {…overrides}, "posts": [ …rows ] }`).

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'preact/hooks';
 import type { Session } from '@supabase/supabase-js';
 import type { Overrides } from '../cms/schema';
-import { sb, explain, loadContent, saveContent, triggerDeploy } from './supabase';
+import { sb, explain, loadContent, saveContent } from './supabase';
 import { SectionsTab } from './tabs/Sections';
 import { GalleryTab } from './tabs/Gallery';
 import { CoursesTab } from './tabs/Courses';
 import { InfoTab } from './tabs/Info';
 import { BlogTab } from './tabs/Blog';
-import { PublishTab } from './tabs/Publish';
+import { HistoryTab } from './tabs/History';
 
 export type Edit = (fn: (c: Overrides) => Overrides) => void;
 export type TabProps = { content: Overrides; edit: Edit; email: string; saveNow: () => Promise<boolean> };
@@ -18,7 +18,7 @@ const tabs = [
   { id: 'courses', label: 'Courses & prices', C: CoursesTab },
   { id: 'info', label: 'Contact & numbers', C: InfoTab },
   { id: 'blog', label: 'Blog', C: BlogTab },
-  { id: 'publish', label: 'Publishing', C: PublishTab },
+  { id: 'history', label: 'History', C: HistoryTab },
 ] as const;
 
 export default function App() {
@@ -99,26 +99,11 @@ function Editor({ email }: { email: string }) {
     try {
       await saveContent(content, email);
       setSavedJson(JSON.stringify(content));
-      setStatus({ kind: 'ok', text: 'Saved. Press “Publish” when you want the website to show it.' });
+      setStatus({ kind: 'ok', text: 'Saved. The website will show it within about 2 minutes.' });
       return true;
     } catch (e) {
       setStatus({ kind: 'error', text: explain(e) });
       return false;
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const publish = async () => {
-    if (!(await saveNow())) return;
-    setBusy(true);
-    try {
-      const ok = await triggerDeploy();
-      setStatus(ok
-        ? { kind: 'ok', text: 'Publishing… the website will show your changes in about 1–2 minutes.' }
-        : { kind: 'error', text: 'Publishing is not connected yet. Open “Publishing” and paste the Vercel deploy hook once.' });
-    } catch (e) {
-      setStatus({ kind: 'error', text: explain(e) });
     } finally {
       setBusy(false);
     }
@@ -134,8 +119,7 @@ function Editor({ email }: { email: string }) {
         </nav>
         <div class="bar__actions">
           <span class={`dot ${dirty ? 'dot--dirty' : ''}`}>{dirty ? 'Unsaved changes' : 'All saved'}</span>
-          <button type="button" class="btn btn--light" disabled={!dirty || busy} onClick={saveNow}>Save</button>
-          <button type="button" class="btn btn--primary" disabled={busy} onClick={publish}>Publish</button>
+          <button type="button" class="btn btn--primary" disabled={!dirty || busy} onClick={saveNow}>{busy ? 'Saving…' : 'Save'}</button>
           <a class="btn btn--ghost" href="/" target="_blank" rel="noopener">View site</a>
           <button type="button" class="btn btn--ghost" onClick={() => { if (!dirty || confirm('You have unsaved changes. Sign out anyway?')) sb.auth.signOut(); }}>Sign out</button>
         </div>

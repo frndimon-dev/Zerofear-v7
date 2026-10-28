@@ -6,16 +6,13 @@ import Icon from '../../components/Icon.astro';
 import CmsImg from '../../components/CmsImg.astro';
 import Lightbox from '../../components/Lightbox.astro';
 import { fonts } from '../../cms/fonts';
-import { getPosts, formatDate, readingTime, renderMarkdown, type Post } from '../../lib/blog';
+import { getPosts, formatDate, readingTime, renderMarkdown } from '../../lib/blog';
 import { site, waLink } from '../../data/site';
 
-export async function getStaticPaths() {
-  const posts = await getPosts();
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
-}
-
-interface Props { post: Post; posts: Post[] }
-const { post, posts } = Astro.props;
+const posts = await getPosts();
+const found = posts.find((p) => p.id === Astro.params.slug);
+if (!found) return Astro.rewrite('/404');
+const post = found;
 const html = renderMarkdown(post.body);
 const { title, description, date, updated, category, image, imageAlt, cover, keywords, gallery, headingFont } = post.data;
 const fontVars = headingFont ? `--font-blog:${fonts[headingFont].css};--font-blog-weight:${fonts[headingFont].weight}` : undefined;

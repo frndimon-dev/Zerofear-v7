@@ -1,9 +1,12 @@
-// Build-time content: the built-in defaults merged with what was saved in the
-// admin panel (Supabase table `site_content`, row key "site").
-// If the database can't be reached the site is built from the defaults.
+// Site content: the built-in defaults merged with what was saved in the admin
+// panel (Supabase table `site_content`, row key "site"). Pages are rendered on
+// the server and cached by Vercel for a minute (see astro.config.mjs), so a
+// Save in the admin panel shows on the site within about a minute.
+// If the database can't be reached the defaults are used.
 //
-// Business details and course fields are written back into the objects in
-// data/site.ts, so every component that imports them shows the edited values.
+// refreshCms() runs before every page render (src/middleware.ts). Business
+// details and course fields are written into the objects in data/site.ts, so
+// every component that imports them shows the edited values.
 
 import { readFileSync } from 'node:fs';
 import { supabase } from '../data/supabase';
@@ -29,14 +32,14 @@ export async function fetchRows<T>(path: string): Promise<T[] | null> {
 }
 
 // CMS_FILE=path/to.json lets a local build use saved content without the database.
-async function loadOverrides(): Promise<Overrides> {
+async function loadOverrides(): Promise<Overrides | null> {
   const file = process.env.CMS_FILE;
   if (file) return JSON.parse(readFileSync(file, 'utf8')).site ?? {};
   const rows = await fetchRows<{ data: Overrides }>('site_content?key=eq.site&select=data');
-  return rows?.[0]?.data ?? {};
+  return rows ? rows[0]?.data ?? {} : null;
 }
 
-export const overrides: Overrides = await loadOverrides();
+export let overrides: Overrides = {};
 
 const fieldIndex = new Map<string, TextField>();
 for (const s of sections) for (const [k, f] of Object.entries(s.texts)) fieldIndex.set(`${s.id}.${k}`, f);
@@ -89,18 +92,64 @@ export function homeOrder(): string[] {
   return order.filter((id) => !hidden.has(id));
 }
 
-export const heroLayout: HeroLayout = { ...defaultHeroLayout, ...overrides.hero };
-
-export const trainingGallery: Photo[] = overrides.gallery?.length ? overrides.gallery : defaultTrainingGallery;
-
-export const blogFont: FontKey = isFontKey(overrides.blogFont) ? overrides.blogFont : 'bricolage';
-
+export let heroLayout: HeroLayout = defaultHeroLayout;
+export let trainingGallery: Photo[] = defaultTrainingGallery;
+export let blogFont: FontKey = 'bricolage';
 // Every font the pages need, for the Google Fonts link.
-export const usedFonts: FontKey[] = [
-  ...baseFonts,
-  blogFont,
-  ...Object.values(overrides.texts ?? {}).map((t) => t.font).filter(isFontKey),
-];
+export let usedFonts: FontKey[] = [...baseFonts];
+
+// Untouched copies of the editable objects, so a removed edit goes back to the default.
+const pristineSite = structuredClone(site);
+const pristineCourses = structuredClone(courses);
+
+function apply(o: Overrides) {
+  overrides = o;
+  heroLayout = { ...defaultHeroLayout, ...o.hero };
+  trainingGallery = o.gallery?.length ? o.gallery : defaultTrainingGallery;
+  blogFont = isFontKey(o.blogFont) ? o.blogFont : 'bricolage';
+  usedFonts = [...baseFonts, blogFont, ...Object.values(o.texts ?? {}).map((t) => t.font).filter(isFontKey)];
+
+  Object.assign(site, structuredClone(pristineSite));
+  const info = o.info ?? {};
+  if (info.phoneDisplay && info.phoneTel) site.phone = { display: info.phoneDisplay, tel: info.phoneTel };
+  if (info.whatsappDisplay && info.whatsappNumber) site.whatsapp = { display: info.whatsappDisplay, number: info.whatsappNumber };
+  if (info.address) { site.address = info.address; site.mapQuery = info.address; }
+  if (info.hours !== undefined) site.hours = info.hours || null;
+  if (info.instagram !== undefined) site.social.instagram = info.instagram || null;
+  if (info.facebook !== undefined) site.social.facebook = info.facebook || null;
+  if (info.youtube !== undefined) site.social.youtube = info.youtube || null;
+  if (info.googleReviewsUrl) site.googleReviewsUrl = info.googleReviewsUrl;
+  if (info.stats?.length === site.stats.length) site.stats = info.stats.map((s, i) => ({ value: s.value || site.stats[i].value, label: s.label || site.stats[i].label }));
+
+  courses.forEach((c, i) => {
+    Object.assign(c, structuredClone(pristineCourses[i]));
+    const e = o.courses?.[c.slug];
+    if (!e) return;
+    if (e.name) c.name = e.name;
+    if (e.level) c.level = e.level;
+    if (e.summary) c.summary = e.summary;
+    if (e.classes) c.classes = e.classes;
+    if (e.price !== undefined) c.price = e.price;
+    if (e.photo?.src) c.photo = { src: e.photo.src, alt: e.photo.alt, cms: e.photo };
+  });
+}
+
+// Loads the saved content at most every 30 seconds per server instance.
+// If the database is unreachable, the last good content (or the defaults) stays.
+let loadedAt = 0;
+let loading: Promise<void> | null = null;
+export let version = 0;
+export function refreshCms(): Promise<void> {
+  if (Date.now() - loadedAt < 30_000) return Promise.resolve();
+  loading ??= loadOverrides()
+    .then((o) => {
+      if (o) apply(o);
+      loadedAt = Date.now();
+      version++;
+    })
+    .finally(() => { loading = null; });
+  return loading;
+}
 
 // object-position for desktop (d) and phones (m) as CSS variables.
 export const focusStyle = (p: Photo) => {
@@ -108,29 +157,6 @@ export const focusStyle = (p: Photo) => {
   const m = p.focus?.m ?? d;
   return `--fd:${d.x}% ${d.y}%;--fm:${m.x}% ${m.y}%`;
 };
-
-// Business details and course edits.
-const info = overrides.info ?? {};
-if (info.phoneDisplay && info.phoneTel) site.phone = { display: info.phoneDisplay, tel: info.phoneTel };
-if (info.whatsappDisplay && info.whatsappNumber) site.whatsapp = { display: info.whatsappDisplay, number: info.whatsappNumber };
-if (info.address) { site.address = info.address; site.mapQuery = info.address; }
-if (info.hours !== undefined) site.hours = info.hours || null;
-if (info.instagram !== undefined) site.social.instagram = info.instagram || null;
-if (info.facebook !== undefined) site.social.facebook = info.facebook || null;
-if (info.youtube !== undefined) site.social.youtube = info.youtube || null;
-if (info.googleReviewsUrl) site.googleReviewsUrl = info.googleReviewsUrl;
-if (info.stats?.length === site.stats.length) site.stats = info.stats.map((s, i) => ({ value: s.value || site.stats[i].value, label: s.label || site.stats[i].label }));
-
-for (const c of courses) {
-  const e = overrides.courses?.[c.slug];
-  if (!e) continue;
-  if (e.name) c.name = e.name;
-  if (e.level) c.level = e.level;
-  if (e.summary) c.summary = e.summary;
-  if (e.classes) c.classes = e.classes;
-  if (e.price !== undefined) c.price = e.price;
-  if (e.photo?.src) c.photo = { src: e.photo.src, alt: e.photo.alt, cms: e.photo };
-}
 
 // Any photo object used by the site, as a CMS photo.
 export const asPhoto = (p: { src: string; alt: string; position?: string; cms?: Photo }): Photo => {

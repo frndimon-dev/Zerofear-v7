@@ -1,7 +1,7 @@
 import { getCollection } from 'astro:content';
 import { readFileSync } from 'node:fs';
 import { marked } from 'marked';
-import { fetchRows, overrides } from '../cms';
+import { fetchRows, overrides, version } from '../cms';
 import { isFontKey, type FontKey } from '../cms/fonts';
 import type { Photo } from '../cms/schema';
 
@@ -62,9 +62,11 @@ async function loadDbPosts(): Promise<PostRow[]> {
 }
 
 let cache: Promise<Post[]> | undefined;
+let cacheVersion = -1;
 
-// Published posts, newest first.
+// Published posts, newest first. Reloaded whenever the site content is refreshed.
 export function getPosts(): Promise<Post[]> {
+  if (cacheVersion !== version) { cache = undefined; cacheVersion = version; }
   cache ??= (async () => {
     const hidden = new Set(overrides.hiddenPosts ?? []);
     const files = await getCollection('blog', ({ data }) => !data.draft);

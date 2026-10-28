@@ -58,31 +58,10 @@ export async function deletePost(slug: string) {
   if (error) throw error;
 }
 
-export async function getSetting(key: string): Promise<string | null> {
-  const { data, error } = await sb.from('admin_settings').select('value').eq('key', key).maybeSingle();
-  if (error) throw error;
-  return data?.value ?? null;
-}
-
-export async function setSetting(key: string, value: string) {
-  const { error } = await sb.from('admin_settings').upsert({ key, value });
-  if (error) throw error;
-}
-
 export async function uploadImage(blob: Blob, name: string): Promise<string> {
   const ext = blob.type === 'image/webp' ? 'webp' : 'jpg';
   const path = `${new Date().getFullYear()}/${crypto.randomUUID().slice(0, 8)}-${name}.${ext}`;
   const { error } = await sb.storage.from(BUCKET).upload(path, blob, { contentType: blob.type, cacheControl: '31536000', upsert: false });
   if (error) throw error;
   return sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
-}
-
-// Starts a new Vercel build so saved changes go live.
-export async function triggerDeploy(): Promise<boolean> {
-  const hook = await getSetting('deploy_hook');
-  if (!hook) return false;
-  // Deploy hooks don't send CORS headers; the request still goes through.
-  await fetch(hook, { method: 'POST', mode: 'no-cors' });
-  await setSetting('last_publish', new Date().toISOString());
-  return true;
 }

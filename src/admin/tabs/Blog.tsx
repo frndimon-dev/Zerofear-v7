@@ -105,7 +105,7 @@ export function BlogTab({ content, edit }: TabProps) {
           );
         })}
       </ul>
-      <p class="muted">Hiding or showing a post takes effect after Save and Publish. Saving a post itself is immediate; it shows on the site after Publish.</p>
+      <p class="muted">Hiding or showing a post needs the Save button at the top. Saving a post itself is immediate. Changes show on the website within about 2 minutes.</p>
     </div>
   );
 }
@@ -146,7 +146,7 @@ function PostEditor({ initial, content, taken, onClose }: { initial: Draft; cont
       await savePost(row);
       set({ draft: !publish, isNew: false, slug });
       setSavedOnce(true);
-      setBusy(publish ? 'Saved. Press “Publish” at the top to update the website.' : 'Saved as draft.');
+      setBusy(publish ? 'Saved. It will be on the website within about 2 minutes.' : 'Saved as draft.');
       setTimeout(() => setBusy(''), 2500);
     } catch (e) {
       setError(explain(e));
