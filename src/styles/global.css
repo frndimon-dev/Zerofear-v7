@@ -1,0 +1,173 @@
+/* Zero Fear — design system
+   Ink black + electric yellow. Anton for big condensed headlines, Inter for text. */
+
+:root {
+  --navy: #0c0f16;
+  --navy-2: #1b2130;
+  --blue: #1e5eff;
+  --yellow: #ffd60a;
+  --yellow-hover: #ffe24d;
+  --bg: #ffffff;
+  --bg-soft: #f3f2ee;
+  --text: #0c0f16;
+  --muted: #454b57;
+  --border: #e4e2dc;
+  --success: #128c4a;
+
+  --font: 'Manrope', 'Noto Sans Bengali', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+  --font-serif: 'Fraunces', Georgia, serif;
+
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 24px;
+  --shadow: 0 1px 2px rgba(11, 31, 58, 0.06), 0 8px 24px rgba(11, 31, 58, 0.06);
+
+  --container: 1160px;
+  --gutter: 20px;
+  --section-y: clamp(64px, 9vw, 112px);
+  --header-h: 68px;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 12px); -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.65;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+
+h1, h2, h3 { margin: 0; color: var(--navy); }
+h1, h2 { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; line-height: 1.04; letter-spacing: -0.005em; }
+h3 { font-family: var(--font); font-weight: 700; }
+.section--navy h1, .section--navy h2, .section--navy h3 { color: #fff; }
+h1 { font-size: clamp(3rem, 7vw, 5.5rem); }
+h2 { font-size: clamp(2.5rem, 5.6vw, 4.5rem); }
+
+/* Highlighted words in headings: yellow marker underline */
+mark {
+  background: linear-gradient(transparent 6%, var(--yellow) 6%, var(--yellow) 94%, transparent 94%);
+  color: var(--navy);
+  padding: 0 0.1em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.section--navy mark, .hero mark, .dark mark { background: none; color: var(--yellow); padding: 0; }
+h3 { font-size: 1.25rem; letter-spacing: -0.015em; line-height: 1.2; }
+.display { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; letter-spacing: 0; }
+
+/* Dark surfaces */
+.dark { background: var(--navy); color: #e9ebf0; }
+.dark h1, .dark h2, .dark h3 { color: #fff; }
+
+/* Scroll reveal (enabled by a script in Base; content stays visible without JS) */
+.js [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(.2,.7,.2,1); }
+.js [data-reveal].is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .js [data-reveal] { opacity: 1; transform: none; transition: none; } }
+p { margin: 0; }
+
+.container { width: min(100% - var(--gutter) * 2, var(--container)); margin-inline: auto; }
+.section { padding-block: var(--section-y); }
+.section--soft { background: var(--bg-soft); }
+.section--navy { background: var(--navy); color: #fff; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 16px;
+}
+.eyebrow::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 4px rgba(255, 214, 10, 0.25); }
+.eyebrow { color: var(--muted); }
+.section--navy .eyebrow, .dark .eyebrow { color: #c8ccd6; }
+
+.section-head { max-width: 640px; margin-bottom: clamp(32px, 5vw, 48px); }
+.section-head p { margin-top: 16px; color: var(--muted); font-size: 1.12rem; max-width: 52ch; }
+.section--navy .section-head p, .dark .section-head p { color: #dfe3ea; }
+.section-head--center { margin-inline: auto; text-align: center; }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  font-weight: 700;
+  font-size: 0.975rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.btn svg { width: 18px; height: 18px; flex: none; }
+.btn--primary { background: var(--yellow); color: var(--navy); }
+.btn--primary:hover { background: var(--yellow-hover); }
+.btn--dark { background: var(--navy); color: #fff; }
+.btn--dark:hover { background: var(--navy-2); }
+.btn--outline { border-color: var(--border); background: #fff; color: var(--navy); }
+.btn--outline:hover { border-color: var(--navy); }
+.btn--whatsapp { background: #e9f8ef; color: var(--success); }
+.btn--whatsapp:hover { background: #d8f2e2; }
+.btn--block { width: 100%; }
+.btn--lg { min-height: 54px; padding: 0 26px; font-size: 1.02rem; }
+.btn--glass { background: rgba(255, 255, 255, 0.14); color: #fff; border-color: rgba(255, 255, 255, 0.28); backdrop-filter: blur(6px); }
+.btn--glass:hover { background: rgba(255, 255, 255, 0.24); }
+
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; border-radius: 6px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* Space for the fixed mobile action bar */
+@media (max-width: 760px) {
+  body { padding-bottom: 76px; }
+}
+
+/* Photos from the admin panel: crop position per screen size (see CmsImg.astro) */
+.cms-img { width: 100%; height: 100%; object-fit: cover; object-position: var(--fd, 50% 50%); }
+.cms-pic { display: block; }
+@media (max-width: 760px) { .cms-img { object-position: var(--fm, var(--fd, 50% 50%)); } }

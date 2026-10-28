@@ -1,0 +1,71 @@
+---
+import Icon from './Icon.astro';
+import { site, courses } from '../data/site';
+
+// Enquiry form that opens WhatsApp with the details filled in.
+// A `?course=<slug>` query (or the `course` prop) preselects the course.
+interface Props { title?: string; course?: string }
+const { title = 'Send an enquiry', course } = Astro.props;
+const options = [
+  ...courses.map((c) => ({ value: c.slug, label: c.name })),
+  { value: 'doorstep-training', label: 'Doorstep Training' },
+  { value: 'not-sure', label: 'Not sure yet' },
+];
+---
+<form class="form card" data-booking-form data-wa={site.whatsapp.number}>
+  <h3>{title}</h3>
+  <label>
+    <span>Your name</span>
+    <input name="name" autocomplete="name" required />
+  </label>
+  <label>
+    <span>Phone number</span>
+    <input name="phone" type="tel" inputmode="tel" autocomplete="tel" pattern="[0-9+ ]{10,14}" required />
+  </label>
+  <label>
+    <span>What do you want to learn?</span>
+    <select name="course" required>
+      {options.map((o) => <option value={o.value} selected={o.value === course}>{o.label}</option>)}
+    </select>
+  </label>
+  <label>
+    <span>Your area & preferred time <em>(optional)</em></span>
+    <textarea name="message" rows="3"></textarea>
+  </label>
+  <button class="btn btn--primary btn--block" type="submit"><Icon name="whatsapp" /> Send on WhatsApp</button>
+  <p class="form__note">This opens WhatsApp with your details filled in.</p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-booking-form]').forEach((form) => {
+    const select = form.querySelector<HTMLSelectElement>('select[name="course"]')!;
+    const wanted = new URLSearchParams(location.search).get('course');
+    if (wanted && [...select.options].some((o) => o.value === wanted)) select.value = wanted;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const d = new FormData(form);
+      const lines = [
+        'Hi Zero Fear, I want to book a class.',
+        `Name: ${d.get('name')}`,
+        `Phone: ${d.get('phone')}`,
+        `Course: ${select.selectedOptions[0]?.text ?? ''}`,
+      ];
+      const message = String(d.get('message') || '').trim();
+      if (message) lines.push(`Area / time: ${message}`);
+      window.open(`https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener');
+    });
+  });
+</script>
+
+<style>
+  .form { padding: 28px; display: grid; gap: 16px; box-shadow: var(--shadow); }
+  .form label { display: grid; gap: 6px; font-weight: 600; font-size: 0.92rem; }
+  .form em { font-style: normal; color: var(--muted); font-weight: 500; }
+  .form input, .form select, .form textarea {
+    width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: #fff; font-size: 1rem; font-weight: 500;
+  }
+  .form input:focus, .form select:focus, .form textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(20, 87, 217, 0.15); }
+  .form__note { font-size: 0.82rem; color: var(--muted); text-align: center; }
+</style>

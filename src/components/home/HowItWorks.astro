@@ -1,0 +1,46 @@
+---
+import CmsImg from '../CmsImg.astro';
+import { text as t, photo } from '../../cms';
+const steps = [1, 2, 3, 4].map((i) => ({ title: t(`how.s${i}t`).plain, text: t(`how.s${i}`).plain }));
+---
+<section class="section method" id="how-it-works">
+  <div class="container method__grid">
+    <div class="method__side">
+      <span class="eyebrow" set:html={t('how.eyebrow').html} />
+      <h2 set:html={t('how.title').html} />
+      <p set:html={t('how.lead').html} />
+      <div class="method__photo"><CmsImg photo={photo('how.main')} sizes="(max-width: 860px) 100vw, 45vw" /></div>
+    </div>
+    <ol class="method__list">
+      {steps.map((s, i) => (
+        <li data-reveal>
+          <span class="method__num">0{i + 1}</span>
+          <div>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .method__grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(32px, 7vw, 96px); align-items: start; }
+  .method__side { position: sticky; top: calc(var(--header-h) + 32px); }
+  .method__side p { margin-top: 18px; color: var(--muted); font-size: 1.08rem; max-width: 42ch; }
+  .method__photo { margin-top: 28px; aspect-ratio: 3 / 2; border-radius: var(--radius-lg); overflow: hidden; }
+  
+  .method__list { list-style: none; margin: 0; padding: 0; counter-reset: none; }
+  .method__list li { display: grid; grid-template-columns: auto 1fr; gap: clamp(20px, 3vw, 40px); padding: clamp(28px, 4vw, 44px) 0; border-top: 1px solid var(--border); }
+  .method__list li:last-child { border-bottom: 1px solid var(--border); }
+  .method__num { font-family: var(--font-display); font-size: clamp(3.6rem, 7vw, 6rem); line-height: 0.8; color: transparent; -webkit-text-stroke: 2px var(--navy); }
+  .method__list li:hover .method__num { color: var(--yellow); -webkit-text-stroke-color: var(--yellow); }
+  .method__list h3 { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.7rem, 2.8vw, 2.4rem); line-height: 1; }
+  .method__list p { margin-top: 10px; color: var(--muted); font-size: 1.05rem; max-width: 44ch; }
+
+  @media (max-width: 860px) {
+    .method__grid { grid-template-columns: 1fr; }
+    .method__side { position: static; }
+  }
+</style>

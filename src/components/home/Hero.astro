@@ -1,0 +1,81 @@
+---
+import Icon from '../Icon.astro';
+import CmsImg from '../CmsImg.astro';
+import { site, courses, formatINR, waLink } from '../../data/site';
+import { text as t, photo, heroLayout as L } from '../../cms';
+const prices = courses.map((c) => c.price).filter((p): p is number => p !== null);
+const fromPrice = prices.length ? Math.min(...prices) : null;
+const rating = site.stats[0]?.value ?? '4.9★';
+const learners = site.stats[2]?.value ?? '5000+';
+---
+<section class="hero dark">
+  <!-- Photo with only the headline on it, so the photo stays visible.
+       The headline position is set in the admin panel (yD / yM). -->
+  <div class="hero__media" style={`--hy-d:${L.yD};--hy-m:${L.yM};--hsize:${L.size}`}>
+    <CmsImg photo={photo('hero.main')} eager class="hero__img" />
+    <div class:list={['container hero__top', { 'hero__top--one': L.oneLine, 'hero__top--center': L.align === 'center' }]}>
+      <p class="hero__kicker"><span class="dot"></span> <span set:html={t('hero.kicker').html} /></p>
+      <h1 class="hero__title" set:html={t('hero.title').html} />
+    </div>
+  </div>
+
+  <!-- Copy and actions sit below the photo -->
+  <div class="container hero__bar">
+    <p class="hero__lead" set:html={t('hero.lead').html} />
+    <div class="hero__actions">
+      <a class="btn btn--primary btn--lg" href="/book">{t('hero.book').plain} <Icon name="arrow" /></a>
+      <a class="btn btn--glass btn--lg" href={waLink('Hi Zero Fear, I want to learn to ride.')} target="_blank" rel="noopener"><Icon name="whatsapp" /> WhatsApp</a>
+    </div>
+    <ul class="hero__proof">
+      <li><strong>{rating}</strong> Google</li>
+      <li><strong>{learners}</strong> learners</li>
+      {fromPrice && <li><strong>{formatINR(fromPrice)}</strong> onwards</li>}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero { background: var(--navy); }
+  .hero__media { position: relative; isolation: isolate; height: min(72svh, 680px); min-height: 340px; overflow: hidden; }
+  .hero__media :global(.hero__img), .hero__media :global(.hero__img img) { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero__media :global(img) { object-fit: cover; z-index: -2; animation: hero-zoom 14s ease-out both; }
+  @keyframes hero-zoom { from { transform: scale(1.06); } to { transform: scale(1); } }
+  /* Shade at the top and bottom for the headline, and a fade into the bar below */
+  .hero__media::after {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(180deg, rgba(12,15,22,.7) 0%, rgba(12,15,22,0) 26%, rgba(12,15,22,0) 62%, rgba(12,15,22,.55) 86%, var(--navy) 100%);
+  }
+  /* y = 0 puts the headline at the top of the photo, 100 at the bottom */
+  .hero__top {
+    position: absolute; left: 0; right: 0; margin-inline: auto;
+    top: calc(var(--hy-d) * 1%); transform: translateY(calc(var(--hy-d) * -1%));
+    padding-block: clamp(18px, 3vw, 32px);
+  }
+  .hero__top--center { text-align: center; }
+
+  .hero__kicker { display: inline-flex; align-items: center; gap: 10px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #e9ebf0; text-shadow: 0 1px 8px rgba(0,0,0,.4); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 5px rgba(255, 214, 10, 0.3); animation: pulse 2s infinite; }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 9px rgba(255, 214, 10, 0); } }
+  .hero__title { margin-top: 8px; font-size: calc(clamp(2.2rem, 4vw, 3.8rem) * var(--hsize)); line-height: 0.95; color: #fff; text-shadow: 0 2px 18px rgba(0,0,0,.35); }
+  .hero__top--one .hero__title { white-space: nowrap; }
+  .hero__title :global(mark) { background: none; color: var(--yellow); padding: 0; }
+
+  .hero__bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px 28px; padding-block: 22px 32px; }
+  .hero__lead { font-size: clamp(1.15rem, 1.8vw, 1.4rem); font-weight: 700; color: #fff; }
+  .hero__lead :global(mark) { background: none; color: var(--yellow); padding: 0; }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .hero__proof { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; width: 100%; }
+  .hero__proof li { padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.18); font-size: 0.82rem; color: #d2d6de; }
+  .hero__proof strong { color: #fff; font-weight: 800; }
+
+  @media (max-width: 760px) {
+    .hero__media { height: 58svh; }
+    .hero__top { top: calc(var(--hy-m) * 1%); transform: translateY(calc(var(--hy-m) * -1%)); }
+    .hero__title { font-size: calc(clamp(2rem, 9vw, 2.6rem) * var(--hsize)); }
+    .hero__top--one .hero__title { font-size: min(calc(clamp(2rem, 9vw, 2.6rem) * var(--hsize)), 10.5vw); }
+    .hero__bar { padding-block: 16px 24px; gap: 14px; }
+    .hero__actions { width: 100%; }
+    .hero__actions .btn { flex: 1 1 0; padding: 0 12px; min-height: 50px; }
+    .hero__proof li { font-size: 0.75rem; padding: 5px 10px; }
+  }
+</style>

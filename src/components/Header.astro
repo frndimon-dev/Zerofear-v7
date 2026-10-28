@@ -1,0 +1,98 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { nav, site } from '../data/site';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isCurrent = (href: string) => !href.includes('#') && (path === href || path.startsWith(href + '/'));
+---
+<header class="header" data-header>
+  <div class="container header__inner">
+    <Logo light />
+
+    <nav class="header__nav" id="site-nav" aria-label="Main">
+      <ul>
+        {nav.map((item) => <li><a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>)}
+      </ul>
+      <a class="btn btn--outline header__call-mobile" href={`tel:${site.phone.tel}`}>
+        <Icon name="phone" /> Call {site.phone.display}
+      </a>
+    </nav>
+
+    <div class="header__actions">
+      <a class="header__phone" href={`tel:${site.phone.tel}`}>
+        <Icon name="phone" /> {site.phone.display}
+      </a>
+      <a class="btn btn--primary header__cta" href="/book">Book a class</a>
+      <button class="header__toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+        <span class="sr-only">Menu</span>
+        <Icon name="menu" class="icon-open" />
+        <Icon name="close" class="icon-close" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const setOpen = (open: boolean) => {
+    header?.classList.toggle('is-open', open);
+    toggle?.setAttribute('aria-expanded', String(open));
+  };
+  toggle?.addEventListener('click', () => setOpen(!header?.classList.contains('is-open')));
+  header?.querySelectorAll('#site-nav a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>
+
+<style>
+  .header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(12, 15, 22, 0.9);
+    backdrop-filter: saturate(1.4) blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: #fff;
+    transition: border-color 0.2s;
+  }
+  .header.is-scrolled { border-bottom-color: rgba(255, 255, 255, 0.14); }
+  .header__inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: var(--header-h); }
+
+  .header__nav ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+  .header__nav a { text-decoration: none; font-weight: 600; font-size: 0.92rem; color: #b9bfcb; padding: 8px 12px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .header__nav ul a:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+  .header__nav a[aria-current='page'] { color: var(--yellow); }
+  .header__call-mobile { display: none; }
+
+  .header__actions { display: flex; align-items: center; gap: 16px; }
+  .header__phone { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; text-decoration: none; color: #fff; }
+  .header__phone :global(svg) { width: 17px; height: 17px; }
+  .header__cta { min-height: 44px; }
+
+  .header__toggle { display: none; width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.2); border-radius: 10px; background: transparent; color: #fff; cursor: pointer; place-items: center; }
+  .header__toggle :global(svg) { width: 22px; height: 22px; }
+  .header__toggle :global(.icon-close) { display: none; }
+  .header.is-open .header__toggle :global(.icon-open) { display: none; }
+  .header.is-open .header__toggle :global(.icon-close) { display: block; }
+
+  @media (max-width: 1060px) {
+    .header__phone { display: none; }
+  }
+  @media (max-width: 900px) {
+    .header__toggle { display: grid; }
+    .header__nav {
+      position: absolute; left: 0; right: 0; top: var(--header-h);
+      background: var(--navy); border-bottom: 1px solid rgba(255,255,255,.1);
+      padding: 12px var(--gutter) 20px;
+      display: none;
+    }
+    .header.is-open .header__nav { display: block; }
+    .header__nav ul { flex-direction: column; gap: 2px; }
+    .header__nav a { display: block; padding: 14px 12px; font-size: 1.1rem; color: #fff; }
+    .header__call-mobile { display: flex; margin-top: 12px; }
+  }
+  @media (max-width: 760px) {
+    .header__cta { display: none; }
+  }
+</style>

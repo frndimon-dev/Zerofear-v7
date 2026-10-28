@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/home/Hero.astro';
+import Ticker from '../components/home/Ticker.astro';
+import AboutIntro from '../components/home/AboutIntro.astro';
+import Courses from '../components/home/Courses.astro';
+import HowItWorks from '../components/home/HowItWorks.astro';
+import Women from '../components/home/Women.astro';
+import Doorstep from '../components/home/Doorstep.astro';
+import PhotoStrip from '../components/home/PhotoStrip.astro';
+import Reviews from '../components/home/Reviews.astro';
+import MissionBand from '../components/home/MissionBand.astro';
+import BlogTeaser from '../components/home/BlogTeaser.astro';
+import Faq from '../components/home/Faq.astro';
+import Contact from '../components/home/Contact.astro';
+import { homeOrder } from '../cms';
+
+// Section order and visibility are set in the admin panel.
+const blocks: Record<string, any> = {
+  ticker: Ticker, about: AboutIntro, courses: Courses, women: Women, how: HowItWorks, gallery: PhotoStrip,
+  doorstep: Doorstep, reviews: Reviews, mission: MissionBand, blog: BlogTeaser, faq: Faq, contact: Contact,
+};
+const order = homeOrder().map((id) => blocks[id]).filter(Boolean);
+---
+<Base>
+  <Hero />
+  {order.map((Block) => <Block />)}
+  <script is:inline>
+    // Old single-page site used #hash routes; send those visitors to the new pages.
+    (function () {
+      var map = {
+        'courses/basic-scooty-training': '/courses/basic-scooty-training',
+        'courses/advanced-scooty-training': '/courses/advanced-scooty-training',
+        'courses/bike-training': '/courses/bike-training',
+        'courses/rto-exam-preparation': '/courses/rto-exam-preparation',
+        'doorstep-training': '/doorstep-training', 'doorstep': '/doorstep-training', 'doorstep-detail': '/doorstep-training',
+        'women-detail': '/women-riders', 'about-detail': '/about', 'mission-detail': '/about',
+        'faq-detail': '/faq', 'booking': '/book', 'blog-sec': '/blog',
+        'blog/cycle-na-janle-scooty': '/blog/learn-scooty-without-cycle',
+        'blog/beginner-scooty-mistakes': '/blog/beginner-scooty-mistakes',
+        'blog/real-road-riding-checklist': '/blog/road-riding-checklist',
+        'blog/confidence-before-speed': '/blog/learn-scooty-without-cycle',
+      };
+      var target = map[location.hash.slice(1)];
+      if (target) location.replace(target);
+    })();
+  </script>
+</Base>

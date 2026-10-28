@@ -1,0 +1,26 @@
+{
+  "name": "zerofear",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/copy-admin-assets.mjs && astro dev",
+    "build": "node scripts/copy-admin-assets.mjs && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "start": "node ./dist/server/entry.mjs"
+  },
+  "dependencies": {
+    "@astrojs/node": "11.1.9",
+    "@astrojs/preact": "6.0.6",
+    "@astrojs/rss": "4.0.19",
+    "@mediapipe/tasks-vision": "1.1.1",
+    "@supabase/supabase-js": "2.117.0",
+    "astro": "7.4.2",
+    "marked": "18.0.14",
+    "preact": "10.29.2"
+  },
+  "engines": {
+    "node": ">=22.23"
+  }
+}

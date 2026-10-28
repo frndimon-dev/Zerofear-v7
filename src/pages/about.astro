@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import TrustStrip from '../components/home/TrustStrip.astro';
+import Journey from '../components/home/Journey.astro';
+import Social from '../components/home/Social.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+
+const values = [
+  { title: 'Start where you are', text: 'Never cycled? Tried before and gave up? Scared of traffic? That’s where we begin. No fixed formula.' },
+  { title: 'Confidence before speed', text: 'We build control you can repeat, not just enough to make the vehicle move.' },
+  { title: 'Real roads, real Kolkata', text: 'Every course ends on real roads with a trainer beside you, so you’re ready for daily riding.' },
+  { title: 'Honest training', text: 'Clear fees, no false promises. We prepare you for the RTO test; we don’t sell guaranteed licences.' },
+];
+---
+<Base
+  title={`About ${site.name} | Two-Wheeler Training in Kolkata`}
+  description={`${site.name} is a beginner-first scooty and bike training school in Kolkata, built on years of on-road training near Netaji Metro. Fear Out. Freedom In.`}
+>
+  <PageHero
+    crumbs={[{ href: '/about', label: 'About' }]}
+    eyebrow="About Zero Fear"
+    title="We don’t just teach riding. <mark>We build confidence.</mark>"
+    lead={`Zero Fear is a beginner-first two-wheeler school in Kolkata, run by trainers with ${site.experienceYears}+ years of hands-on experience. Thousands of beginners, many of whom had never ridden a cycle, have learned to ride with our team.`}
+  >
+    <a class="btn btn--primary" href="/courses">See our courses <Icon name="arrow" /></a>
+  </PageHero>
+
+  <section class="banner container" aria-label="Zero Fear learners and trainers">
+    <Photo src="/images/learners-group.webp" alt="Zero Fear learners on their scooties with their trainers" position="50% 45%" />
+  </section>
+
+  <section class="section">
+    <div class="container split">
+      <div class="section-head">
+        <span class="eyebrow">Our mission</span>
+        <h2>Make riding feel <mark>possible.</mark></h2>
+        <p>
+          For some learners the first challenge is balance. For others it’s braking, turning or facing traffic.
+          We don’t expect everyone to start from the same place. We start from where you are and build the skills step by step,
+          until you trust your own control.
+        </p>
+        <p class="tagline">{site.tagline}</p>
+      </div>
+      <div class="split__photo"><Photo src="/images/gallery-briefing.webp" alt="Trainer explaining scooty controls to two learners" /></div>
+    </div>
+  </section>
+
+  <TrustStrip />
+  <Journey />
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">What we believe</span>
+        <h2>How we <mark>train.</mark></h2>
+      </div>
+      <ul class="values">
+        {values.map((v) => <li class="card"><h3>{v.title}</h3><p>{v.text}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <Social />
+
+  <CtaBand title="Start your riding journey." text="Pick a course, or tell us where you’re starting from and we’ll help you choose." />
+</Base>
+
+<style>
+  .banner { aspect-ratio: 16 / 7; border-radius: var(--radius-lg); overflow: hidden; }
+  .split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(32px, 6vw, 72px); align-items: center; }
+  .split .section-head { margin-bottom: 0; }
+  .tagline { font-weight: 800; color: var(--navy) !important; font-size: 1.2rem !important; }
+  .split__photo { aspect-ratio: 1; border-radius: var(--radius-lg); overflow: hidden; }
+  .values { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .values li { padding: 24px; }
+  .values p { margin-top: 8px; color: var(--muted); font-size: 0.95rem; }
+  @media (max-width: 1000px) { .values { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 860px) {
+    .split { grid-template-columns: 1fr; }
+    .banner { aspect-ratio: 4 / 3; }
+  }
+  @media (max-width: 560px) { .values { grid-template-columns: 1fr; } }
+</style>

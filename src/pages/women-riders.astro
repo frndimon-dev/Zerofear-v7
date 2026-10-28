@@ -1,0 +1,107 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import { site, waLink } from '../data/site';
+
+const concerns = [
+  { q: '“I can’t ride a cycle.”', a: 'Most of our learners can’t either. A scooty doesn’t need cycling skills: we start with balance, feet on the ground, at walking pace.' },
+  { q: '“I’m scared of traffic.”', a: 'You won’t see traffic until you’re ready. Practice starts on quiet lanes, and your trainer stays beside you on every road.' },
+  { q: '“I tried before and gave up.”', a: 'That’s a common starting point. We find what went wrong last time and rebuild from there, without rushing you.' },
+  { q: '“Am I too old to learn?”', a: 'No. We teach college students, working women, mothers and grandmothers. The pace is set by you.' },
+];
+const support = [
+  { title: 'Patient, one-to-one', text: 'One trainer, one learner. No group pressure and no shouting, just calm correction.' },
+  { title: 'Balance before roads', text: 'You master balance and control in a calm place before any road practice.' },
+  { title: 'Near your home', text: 'With doorstep training you can learn in your own lane, on your own scooty.' },
+];
+const photos = [
+  { src: '/images/gallery-any-age.webp', alt: 'Trainer walking beside a learner on a quiet lane' },
+  { src: '/images/gallery-family-support.webp', alt: 'Older learner on a scooty while her family watches' },
+  { src: '/images/bike-first-ride.webp', alt: 'Woman riding a motorcycle with her trainer following' },
+  { src: '/images/gallery-first-ride.webp', alt: 'Learner on her first scooty ride, feet ready on the ground' },
+];
+---
+<Base
+  title={`Scooty & Bike Training for Women in Kolkata | ${site.name}`}
+  description="Patient, one-to-one scooty and bike training for women of any age in Kolkata, even if you can’t ride a cycle. Learn near Netaji Metro or at your doorstep."
+>
+  <PageHero
+    crumbs={[{ href: '/women-riders', label: 'Women riders' }]}
+    eyebrow="Women riders"
+    title="Any age. Any background. <mark>You can ride.</mark>"
+    lead="To work, to college, to the market, to your child’s school: riding means going where you need to, without waiting for anyone. We help you get there, one calm step at a time."
+    photo={{ src: '/images/bike-clutch-practice.webp', alt: 'Woman learning clutch control on a motorcycle with her trainer', position: '50% 40%' }}
+  >
+    <a class="btn btn--primary" href="/book">Book a class <Icon name="arrow" /></a>
+    <a class="btn btn--whatsapp" href={waLink('Hi Zero Fear, I want to learn to ride. I have a few questions.')} target="_blank" rel="noopener"><Icon name="whatsapp" /> Ask us anything</a>
+  </PageHero>
+
+  <section class="section section--soft">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">You’re not alone</span>
+        <h2>Worries we hear <mark>every week.</mark></h2>
+      </div>
+      <ul class="concerns">
+        {concerns.map((c) => <li class="card"><h3>{c.q}</h3><p>{c.a}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split">
+      <div>
+        <div class="section-head">
+          <span class="eyebrow">How we help</span>
+          <h2>Confidence first. <mark>Speed later.</mark></h2>
+        </div>
+        <ul class="support">
+          {support.map((s) => (
+            <li><Icon name="check" /><div><h3>{s.title}</h3><p>{s.text}</p></div></li>
+          ))}
+        </ul>
+      </div>
+      <div class="split__photo"><Photo src="/images/trainers-walk-alongside.webp" alt="Two trainers walking beside a beginner on her scooty" /></div>
+    </div>
+  </section>
+
+  <section class="section section--soft">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Our learners</span>
+        <h2>Scooty or bike, <mark>your choice.</mark></h2>
+        <p>Many of our women learners go on to ride motorcycles too.</p>
+      </div>
+      <ul class="photos">
+        {photos.map((p) => <li><img src={p.src} alt={p.alt} loading="lazy" decoding="async" width="800" height="800" /></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand title="Your first ride is closer than you think." text="Tell us where you’re starting from. We’ll suggest the right course and a time that suits you." />
+</Base>
+
+<style>
+  .concerns { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .concerns li { padding: 24px; }
+  .concerns p { margin-top: 8px; color: var(--muted); }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 72px); align-items: center; }
+  .support { list-style: none; margin: 0; padding: 0; display: grid; gap: 20px; }
+  .support li { display: flex; gap: 14px; }
+  .support :global(svg) { width: 22px; height: 22px; margin-top: 2px; color: var(--success); flex: none; }
+  .support p { margin-top: 4px; color: var(--muted); }
+  .split__photo { aspect-ratio: 1; border-radius: var(--radius-lg); overflow: hidden; }
+
+  .photos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .photos li { aspect-ratio: 4 / 5; border-radius: var(--radius-sm); overflow: hidden; background: var(--border); }
+  .photos img { width: 100%; height: 100%; object-fit: cover; }
+
+  @media (max-width: 900px) {
+    .concerns, .split { grid-template-columns: 1fr; }
+    .photos { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

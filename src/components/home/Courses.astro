@@ -1,0 +1,121 @@
+---
+import CourseCard from '../CourseCard.astro';
+import Icon from '../Icon.astro';
+import CmsImg from '../CmsImg.astro';
+import { courses, formatINR } from '../../data/site';
+import { text as t, asPhoto } from '../../cms';
+
+// `heading={false}` renders the plain card grid (used on /courses).
+interface Props { heading?: boolean }
+const { heading = true } = Astro.props;
+---
+{heading ? (
+  <section class="section dark courses-home" id="courses">
+    <div class="container">
+      <div class="head" data-reveal>
+        <div>
+          <span class="eyebrow" set:html={t('courses.eyebrow').html} />
+          <h2 set:html={t('courses.title').html} />
+        </div>
+        <div class="head__actions">
+          <button class="arrow" type="button" data-slide="-1" aria-label="Previous course"><Icon name="arrow" /></button>
+          <button class="arrow" type="button" data-slide="1" aria-label="Next course"><Icon name="arrow" /></button>
+          <a class="btn btn--glass" href="/courses">{t('courses.button').plain}</a>
+        </div>
+      </div>
+
+      <div class="slider" data-slider>
+        {courses.map((c, i) => (
+          <a class="tile" href={`/courses/${c.slug}`} data-reveal style={`transition-delay:${i * 80}ms`}>
+            <CmsImg photo={asPhoto(c.photo)} class="tile__img" sizes="(max-width: 760px) 84vw, 380px" />
+            <span class="tile__num">0{i + 1}</span>
+            <span class="tile__level">{c.level}</span>
+            <div class="tile__body">
+              <h3>{c.name}</h3>
+              <p>{c.summary}</p>
+              <div class="tile__meta">
+                <span>{c.classes}</span>
+                {c.price !== null && <strong>From {formatINR(c.price)}</strong>}
+              </div>
+            </div>
+            <span class="tile__go" aria-hidden="true"><Icon name="arrow" /></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+) : (
+  <section class="section" id="courses">
+    <div class="container">
+      <div class="courses">
+        {courses.map((c) => <CourseCard course={c} />)}
+      </div>
+    </div>
+  </section>
+)}
+
+<script>
+  const slider = document.querySelector<HTMLElement>('[data-slider]');
+  document.querySelectorAll<HTMLButtonElement>('[data-slide]').forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const card = slider?.querySelector<HTMLElement>('.tile');
+      if (!slider || !card) return;
+      slider.scrollBy({ left: Number(btn.dataset.slide) * (card.offsetWidth + 16), behavior: 'smooth' });
+    }),
+  );
+</script>
+
+<style>
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: clamp(32px, 5vw, 56px); }
+
+  .head__actions { display: flex; align-items: center; gap: 10px; }
+  .arrow {
+    width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #fff;
+  }
+  .arrow:hover { background: var(--yellow); color: var(--navy); border-color: var(--yellow); }
+  .arrow :global(svg) { width: 20px; height: 20px; }
+  .arrow[data-slide='-1'] :global(svg) { transform: rotate(180deg); }
+
+  .slider {
+    display: grid; grid-auto-flow: column; grid-auto-columns: clamp(280px, 30vw, 380px); gap: 16px;
+    overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain;
+    margin-right: calc((100vw - min(100vw - var(--gutter) * 2, var(--container))) / -2);
+    padding-right: var(--gutter);
+  }
+  .slider::-webkit-scrollbar { display: none; }
+  .slider .tile { scroll-snap-align: start; height: 460px; }
+
+  .tile {
+    position: relative; isolation: isolate; overflow: hidden; border-radius: var(--radius-lg);
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 24px;
+    color: #fff; text-decoration: none; background: var(--navy-2);
+  }
+  .tile :global(.tile__img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 0.6s cubic-bezier(.2,.7,.2,1); }
+  .tile::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(12,15,22,0.05) 30%, rgba(12,15,22,0.88) 100%); }
+  .tile:hover :global(.tile__img) { transform: scale(1.05); }
+
+  .tile__num { position: absolute; top: 18px; right: 22px; font-family: var(--font-display); font-size: 1.4rem; color: rgba(255,255,255,0.8); }
+  .tile__level { position: absolute; top: 18px; left: 18px; padding: 6px 12px; border-radius: 999px; background: var(--yellow); color: var(--navy); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
+  .tile h3 { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.9rem, 2.6vw, 2.4rem); line-height: 0.98; }
+  .tile p { margin-top: 10px; color: #eef0f4; max-width: 40ch; font-size: 1rem; }
+  .tile__meta { margin-top: 14px; display: flex; gap: 14px; align-items: center; font-size: 0.85rem; color: #aab0bc; }
+  .tile__meta strong { color: var(--yellow); font-size: 1rem; }
+  .tile__go {
+    position: absolute; right: 20px; bottom: 20px; width: 48px; height: 48px; border-radius: 50%;
+    display: grid; place-items: center; background: #fff; color: var(--navy); transition: transform 0.2s, background 0.2s;
+  }
+  .tile__go :global(svg) { width: 20px; height: 20px; transform: rotate(-45deg); transition: transform 0.2s; }
+  .tile:hover .tile__go { background: var(--yellow); }
+  .tile:hover .tile__go :global(svg) { transform: rotate(0); }
+
+  .courses { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  @media (max-width: 1080px) { .courses { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .courses { grid-template-columns: 1fr; } }
+
+  @media (max-width: 760px) {
+    .head__actions .arrow { display: none; }
+    .slider { grid-auto-columns: 84%; }
+    .slider .tile { height: 420px; }
+  }
+</style>

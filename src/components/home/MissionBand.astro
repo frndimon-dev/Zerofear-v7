@@ -1,0 +1,81 @@
+---
+import Icon from '../Icon.astro';
+import CmsImg from '../CmsImg.astro';
+import { text as t, photo } from '../../cms';
+
+const steps = [1, 2, 3, 4].map((i) => ({ title: t(`mission.c${i}t`).plain, text: t(`mission.c${i}`).plain, photo: photo(`mission.c${i}`) }));
+---
+<section class="section mission" id="mission">
+  <div class="container">
+    <div class="mission__head" data-reveal>
+      <div>
+        <span class="eyebrow" set:html={t('mission.eyebrow').html} />
+        <h2 set:html={t('mission.title').html} />
+        <p class="mission__bn" lang="bn" set:html={t('mission.bn').html} />
+      </div>
+      <div class="mission__nav">
+        <a class="btn btn--dark" href="/gallery">{t('mission.button').plain} <Icon name="arrow" /></a>
+        <button class="arrow" type="button" data-mission="-1" aria-label="Previous"><Icon name="arrow" /></button>
+        <button class="arrow" type="button" data-mission="1" aria-label="Next"><Icon name="arrow" /></button>
+      </div>
+    </div>
+
+    <ol class="mission__slider" data-mission-slider>
+      {steps.map((s, i) => (
+        <li class="slide">
+          <CmsImg photo={s.photo} alt="" class="slide__img" sizes="(max-width: 760px) 78vw, 340px" />
+          <span class="slide__num">0{i + 1}</span>
+          <div class="slide__body">
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<script>
+  const track = document.querySelector<HTMLElement>('[data-mission-slider]');
+  document.querySelectorAll<HTMLButtonElement>('[data-mission]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const card = track?.querySelector<HTMLElement>('.slide');
+      if (track && card) track.scrollBy({ left: Number(b.dataset.mission) * (card.offsetWidth + 16), behavior: 'smooth' });
+    }),
+  );
+</script>
+
+<style>
+  .mission { background: var(--yellow); color: var(--navy); overflow: hidden; }
+  .mission .eyebrow { color: var(--navy); }
+  .mission .eyebrow::before { background: var(--navy); box-shadow: none; }
+  .mission__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 44px); }
+  .mission h2 { font-size: clamp(2.6rem, 7vw, 6rem); line-height: 0.9; }
+  .mission h2 :global(mark) { background: var(--navy); color: var(--yellow); padding: 0 0.08em; }
+  .mission__bn { margin-top: 12px; font-weight: 700; font-size: 1.1rem; }
+  .mission__nav { display: flex; align-items: center; gap: 10px; }
+  .arrow { width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; background: var(--navy); color: #fff; border: 0; }
+  .arrow:hover { background: #fff; color: var(--navy); }
+  .arrow :global(svg) { width: 20px; height: 20px; }
+  .arrow[data-mission='-1'] :global(svg) { transform: rotate(180deg); }
+
+  .mission__slider {
+    list-style: none; margin: 0; padding: 0 var(--gutter) 6px 0;
+    display: grid; grid-auto-flow: column; grid-auto-columns: clamp(260px, 28vw, 340px); gap: 16px;
+    overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin-right: calc((100vw - min(100vw - var(--gutter) * 2, var(--container))) / -2);
+  }
+  .mission__slider::-webkit-scrollbar { display: none; }
+  .slide { position: relative; isolation: isolate; height: 420px; border-radius: var(--radius-lg); overflow: hidden; scroll-snap-align: start; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; color: #fff; background: var(--navy); }
+  .slide :global(.slide__img) { position: absolute; inset: 0; z-index: -2; }
+  .slide::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(12,15,22,0) 35%, rgba(12,15,22,.9) 100%); }
+  .slide__num { position: absolute; top: 18px; left: 22px; font-family: var(--font-display); font-size: 3rem; line-height: 1; color: var(--yellow); }
+  .slide h3 { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: 2.4rem; line-height: 1; color: #fff; }
+  .slide p { margin-top: 8px; color: #e9ebf0; }
+
+  @media (max-width: 760px) {
+    .mission__nav .arrow { display: none; }
+    .mission__slider { grid-auto-columns: 78%; }
+    .slide { height: 380px; }
+  }
+</style>

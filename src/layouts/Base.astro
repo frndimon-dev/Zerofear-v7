@@ -1,0 +1,99 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileBar from '../components/MobileBar.astro';
+import { site } from '../data/site';
+// Importing the CMS first applies admin-panel edits before any component renders.
+import { usedFonts, blogFont } from '../cms';
+import { googleFontsHref, fonts } from '../cms/fonts';
+
+interface Props { title?: string; description?: string; image?: string; type?: 'website' | 'article'; noindex?: boolean }
+const {
+  title = `Scooty & Bike Training in Kolkata | No Cycling Needed | ${site.name}`,
+  description = site.description,
+  image = '/og.png',
+  type = 'website',
+  noindex = false,
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': 'DrivingSchool',
+  name: site.name,
+  description: site.description,
+  url: site.url,
+  telephone: site.phone.tel,
+  foundingDate: String(site.founded),
+  areaServed: 'Kolkata',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.streetAddress,
+    postalCode: site.postalCode,
+    addressLocality: 'Kolkata',
+    addressRegion: 'West Bengal',
+    addressCountry: 'IN',
+  },
+  sameAs: Object.values(site.social).filter(Boolean),
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#0c0f16" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="alternate" type="application/rss+xml" title="Zero Fear Blog" href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap.xml" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(image, site.url).href} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href={googleFontsHref(usedFonts)} rel="stylesheet" />
+    <style set:html={`:root{--font-blog:${fonts[blogFont].css};--font-blog-weight:${fonts[blogFont].weight}}`}></style>
+
+    <script type="application/ld+json" set:html={JSON.stringify(localBusiness)} />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <MobileBar />
+    <script>
+      // Fade sections in as they scroll into view.
+      document.documentElement.classList.add('js');
+      const io = new IntersectionObserver(
+        (entries) => entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+        }),
+        { rootMargin: '0px 0px -10% 0px' },
+      );
+      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>
+
+<style>
+  .skip {
+    position: absolute; left: 12px; top: -60px; z-index: 100;
+    background: var(--navy); color: #fff; padding: 10px 14px; border-radius: 8px;
+  }
+  .skip:focus { top: 12px; }
+</style>

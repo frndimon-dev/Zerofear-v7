@@ -1,0 +1,43 @@
+---
+import Icon from '../Icon.astro';
+import CmsImg from '../CmsImg.astro';
+import FeeCalculator from '../FeeCalculator.astro';
+import { doorstep } from '../../data/site';
+import { text as t, photo } from '../../cms';
+---
+<section class="section section--soft" id="doorstep">
+  <div class="container doorstep">
+    <div class="doorstep__copy">
+      <span class="eyebrow" set:html={t('doorstep.eyebrow').html} />
+      <h2 set:html={t('doorstep.title').html} />
+      <p class="doorstep__lead">
+        <span set:html={t('doorstep.lead').html} /> Available within {doorstep.radiusKm} km of {doorstep.from}.
+      </p>
+      <p class="doorstep__areas-label">{t('doorstep.areas').plain}</p>
+      <ul class="doorstep__areas">
+        {doorstep.areas.map((a) => <li class="chip">{a}</li>)}
+        <li class="chip">and more</li>
+      </ul>
+      <a class="doorstep__more" href="/doorstep-training">{t('doorstep.link').plain} <Icon name="arrow" /></a>
+      <div class="doorstep__media"><CmsImg photo={photo('doorstep.main')} sizes="(max-width: 900px) 100vw, 55vw" /></div>
+    </div>
+
+    <div class="doorstep__calc"><FeeCalculator /></div>
+  </div>
+</section>
+
+<style>
+  .doorstep { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: clamp(32px, 6vw, 72px); align-items: start; }
+  .doorstep__lead { margin-top: 14px; color: var(--muted); font-size: 1.075rem; max-width: 52ch; }
+  .doorstep__areas-label { margin-top: 24px; font-weight: 700; font-size: 0.9rem; }
+  .doorstep__areas { list-style: none; padding: 0; margin: 10px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .doorstep__more { display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; font-weight: 700; color: var(--blue); text-decoration: none; }
+  .doorstep__more :global(svg) { width: 16px; height: 16px; }
+  .doorstep__media { margin-top: 28px; aspect-ratio: 5 / 4; border-radius: var(--radius); overflow: hidden; }
+  .doorstep__calc { position: sticky; top: calc(var(--header-h) + 20px); }
+
+  @media (max-width: 900px) {
+    .doorstep { grid-template-columns: 1fr; }
+    .doorstep__calc { position: static; }
+  }
+</style>

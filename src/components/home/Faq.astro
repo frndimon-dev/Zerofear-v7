@@ -1,0 +1,24 @@
+---
+import Icon from '../Icon.astro';
+import FaqList from '../FaqList.astro';
+import { faqs } from '../../data/site';
+import { text as t } from '../../cms';
+---
+<section class="section" id="faq">
+  <div class="container faq">
+    <div class="section-head">
+      <span class="eyebrow" set:html={t('faq.eyebrow').html} />
+      <h2 set:html={t('faq.title').html} />
+      <p set:html={t('faq.lead').html} />
+      <a class="faq__more" href="/faq">{t('faq.link').plain} <Icon name="arrow" /></a>
+    </div>
+    <FaqList items={faqs} />
+  </div>
+</section>
+
+<style>
+  .faq { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(32px, 6vw, 72px); align-items: start; }
+  .faq__more { display: inline-flex; align-items: center; gap: 6px; margin-top: 18px; font-weight: 700; color: var(--blue); text-decoration: none; }
+  .faq__more :global(svg) { width: 16px; height: 16px; }
+  @media (max-width: 860px) { .faq { grid-template-columns: 1fr; } .faq .section-head { margin-bottom: 0; } }
+</style>

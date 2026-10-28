@@ -1,0 +1,75 @@
+---
+import Photo from './Photo.astro';
+import { site } from '../data/site';
+
+// Header for inner pages: breadcrumb, title, intro, actions and a photo.
+interface Props {
+  crumbs: { href: string; label: string }[];
+  eyebrow?: string;
+  title: string;
+  lead: string;
+  photo?: { src: string; alt: string; position?: string };
+}
+const { crumbs, eyebrow, title, lead, photo } = Astro.props;
+
+const trail = [{ href: '/', label: 'Home' }, ...crumbs];
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: trail.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.label,
+    item: new URL(c.href, site.url).href,
+  })),
+};
+---
+<section class="page-hero">
+  <div class:list={['container page-hero__grid', { 'page-hero__grid--no-photo': !photo }]}>
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <ol>
+          {trail.map((c, i) => (
+            <li>{i < trail.length - 1 ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>
+          ))}
+        </ol>
+      </nav>
+      {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+      <h1 set:html={title} />
+      <p class="page-hero__lead">{lead}</p>
+      <div class="page-hero__actions"><slot /></div>
+    </div>
+    {photo && (
+      <div class="page-hero__media">
+        <Photo src={photo.src} alt={photo.alt} position={photo.position} eager />
+      </div>
+    )}
+  </div>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+</section>
+
+<style>
+  .page-hero { padding-block: clamp(28px, 5vw, 56px) clamp(48px, 7vw, 88px); }
+  .page-hero__grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(32px, 6vw, 72px); align-items: center; }
+  .page-hero__grid--no-photo { grid-template-columns: minmax(0, 760px); }
+  h1 { font-size: clamp(2rem, 4.4vw, 3.25rem); }
+  .page-hero__lead { margin-top: 18px; font-size: 1.125rem; color: var(--muted); max-width: 56ch; }
+  .page-hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .page-hero__actions:empty { display: none; }
+  .page-hero__media { aspect-ratio: 4 / 5; border-radius: var(--radius-lg); overflow: hidden; max-height: 560px; width: 100%; justify-self: end; }
+
+  .crumbs ol { list-style: none; margin: 0 0 20px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.875rem; color: var(--muted); }
+  .crumbs li:not(:last-child)::after { content: '/'; margin-left: 6px; color: #b4c0d0; }
+  .crumbs a { text-decoration: none; }
+  .crumbs a:hover { color: var(--blue); }
+  .crumbs [aria-current] { color: var(--navy); font-weight: 600; }
+
+  @media (max-width: 860px) {
+    .page-hero__grid { grid-template-columns: 1fr; }
+    .page-hero__media { aspect-ratio: 16 / 11; justify-self: stretch; order: -1; border-radius: var(--radius); }
+    .page-hero__grid { gap: 24px; }
+  }
+  @media (max-width: 480px) {
+    .page-hero__actions :global(.btn) { flex: 1 1 100%; }
+  }
+</style>

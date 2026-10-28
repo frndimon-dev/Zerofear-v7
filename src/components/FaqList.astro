@@ -1,0 +1,37 @@
+---
+// Accordion of questions, with FAQPage structured data.
+interface Props { items: { q: string; a: string }[]; openFirst?: boolean }
+const { items, openFirst = true } = Astro.props;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+<div class="faq-list">
+  {items.map((f, i) => (
+    <details class="faq-item" open={openFirst && i === 0}>
+      <summary>{f.q}</summary>
+      <p>{f.a}</p>
+    </details>
+  ))}
+</div>
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<style>
+  .faq-list { display: grid; gap: 12px; }
+  .faq-item { border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; }
+  .faq-item[open] { border-color: #c9d3e1; }
+  summary {
+    list-style: none; cursor: pointer; padding: 18px 52px 18px 20px; position: relative;
+    font-weight: 700; font-size: 1.02rem;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: '+'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+    font-size: 1.4rem; font-weight: 500; color: var(--blue);
+  }
+  .faq-item[open] summary::after { content: '–'; }
+  .faq-item p { padding: 0 20px 20px; color: var(--muted); }
+</style>

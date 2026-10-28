@@ -1,0 +1,135 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import FeeCalculator from '../components/FeeCalculator.astro';
+import FaqList from '../components/FaqList.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import { doorstep, photos, site, waLink } from '../data/site';
+
+const benefits = [
+  { title: 'No travel', text: 'No commute to a centre. Learn in a familiar, calm place near home.' },
+  { title: 'Your timing', text: 'Morning or evening classes that fit around work, college or home.' },
+  { title: 'Same course', text: 'The same step-by-step course as at our centre, not a shortcut.' },
+];
+const doorstepFaqs = [
+  { q: 'How is the doorstep fee worked out?', a: 'By distance from Netaji Metro / Kudghat: up to 2 km is ₹4,500, 2–3 km is ₹5,000, and 3–10 km goes up to ₹8,000. Use the calculator for an estimate; we confirm the exact fee on WhatsApp.' },
+  { q: 'Can I learn on my own scooty?', a: 'Yes. Many doorstep learners use their own scooty. If you don’t have one, ask us when you book.' },
+  { q: 'Where will we practise?', a: 'On a quiet lane or inside your housing complex first. We move to busier roads only when you’re ready.' },
+];
+---
+<Base
+  title={`Doorstep Scooty & Bike Training in South Kolkata | ${site.name}`}
+  description="Scooty and bike training at your home, within 10 km of Netaji Metro / Kudghat: Garia, Jadavpur, Behala, Naktala, Bansdroni, New Alipore and more. Check your fee instantly."
+>
+  <PageHero
+    crumbs={[{ href: '/doorstep-training', label: 'Doorstep training' }]}
+    eyebrow="Doorstep training"
+    title="Learn to ride <mark>near your home.</mark>"
+    lead={`Your trainer comes to you, anywhere within ${doorstep.radiusKm} km of ${doorstep.from}. Same patient, step-by-step course, without the travel.`}
+    photo={photos.doorstep}
+  >
+    <a class="btn btn--primary" href="/book?course=doorstep-training">Book doorstep training <Icon name="arrow" /></a>
+    <a class="btn btn--whatsapp" href={waLink('Hi Zero Fear, I want doorstep training. My area is: ')} target="_blank" rel="noopener"><Icon name="whatsapp" /> Check my area</a>
+  </PageHero>
+
+  <section class="facts" aria-label="Doorstep training in numbers">
+    <div class="container">
+      <ul class="facts__list">
+        {doorstep.stats.map((s) => <li><strong>{s.value}</strong><span>{s.label}</span></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split">
+      <div>
+        <div class="section-head">
+          <span class="eyebrow">Areas</span>
+          <h2>Where we <mark>come.</mark></h2>
+          <p>Anywhere within {doorstep.radiusKm} km of {doorstep.from}. These are some of the areas we visit most:</p>
+        </div>
+        <ul class="areas">
+          {doorstep.allAreas.map((a) => <li class="chip">{a}</li>)}
+        </ul>
+        <p class="areas__note">Not on the list? Send us your area or a landmark and we’ll confirm.</p>
+
+        <ul class="benefits">
+          {benefits.map((b) => (
+            <li class="card"><h3>{b.title}</h3><p>{b.text}</p></li>
+          ))}
+        </ul>
+      </div>
+      <div class="split__calc"><FeeCalculator /></div>
+    </div>
+  </section>
+
+  <section class="section section--navy">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">How it works</span>
+        <h2>From message to <mark>first class.</mark></h2>
+      </div>
+      <ol class="steps">
+        {doorstep.steps.map((s, i) => (
+          <li class="step">
+            <span class="step__num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split split--faq">
+      <div>
+        <div class="section-head">
+          <span class="eyebrow">Questions</span>
+          <h2>Doorstep <mark>FAQ.</mark></h2>
+        </div>
+        <div class="faq-photo"><Photo src="/images/gallery-proud-moment.webp" alt="Family filming a learner’s ride on a quiet lane near home" /></div>
+      </div>
+      <FaqList items={doorstepFaqs} />
+    </div>
+  </section>
+
+  <CtaBand title="Want training at your doorstep?" text="Send us your area. We’ll confirm the distance, fee and a time that suits you." bookHref="/book?course=doorstep-training" whatsappText="Hi Zero Fear, I want doorstep training. My area is: " />
+</Base>
+
+<style>
+  .facts { border-block: 1px solid var(--border); background: var(--bg-soft); }
+  .facts__list { list-style: none; margin: 0; padding: 24px 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .facts__list li { display: grid; gap: 2px; text-align: center; }
+  .facts__list strong { font-family: var(--font-display); font-size: clamp(1.4rem, 2.6vw, 1.9rem); font-weight: 400; color: var(--navy); }
+  .facts__list span { font-size: 0.9rem; color: var(--muted); }
+
+  .split { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: clamp(32px, 6vw, 72px); align-items: start; }
+  .split__calc { position: sticky; top: calc(var(--header-h) + 20px); }
+  .areas { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .areas .chip { font-size: 0.9rem; padding: 6px 12px; }
+  .areas__note { margin-top: 14px; color: var(--muted); font-size: 0.95rem; }
+  .benefits { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .benefits li { padding: 20px; }
+  .benefits p { margin-top: 6px; color: var(--muted); font-size: 0.95rem; }
+
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  .step { padding: 22px; border-radius: var(--radius); background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); }
+  .step__num { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; background: var(--yellow); color: var(--navy); font-weight: 800; }
+  .step h3 { margin-top: 16px; color: #fff; font-size: 1.05rem; }
+  .step p { margin-top: 6px; color: #c5d2e6; font-size: 0.92rem; }
+
+  .split--faq { grid-template-columns: 0.8fr 1.2fr; }
+  .faq-photo { aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; max-width: 360px; }
+
+  @media (max-width: 1000px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 900px) {
+    .split, .split--faq { grid-template-columns: 1fr; }
+    .split__calc { position: static; }
+    .benefits { grid-template-columns: 1fr; }
+    .faq-photo { display: none; }
+  }
+  @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
+</style>

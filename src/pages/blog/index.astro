@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import PostCard from '../../components/PostCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getPosts } from '../../lib/blog';
+import { site } from '../../data/site';
+
+const posts = await getPosts();
+const categories = [...new Set(posts.map((p) => p.data.category))];
+---
+<Base
+  title={`Scooty & Bike Riding Tips Blog, Kolkata | ${site.name}`}
+  description="Beginner guides, safety tips, RTO test advice and area guides for scooty and bike training in Kolkata, from the trainers at Zero Fear."
+>
+  <PageHero
+    crumbs={[{ href: '/blog', label: 'Blog' }]}
+    eyebrow="Blog"
+    title="Riding tips from <mark>our trainers.</mark>"
+    lead="Beginner guides, safety tips and honest advice for learning to ride a scooty or bike in Kolkata."
+  />
+
+  <section class="section blog">
+    <div class="container">
+      <ul class="filters" aria-label="Filter by topic">
+        <li><button type="button" class="filter is-active" data-filter="all">All</button></li>
+        {categories.map((c) => <li><button type="button" class="filter" data-filter={c}>{c}</button></li>)}
+      </ul>
+      <ul class="grid">
+        {posts.map((p) => <li data-cat={p.data.category}><PostCard post={p} /></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand title="Ready to learn for real?" text="Reading helps. Riding with a patient trainer helps more." />
+</Base>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const items = document.querySelectorAll<HTMLElement>('[data-cat]');
+  buttons.forEach((b) => b.addEventListener('click', () => {
+    const f = b.dataset.filter;
+    buttons.forEach((x) => x.classList.toggle('is-active', x === b));
+    items.forEach((i) => { i.hidden = f !== 'all' && i.dataset.cat !== f; });
+  }));
+</script>
+
+<style>
+  .blog { padding-top: 0; }
+  .filters { list-style: none; margin: 0 0 32px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .filter { padding: 8px 16px; border-radius: 999px; border: 1px solid var(--border); background: #fff; font-weight: 700; cursor: pointer; }
+  .filter.is-active { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px 28px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Lightbox from '../components/Lightbox.astro';
+import { site } from '../data/site';
+import { trainingGallery, photo, text as t } from '../cms';
+import { getPosts } from '../lib/blog';
+import type { Photo } from '../cms/schema';
+
+// Every class photo on the site, shown uncropped: the "Training in action"
+// photos first, then the mission cards and the photos from blog posts.
+const posts = await getPosts();
+const seen = new Set<string>();
+const all: Photo[] = [
+  ...trainingGallery,
+  ...[1, 2, 3, 4].map((i) => photo(`mission.c${i}`)),
+  ...posts.flatMap((p) => p.data.gallery),
+].filter((p) => p.src && !seen.has(p.src) && seen.add(p.src));
+---
+<Base
+  title={`Training in Action: Scooty & Bike Class Photos | ${site.name}`}
+  description="Real photos from Zero Fear scooty and bike training classes in Kolkata: first rides, practice-ground lessons and road practice with our trainers."
+>
+  <PageHero
+    crumbs={[{ href: '/gallery', label: 'Training in action' }]}
+    eyebrow={t('gallery.eyebrow').plain}
+    title={t('gallery.title').html}
+    lead="First rides, nervous starts and proud finishes. Tap any photo to see it full size."
+  />
+
+  <section class="section gallery-page">
+    <div class="container">
+      <ul class="masonry" data-lightbox>
+        {all.map((p, i) => (
+          <li id={`photo-${i + 1}`}>
+            <a href={p.src} data-full>
+              <img src={p.srcSm ?? p.src} alt={p.alt} loading={i < 6 ? 'eager' : 'lazy'} decoding="async" width={p.w} height={p.h} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand title="Your photo could be next." text="Book your first class and start riding without fear." />
+  <Lightbox />
+</Base>
+
+<style>
+  .gallery-page { padding-top: 0; }
+  .masonry { list-style: none; margin: 0; padding: 0; columns: 3 300px; column-gap: 14px; }
+  .masonry li { break-inside: avoid; margin-bottom: 14px; border-radius: var(--radius); overflow: hidden; background: var(--border); scroll-margin-top: calc(var(--header-h) + 20px); }
+  .masonry li:target { outline: 4px solid var(--yellow); }
+  .masonry a { display: block; }
+  .masonry img { width: 100%; height: auto; transition: transform 0.4s; }
+  .masonry a:hover img { transform: scale(1.03); }
+  @media (max-width: 560px) { .masonry { columns: 2; column-gap: 8px; } .masonry li { margin-bottom: 8px; } }
+</style>

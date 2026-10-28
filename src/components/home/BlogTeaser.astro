@@ -1,0 +1,34 @@
+---
+import Icon from '../Icon.astro';
+import PostCard from '../PostCard.astro';
+import { getPosts } from '../../lib/blog';
+import { text as t } from '../../cms';
+
+const posts = (await getPosts()).slice(0, 3);
+---
+{posts.length > 0 && (
+  <section class="section blog-teaser" id="blog">
+    <div class="container">
+      <div class="head" data-reveal>
+        <div>
+          <span class="eyebrow" set:html={t('blog.eyebrow').html} />
+          <h2 set:html={t('blog.title').html} />
+        </div>
+        <a class="btn btn--dark" href="/blog">{t('blog.button').plain} <Icon name="arrow" /></a>
+      </div>
+      <ul class="grid">
+        {posts.map((p) => <li data-reveal><PostCard post={p} /></li>)}
+      </ul>
+    </div>
+  </section>
+)}
+
+<style>
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 44px); }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  @media (max-width: 860px) {
+    .grid { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 82%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .grid::-webkit-scrollbar { display: none; }
+    .grid > li { scroll-snap-align: start; }
+  }
+</style>

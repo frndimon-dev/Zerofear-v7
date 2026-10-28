@@ -1,0 +1,146 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import CmsImg from '../../components/CmsImg.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import { fonts } from '../../cms/fonts';
+import { getPosts, formatDate, readingTime, renderMarkdown } from '../../lib/blog';
+import { site, waLink } from '../../data/site';
+
+const posts = await getPosts();
+const found = posts.find((p) => p.id === Astro.params.slug);
+if (!found) return Astro.rewrite('/404');
+const post = found;
+const html = renderMarkdown(post.body);
+const { title, description, date, updated, category, image, imageAlt, cover, keywords, gallery, headingFont } = post.data;
+const fontVars = headingFont ? `--font-blog:${fonts[headingFont].css};--font-blog-weight:${fonts[headingFont].weight}` : undefined;
+const related = posts.filter((p) => p.id !== post.id).sort((a, b) => Number(b.data.category === category) - Number(a.data.category === category)).slice(0, 3);
+const url = new URL(`/blog/${post.id}`, site.url).href;
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    image: new URL(image, site.url).href,
+    datePublished: date.toISOString(),
+    dateModified: (updated ?? date).toISOString(),
+    author: { '@type': 'Organization', name: site.name, url: site.url },
+    publisher: { '@type': 'Organization', name: site.name, logo: { '@type': 'ImageObject', url: new URL('/favicon.svg', site.url).href } },
+    mainEntityOfPage: url,
+    keywords: keywords.join(', '),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: new URL('/blog', site.url).href },
+      { '@type': 'ListItem', position: 3, name: title, item: url },
+    ],
+  },
+];
+---
+<Base title={`${title} | ${site.name}`} description={description} image={image} type="article">
+  <article class="article" style={fontVars}>
+    <header class="container article__head">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/blog">Blog</a></nav>
+      <div class="article__meta"><span class="cat">{category}</span><time datetime={date.toISOString()}>{formatDate(date)}</time><span>{readingTime(post.body)} min read</span></div>
+      <h1>{title}</h1>
+      <p class="article__lead">{description}</p>
+    </header>
+    <div class="container article__img"><CmsImg photo={cover ?? { src: image, alt: imageAlt }} eager sizes="(max-width: 1100px) 100vw, 1060px" /></div>
+
+    <div class="container article__layout">
+      <div>
+        <div class="prose" set:html={html} />
+        {gallery.length > 0 && (
+          <section class="strip" aria-label="Photos">
+            <div class="strip__head">
+              <h2>Photos from <mark>this class.</mark></h2>
+              <a class="btn btn--dark" href="/gallery">See all photos <Icon name="arrow" /></a>
+            </div>
+            <ul class="strip__list" data-lightbox>
+              {gallery.map((g) => (
+                <li><a href={g.src} data-full><CmsImg photo={g} sizes="280px" /></a></li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
+      <aside class="side">
+        <div class="side__box">
+          <p class="side__title">Learn with Zero Fear</p>
+          <p>One-to-one scooty & bike training in Kolkata. No cycling needed. From ₹2,500.</p>
+          <a class="btn btn--primary btn--block" href="/book">Book a class <Icon name="arrow" /></a>
+          <a class="btn btn--whatsapp btn--block" href={waLink(`Hi Zero Fear, I read "${title}" and want to know more.`)} target="_blank" rel="noopener"><Icon name="whatsapp" /> WhatsApp</a>
+        </div>
+      </aside>
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="section related">
+      <div class="container">
+        <h2>Keep <mark>reading.</mark></h2>
+        <ul>{related.map((p) => <li><PostCard post={p} /></li>)}</ul>
+      </div>
+    </section>
+  )}
+
+  <CtaBand title="Reading is step one." text="Step two is your first class with a patient trainer." />
+  <Lightbox />
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+</Base>
+
+<style>
+  .article__head { max-width: 860px; padding-top: clamp(28px, 5vw, 56px); }
+  .crumbs { font-size: 0.875rem; color: var(--muted); }
+  .crumbs a { text-decoration: none; }
+  .article__meta { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-top: 18px; font-size: 0.88rem; color: var(--muted); }
+  .cat { padding: 3px 10px; border-radius: 999px; background: var(--yellow); color: var(--navy); font-weight: 800; text-transform: uppercase; font-size: 0.72rem; }
+  .article h1 { margin-top: 14px; font-family: var(--font-blog); text-transform: none; font-weight: var(--font-blog-weight); letter-spacing: -0.035em; font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1.02; }
+  .article__lead { margin-top: 16px; font-size: 1.15rem; color: var(--muted); }
+  .article__img { max-width: 1060px; margin-top: 32px; }
+  .article__img { aspect-ratio: 16 / 8; }
+  .article__img :global(img) { border-radius: var(--radius-lg); }
+
+  .article__layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 56px; margin-top: 48px; max-width: 1060px; }
+  .side__box { position: sticky; top: calc(var(--header-h) + 24px); padding: 24px; border-radius: var(--radius); background: var(--navy); color: #dfe3ea; display: grid; gap: 12px; }
+  .side__title { font-family: var(--font-display); text-transform: uppercase; font-size: 1.6rem; color: #fff; line-height: 1; }
+
+  .prose { font-size: 1.1rem; line-height: 1.75; color: #23272f; }
+  .prose :global(h2) { font-family: var(--font-blog); text-transform: none; font-weight: var(--font-blog-weight); letter-spacing: -0.025em; font-size: clamp(1.6rem, 2.6vw, 2rem); line-height: 1.1; margin: 48px 0 14px; }
+  .prose :global(h3) { font-size: 1.25rem; margin: 28px 0 8px; }
+  .prose :global(p) { margin: 0 0 18px; }
+  .prose :global(ul), .prose :global(ol) { margin: 0 0 20px; padding-left: 1.3em; }
+  .prose :global(li) { margin-bottom: 8px; }
+  .prose :global(a) { color: var(--blue); font-weight: 600; }
+  .prose :global(strong) { color: var(--navy); }
+  .prose :global(table) { width: 100%; border-collapse: collapse; margin: 0 0 24px; font-size: 1rem; }
+  .prose :global(th), .prose :global(td) { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .prose :global(th) { background: var(--bg-soft); }
+  .prose :global(em) { color: var(--muted); }
+
+  .strip { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+  .strip__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+  .strip__head h2 { font-family: var(--font-blog); font-weight: var(--font-blog-weight); text-transform: none; letter-spacing: -0.025em; font-size: clamp(1.5rem, 2.4vw, 1.9rem); }
+  .strip__list { list-style: none; margin: 0; padding: 0 0 8px; display: grid; grid-auto-flow: column; grid-auto-columns: min(260px, 72%); gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; }
+  .strip__list li { aspect-ratio: 4 / 3; border-radius: var(--radius); overflow: hidden; scroll-snap-align: start; }
+  .strip__list a { display: block; height: 100%; }
+  .strip__list :global(img) { transition: transform 0.4s; }
+  .strip__list a:hover :global(img) { transform: scale(1.05); }
+
+  .related { background: var(--bg-soft); }
+  .related h2 { margin-bottom: 32px; }
+  .related ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+
+  @media (max-width: 900px) {
+    .article__layout { grid-template-columns: 1fr; gap: 32px; }
+    .side__box { position: static; }
+    .related ul { grid-template-columns: 1fr; }
+  }
+</style>

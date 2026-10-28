@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Courses from '../../components/home/Courses.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import { site, waLink } from '../../data/site';
+---
+<Base
+  title={`Scooty & Bike Training Courses in Kolkata | ${site.name}`}
+  description="Basic and advanced scooty training, bike training and RTO test preparation in Kolkata. One-to-one classes from ₹2,500, near Netaji Metro or at your doorstep."
+>
+  <PageHero
+    crumbs={[{ href: '/courses', label: 'Courses' }]}
+    eyebrow="Courses"
+    title="Find the <mark>right course</mark> for you."
+    lead="Four courses, all one-to-one with a trainer. Complete beginner, nervous in traffic, learning a bike or preparing for your test: start where you are."
+  >
+    <a class="btn btn--whatsapp" href={waLink('Hi Zero Fear, which course is right for me?')} target="_blank" rel="noopener"><Icon name="whatsapp" /> Help me choose</a>
+  </PageHero>
+  <Courses heading={false} />
+  <CtaBand title="Not sure where to start?" text="Tell us what you can do today and we’ll suggest the right course." />
+</Base>

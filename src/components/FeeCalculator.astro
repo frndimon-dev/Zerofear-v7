@@ -1,0 +1,65 @@
+---
+import Icon from './Icon.astro';
+import { doorstep, formatINR, waLink } from '../data/site';
+const last = doorstep.tiers[doorstep.tiers.length - 1];
+---
+<div class="calc card" data-calc data-tiers={JSON.stringify(doorstep.tiers)} data-max-fee={doorstep.maxFee} data-radius={doorstep.radiusKm}>
+  <h3>Fee calculator</h3>
+  <p class="calc__hint">Distance from {doorstep.from}</p>
+  <label class="calc__field">
+    <span class="sr-only">Distance in km</span>
+    <input type="range" min="0" max={doorstep.radiusKm} step="0.5" value="2" data-calc-range />
+    <output data-calc-km>2 km</output>
+  </label>
+  <div class="calc__result">
+    <span>Estimated fee</span>
+    <strong data-calc-fee>{formatINR(doorstep.tiers[0].fee)}</strong>
+  </div>
+  <ul class="calc__tiers">
+    {doorstep.tiers.map((t, i) => (
+      <li>{i === 0 ? `Up to ${t.upToKm} km` : `${doorstep.tiers[i - 1].upToKm}–${t.upToKm} km`} · {formatINR(t.fee)}</li>
+    ))}
+    <li>{last.upToKm}–{doorstep.radiusKm} km · up to {formatINR(doorstep.maxFee)}</li>
+  </ul>
+  <a class="btn btn--primary btn--block" href={waLink('Hi Zero Fear, I want doorstep training. My area is: ')} target="_blank" rel="noopener">
+    <Icon name="whatsapp" /> Check my area
+  </a>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-calc]').forEach((root) => {
+    const tiers: { upToKm: number; fee: number }[] = JSON.parse(root.dataset.tiers || '[]');
+    const maxFee = Number(root.dataset.maxFee);
+    const radius = Number(root.dataset.radius);
+    const range = root.querySelector<HTMLInputElement>('[data-calc-range]')!;
+    const kmOut = root.querySelector<HTMLElement>('[data-calc-km]')!;
+    const feeOut = root.querySelector<HTMLElement>('[data-calc-fee]')!;
+    const last = tiers[tiers.length - 1];
+
+    const feeFor = (km: number) => {
+      const tier = tiers.find((t) => km <= t.upToKm);
+      if (tier) return tier.fee;
+      // Linear between the last tier and the max fee at the edge of the radius.
+      return Math.round(last.fee + ((km - last.upToKm) / (radius - last.upToKm)) * (maxFee - last.fee));
+    };
+    const update = () => {
+      const km = Number(range.value);
+      kmOut.textContent = `${km} km`;
+      feeOut.textContent = '₹' + feeFor(km).toLocaleString('en-IN');
+    };
+    range.addEventListener('input', update);
+    update();
+  });
+</script>
+
+<style>
+  .calc { padding: 28px; box-shadow: var(--shadow); }
+  .calc__hint { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+  .calc__field { display: flex; align-items: center; gap: 14px; margin-top: 20px; }
+  .calc__field input { flex: 1; accent-color: var(--blue); height: 28px; }
+  .calc__field output { min-width: 56px; text-align: right; font-weight: 700; }
+  .calc__result { margin-top: 18px; padding: 18px; border-radius: var(--radius-sm); background: var(--bg-soft); display: grid; gap: 2px; text-align: center; }
+  .calc__result span { font-size: 0.85rem; color: var(--muted); }
+  .calc__result strong { font-family: var(--font-display); font-size: 2rem; font-weight: 400; color: var(--navy); letter-spacing: -0.02em; }
+  .calc__tiers { list-style: none; padding: 0; margin: 16px 0 20px; display: grid; gap: 4px; font-size: 0.85rem; color: var(--muted); }
+</style>

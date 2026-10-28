@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Contact from '../components/home/Contact.astro';
+import { site } from '../data/site';
+---
+<Base
+  title={`Book a Scooty or Bike Training Class | ${site.name}`}
+  description="Book scooty or bike training in Kolkata. Send your details on WhatsApp and we’ll call you back to fix a slot. Courses from ₹2,500."
+>
+  <PageHero
+    crumbs={[{ href: '/book', label: 'Book a class' }]}
+    eyebrow="Book a class"
+    title="Book your <mark>first class.</mark>"
+    lead="Fill in the form and it opens WhatsApp with your details. We’ll reply to confirm your course, fee and a time that suits you."
+  />
+  <Contact title="We’ll <mark>call you back.</mark>" lead="Prefer to talk? Call or WhatsApp us directly." />
+</Base>

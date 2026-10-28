@@ -1,0 +1,18 @@
+---
+// Wordmark: ZERO + FEAR in a yellow block (matches brand/zerofear-logo.svg).
+interface Props { light?: boolean }
+const { light = false } = Astro.props;
+---
+<a href="/" class:list={['logo', { 'logo--light': light }]} aria-label="Zero Fear home">
+  <span class="logo__word" aria-hidden="true">Zero <span class="logo__block">Fear</span></span>
+  <span class="logo__sub">Scooty & Bike Training</span>
+</a>
+
+<style>
+  .logo { display: inline-grid; gap: 3px; text-decoration: none; color: var(--navy); line-height: 1; }
+  .logo__word { font-family: var(--font-display); font-size: 1.55rem; text-transform: uppercase; letter-spacing: 0.01em; white-space: nowrap; }
+  .logo__block { display: inline-block; background: var(--yellow); color: var(--navy); padding: 2px 6px 1px; margin-left: 2px; }
+  .logo__sub { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .logo--light { color: #fff; }
+  .logo--light .logo__sub { color: #9aa1ae; }
+</style>
