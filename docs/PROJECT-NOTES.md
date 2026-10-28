@@ -1,7 +1,7 @@
 # Zero Fear – project notes
 
 Everything decided so far, so nothing is lost between sessions.
-(Last updated: 28 Oct 2026.)
+(Last updated: 28 Oct 2026, site live on zerofear.in.)
 
 ## Brand facts (use exactly these everywhere)
 
@@ -39,9 +39,10 @@ Everything decided so far, so nothing is lost between sessions.
 ## Where things live
 | What | Where |
 |---|---|
-| Website code | GitHub `frndimon-dev/Zerofear-v7`, branch `claude/website-review-modernize-3hox2w` (not merged to `main` yet) |
-| Hosting | Vercel team `kd-captain`, project **zerofear-v7** (the 7 `zerofear-v7-xxxx` duplicates should be deleted) |
-| Preview link | https://zerofear-v7-git-claude-website-review-moderni-8f0da5-kd-captain.vercel.app |
+| Website code | GitHub `frndimon-dev/Zerofear-v7`, branch `main` (Hostinger deploys this) |
+| Hosting | **Hostinger Business** (Node.js app), domain **zerofear.in** (to Oct 2029). Settings in `docs/HOSTING.md`. Code changes need hPanel → Settings → **Save and redeploy**; admin-panel edits don't. Old Vercel projects can be deleted. |
+| Live site | https://zerofear.in · admin https://zerofear.in/admin |
+| Google Search Console | URL-prefix property `https://zerofear.in/`, verified by `public/google8a29fba7104d5b35.html` (keep it); sitemap.xml submitted, 21 pages |
 | Admin panel | `/admin` on the site — guide in `docs/ADMIN.md` |
 | Database, login, uploaded photos | Supabase project “Zerofear web” (`fhsslykxcwbpzqusouii`), setup in `supabase/admin-setup.sql` |
 | Old single-page site | `legacy/index.html` (reference only) |
@@ -51,14 +52,11 @@ Everything decided so far, so nothing is lost between sessions.
 Admin login e-mail: frndimon@gmail.com (the password is **not** stored here).
 
 ## Still to do
-1. Run the admin database setup (`supabase/admin-setup.sql`) — waiting on approval / owner paste.
-2. Deploy the latest code and test the admin panel with the real database.
-3. Delete the 7 duplicate Vercel projects (they use up the free 100 deploys/day).
-4. Correct Instagram link and opening hours from the owner.
-5. Rename Facebook / Instagram / WhatsApp to Zero Fear once the site is final.
-6. Buy the domain (recommendation: **zerofear.in** from Hostinger or Namecheap; `zerofearkolkata.com` is free on Vercel at $11.25/yr).
-   Then update `site` in `astro.config.mjs` and `src/data/site.ts`, `public/robots.txt`, Google Search Console, Google Business Profile.
-7. Cover photos for Facebook / WhatsApp / Instagram.
-8. Ideas: enquiry inbox in admin, reviews manager, editable course-page details and inner pages, per-page Google titles.
-9. More area blog posts (Behala, Jadavpur, Garia, …), backlinks with the exact name/address/phone.
-10. Merge to `main` when the owner approves.
+1. Google Business Profile: add https://zerofear.in as the website (confirm which profile belongs to Zero Fear).
+2. Delete the old Vercel projects (they send failed-deploy emails on every push).
+3. Correct Instagram link and opening hours from the owner (admin → Contact & numbers).
+4. Rename Facebook / Instagram / WhatsApp to Zero Fear; set up info@zerofear.in (free with Hostinger).
+5. Check whether Hostinger can auto-deploy on push; until then use Save and redeploy.
+6. Cover photos for Facebook / WhatsApp / Instagram.
+7. Ideas: enquiry inbox in admin, reviews manager, editable course-page details and inner pages, per-page Google titles.
+8. More area blog posts (Behala, Jadavpur, Garia, …), backlinks with the exact name/address/phone.
