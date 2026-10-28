@@ -2,14 +2,11 @@
 
 Open **/admin** on the website (e.g. `https://zerofear-v7.vercel.app/admin`). It is hidden from Google.
 
-## One-time setup (already done for this site)
+## One-time setup
 
-1. **Database.** Supabase → your project → *SQL Editor* → *New query*. Paste everything from
-   [`supabase/admin-setup.sql`](../supabase/admin-setup.sql), check the e-mail on the line marked
-   `YOUR E-MAIL`, and press *Run*.
-2. **Your login.** Supabase → *Authentication* → *Users* → *Add user* → *Create new user*:
-   the same e-mail and a strong password, tick *Auto confirm*.
-   Then *Authentication* → *Sign In / Providers* → turn **off** “Allow new users to sign up”.
+Open **/admin/setup** on the website and follow the three steps (copy, open Supabase, paste + Run).
+It runs [`supabase/admin-setup.sql`](../supabase/admin-setup.sql) and sets a new admin password,
+which is created in the browser and shown on that page. It can be run again safely (e.g. to reset the password).
 
 ## Everyday use
 
