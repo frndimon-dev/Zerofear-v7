@@ -12,7 +12,7 @@
   "dependencies": {
     "@astrojs/preact": "6.0.6",
     "@astrojs/rss": "4.0.19",
-    "@astrojs/vercel": "11.0.13",
+    "@astrojs/vercel": "11.0.16",
     "@mediapipe/tasks-vision": "1.1.1",
     "@supabase/supabase-js": "2.117.0",
     "astro": "7.4.2",
