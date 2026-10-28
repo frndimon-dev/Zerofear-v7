@@ -18,7 +18,7 @@ Everything decided so far, so nothing is lost between sessions.
 | Numbers | 4.9★ Google, 300+ reviews, 5000+ learners, trainers with 8+ years experience |
 | Founded | Zero Fear launched 2026 (trainers’ experience since 2018) |
 | Facebook | facebook.com/freelancetwowheelertraining.co.in (to be renamed) |
-| Instagram | instagram.com/scooty_bike_training_centre (to be renamed; correct link still needed) |
+| Instagram | instagram.com/zerofearkolkata (renamed 28 Oct 2026) |
 | YouTube | none yet (hidden on the site) |
 | Planned username | @zerofearkolkata |
 
