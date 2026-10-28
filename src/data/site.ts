@@ -3,6 +3,8 @@
 
 export const site = {
   name: 'Zero Fear',
+  // Same name as on Google, Facebook and WhatsApp (keeps the business listings matching).
+  fullName: 'Zero Fear Scooty & Bike Training',
   tagline: 'Fear Out. Freedom In.',
   // Trainers' hands-on experience (Zero Fear itself launched in 2026).
   experienceYears: 8,
@@ -16,6 +18,8 @@ export const site = {
   whatsapp: { display: '79801 10273', number: '917980110273' },
 
   area: 'Tollygunge · Netaji Metro · Kudghat',
+  // Doorstep-training neighbourhoods (also listed as the service area on Google).
+  serviceAreas: ['Tollygunge', 'Behala', 'Jadavpur', 'Garia', 'Naktala', 'Bansdroni', 'Kudghat', 'New Alipore', 'Regent Park', 'Netaji Nagar'],
   city: 'Kolkata',
   // Copied exactly from the Google Business Profile so name/address/phone match everywhere.
   address: 'Near, 12, post, Samargarh, Paschim Putiary, Kolkata, West Bengal 700041' as string | null,
