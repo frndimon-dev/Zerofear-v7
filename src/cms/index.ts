@@ -1,7 +1,7 @@
 // Site content: the built-in defaults merged with what was saved in the admin
 // panel (Supabase table `site_content`, row key "site"). Pages are rendered on
-// the server and cached by Vercel for a minute (see astro.config.mjs), so a
-// Save in the admin panel shows on the site within about a minute.
+// the server (see astro.config.mjs), so a Save in the admin panel shows on the
+// site within about 30 seconds.
 // If the database can't be reached the defaults are used.
 //
 // refreshCms() runs before every page render (src/middleware.ts). Business

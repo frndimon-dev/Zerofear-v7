@@ -1,6 +1,6 @@
 # Zero Fear admin panel
 
-Open **/admin** on the website (e.g. `https://zerofear-v7.vercel.app/admin`). It is hidden from Google.
+Open **/admin** on the website (`https://zerofear.in/admin`). It is hidden from Google.
 
 ## One-time setup
 
@@ -10,8 +10,8 @@ which is created in the browser and shown on that page. It can be run again safe
 
 ## Everyday use
 
-- **Save** stores your changes; the website shows them within about 2 minutes
-  (pages are cached by Vercel for 60 seconds, no new deploy is needed).
+- **Save** stores your changes; the website shows them within about a minute
+  (no new deploy is needed).
 - Every Save keeps the previous version (*History* tab).
 
 | Tab | What you can change |
@@ -41,7 +41,7 @@ Hero headline: the preview under *Headline on the photo* warns when the headline
 
 - Content model and defaults: `src/cms/schema.ts`; build-time merge: `src/cms/index.ts`.
 - Saved content: Supabase `site_content` (key `site`), blog posts: `posts`, photos: storage bucket `site-media`.
-- Pages are server-rendered with Vercel ISR (`astro.config.mjs`); `src/middleware.ts` refreshes the content (at most every 30 s per instance).
+- Pages are server-rendered by the Node adapter (Hostinger Node.js hosting, see `docs/HOSTING.md`); `src/middleware.ts` refreshes the content at most every 30 s.
 - If the database can’t be reached, the site uses the defaults in code.
 - Local run with sample content: `CMS_FILE=path/to/content.json npm run dev`
   (`{ "site": {…overrides}, "posts": [ …rows ] }`).

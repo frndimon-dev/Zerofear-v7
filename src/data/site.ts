@@ -7,7 +7,7 @@ export const site = {
   // Trainers' hands-on experience (Zero Fear itself launched in 2026).
   experienceYears: 8,
   founded: 2026,
-  url: 'https://zerofear-v7.vercel.app',
+  url: 'https://zerofear.in',
   description:
     'Scooty and bike training in Kolkata for complete beginners — even if you cannot ride a cycle. One-to-one classes near Netaji Metro, Tollygunge, plus doorstep training within 10 km.',
 

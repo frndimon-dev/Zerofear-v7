@@ -1,13 +1,12 @@
 import { defineConfig } from 'astro/config';
 import preact from '@astrojs/preact';
-import vercel from '@astrojs/vercel';
+import node from '@astrojs/node';
 
 export default defineConfig({
-  // Update to the real domain (e.g. https://zerofear.in) once it is bought.
-  site: 'https://zerofear-v7.vercel.app',
-  // Pages are rendered on the server with the latest admin-panel content and
-  // cached by Vercel for 60 seconds, so edits go live without a new deploy.
+  site: 'https://zerofear.in',
+  // Pages are rendered on the server (Hostinger Node.js hosting) with the
+  // latest admin-panel content, so edits go live without a new deploy.
   output: 'server',
-  adapter: vercel({ isr: { expiration: 60 } }),
+  adapter: node({ mode: 'standalone' }),
   integrations: [preact()], // preact: admin panel only
 });

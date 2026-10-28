@@ -1,0 +1,18 @@
+# Free Supabase projects pause after a week without activity. This makes one
+# small read every day so the admin panel and the site's content never pause.
+name: Keep Supabase awake
+
+on:
+  schedule:
+    - cron: '17 3 * * *' # every day, 08:47 India time
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read the site content once
+        run: |
+          curl -fsS "https://fhsslykxcwbpzqusouii.supabase.co/rest/v1/site_content?select=key&limit=1" \
+            -H "apikey: sb_publishable_QC_9-e0uIV2EEzJUwr4plg_TdhK8ozF" \
+            -H "Authorization: Bearer sb_publishable_QC_9-e0uIV2EEzJUwr4plg_TdhK8ozF"

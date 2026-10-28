@@ -1,6 +1,6 @@
 # Zero Fear website
 
-Scooty & bike training in Kolkata. Built with [Astro](https://astro.build) and deployed on Vercel.
+Scooty & bike training in Kolkata. Built with [Astro](https://astro.build) and hosted on Hostinger (Node.js), see [docs/HOSTING.md](docs/HOSTING.md).
 
 ## Edit content
 
@@ -50,4 +50,4 @@ Add a new post by creating a Markdown file in `src/content/blog/`, for example
 `scooty-training-in-behala.md`. The file name becomes the URL (`/blog/scooty-training-in-behala`).
 Start the file with the same header block (title, description, date, category, image, imageAlt,
 keywords) as the existing posts. The post appears on `/blog`, the home page, the footer, the
-sitemap and the RSS feed automatically after the next deploy.
+sitemap and the RSS feed automatically after the next deploy. Posts written in the admin panel appear right away.
