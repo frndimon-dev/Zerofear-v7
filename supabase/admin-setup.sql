@@ -60,3 +60,10 @@ begin
     end if;
   end loop;
 end $$;
+-- New Supabase projects don't give the website roles access to new tables automatically.
+grant usage on schema public to anon, authenticated;
+grant select on public.site_content, public.posts to anon;
+grant select, insert, update, delete on public.site_content, public.posts, public.site_content_history to authenticated;
+grant select on public.admin_users to authenticated;
+grant execute on function public.is_admin() to anon, authenticated;
+revoke execute on function public.keep_content_history() from public, anon, authenticated;
