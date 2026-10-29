@@ -11,7 +11,7 @@ Everything decided so far, so nothing is lost between sessions.
 | Tagline | Fear Out. Freedom In. |
 | Hero line | Ride without fear. / Can’t ride a cycle? You can still ride. |
 | Phone / WhatsApp | **79801 10273** (+91 79801 10273) |
-| Address (as on Google) | Near, 12, post, Samargarh, Paschim Putiary, Kolkata, West Bengal 700041 |
+| Address (as on Google) | 12, Samargarh Colony, Post Office, near Paschim Putiary, Kolkata, West Bengal 700041 |
 | Area | Near Netaji Metro · Tollygunge · Kudghat |
 | Courses | Basic Scooty, Advanced Scooty, Bike Training, RTO Test Preparation — from **₹2,500** |
 | Doorstep | Within 10 km of Netaji Metro / Kudghat: ≤2 km ₹4,500, ≤3 km ₹5,000, max ₹8,000 |
@@ -59,4 +59,6 @@ Admin login e-mail: frndimon@gmail.com (the password is **not** stored here).
 5. Check whether Hostinger can auto-deploy on push; until then use Save and redeploy.
 6. Cover photos for Facebook / WhatsApp / Instagram.
 7. Ideas: enquiry inbox in admin, reviews manager, editable course-page details and inner pages, per-page Google titles.
-8. More area blog posts (Behala, Jadavpur, Garia, …), backlinks with the exact name/address/phone.
+8. Later (no effect on ranking): move Zero Fear's Search Console and admin login from frndimon@gmail.com
+   (kept for another business) to the owner's Zero Fear Google account, which already runs the Google Business Profile.
+9. More area blog posts (Behala, Jadavpur, Garia, …), backlinks with the exact name/address/phone.

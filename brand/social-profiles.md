@@ -9,7 +9,7 @@ anywhere on these profiles. Use the exact same name, phone and address everywher
 | Name | **Zero Fear Scooty & Bike Training** |
 | Short name | Zero Fear |
 | Phone / WhatsApp | +91 79801 10273 |
-| Address (as on Google) | Near, 12, post, Samargarh, Paschim Putiary, Kolkata, West Bengal 700041 |
+| Address (as on Google) | 12, Samargarh Colony, Post Office, near Paschim Putiary, Kolkata, West Bengal 700041 |
 | Area | Near Netaji Metro, Tollygunge, Kolkata |
 | Website | https://zerofear.in |
 | Username | zerofearkolkata |
@@ -42,8 +42,8 @@ All are 1080×1080 and safe for the round crop.
 ## Google Business Profile
 
 - **Business name:** Zero Fear Scooty & Bike Training
-- **Primary category:** Driving school
-- **Additional category:** Motorcycle driving school
+- **Primary category:** Motorcycle driving school (we only teach two-wheelers)
+- **Additional category:** Driving school
 - **Website:** https://zerofear.in
 - **Phone:** 079801 10273 · **Address:** exactly as in the table above
 - **Service area:** Tollygunge, Behala, Jadavpur, Garia, Naktala, Bansdroni, Kudghat, New Alipore, Regent Park, Netaji Nagar

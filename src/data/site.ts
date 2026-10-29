@@ -22,11 +22,11 @@ export const site = {
   serviceAreas: ['Tollygunge', 'Behala', 'Jadavpur', 'Garia', 'Naktala', 'Bansdroni', 'Kudghat', 'New Alipore', 'Regent Park', 'Netaji Nagar'],
   city: 'Kolkata',
   // Copied exactly from the Google Business Profile so name/address/phone match everywhere.
-  address: 'Near, 12, post, Samargarh, Paschim Putiary, Kolkata, West Bengal 700041' as string | null,
-  streetAddress: 'Near, 12, post, Samargarh, Paschim Putiary',
+  address: '12, Samargarh Colony, Post Office, near Paschim Putiary, Kolkata, West Bengal 700041' as string | null,
+  streetAddress: '12, Samargarh Colony, Post Office, near Paschim Putiary',
   postalCode: '700041',
   hours: null as string | null, // e.g. 'Mon–Sun · 6:00 AM – 10:00 PM'
-  mapQuery: 'Near, 12, post, Samargarh, Paschim Putiary, Kolkata, West Bengal 700041',
+  mapQuery: '12, Samargarh Colony, Post Office, near Paschim Putiary, Kolkata, West Bengal 700041',
 
   stats: [
     { value: '4.9★', label: 'Google rating' },
