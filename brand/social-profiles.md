@@ -42,8 +42,8 @@ All are 1080×1080 and safe for the round crop.
 ## Google Business Profile
 
 - **Business name:** Zero Fear Scooty & Bike Training
-- **Primary category:** Driving school
-- **Additional category:** Motorcycle driving school
+- **Primary category:** Motorcycle driving school (we only teach two-wheelers)
+- **Additional category:** Driving school
 - **Website:** https://zerofear.in
 - **Phone:** 079801 10273 · **Address:** exactly as in the table above
 - **Service area:** Tollygunge, Behala, Jadavpur, Garia, Naktala, Bansdroni, Kudghat, New Alipore, Regent Park, Netaji Nagar
