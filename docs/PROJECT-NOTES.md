@@ -74,8 +74,8 @@ Admin login e-mail: frndimon@gmail.com (the password is **not** stored here).
   Supabase), measures the distance from Netaji Metro / Kudghat ×1.3 for roads, and uses the website tiers
   (≤2 km ₹4,500, ≤3 km ₹5,000, up to ₹8,000 at 10 km; beyond 10 km: no doorstep, suggest the nearest branch).
   Settings in `workspaces.settings.doorstep` / `.branches`.
-- **Source code**: separate project `social-desk` (engine, web app, tests). It is **not on GitHub yet** — create a
-  private repo `frndimon-dev/social-desk` so it can be pushed. The deployed function in Supabase is the live copy.
+- **Source code**: private GitHub repo `frndimon-dev/social-desk` (engine, web app, tests, README). The deployed
+  function in Supabase is the live copy; redeploy from the repo after changes.
 - **Next**: big test sheet (~150 real and invented comments) via `/desk/eval`; place-only comments should be answered
   in the post's language; decide whether to answer the last 7 days of comments from before connecting.
 
