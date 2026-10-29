@@ -1,0 +1,15 @@
+# Wakes the social scheduler (admin → Social) in case the website server slept.
+# The endpoint only sends posts that are already due, so calling it is safe.
+name: Social scheduler
+
+on:
+  schedule:
+    - cron: '7,22,37,52 * * * *' # every 15 minutes
+  workflow_dispatch:
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send due posts
+        run: curl -fsS --max-time 120 https://zerofear.in/api/social/tick || true

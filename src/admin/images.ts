@@ -35,7 +35,25 @@ export async function prepare(file: File): Promise<Prepared> {
   return out;
 }
 
-export const slugify = (s: string) =>
+// Social media photos: JPEG (Instagram accepts nothing else), at most 1440 px
+// wide and 1920 px tall, camera data removed.
+export async function prepareJpeg(file: File): Promise<{ blob: Blob; w: number; h: number; url: string }> {
+  if (!file.type.startsWith('image/')) throw new Error('Please choose a photo (JPG, PNG or WebP).');
+  if (/heic|heif/i.test(file.type)) throw new Error('This is an iPhone HEIC photo. In iPhone Settings → Camera → Formats choose “Most Compatible”, or send it to yourself on WhatsApp and use that copy.');
+  const bmp = await createImageBitmap(file, { imageOrientation: 'from-image' });
+  const scale = Math.min(1, 1440 / bmp.width, 1920 / bmp.height);
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.round(bmp.width * scale);
+  canvas.height = Math.round(bmp.height * scale);
+  const ctx = canvas.getContext('2d')!;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(bmp, 0, 0, canvas.width, canvas.height);
+  bmp.close();
+  const blob = (await new Promise<Blob | null>((r) => canvas.toBlob(r, 'image/jpeg', 0.9)))!;
+  return { blob, w: canvas.width, h: canvas.height, url: URL.createObjectURL(blob) };
+}
+
+export const slugify =(s: string) =>
   s.toLowerCase().normalize('NFKD').replace(/[^\w\s-]/g, '').trim().replace(/[\s_]+/g, '-').replace(/-+/g, '-').slice(0, 60).replace(/-$/, '');
 
 export function loadImage(src: string): Promise<HTMLImageElement> {
