@@ -4,3 +4,6 @@ dist/
 .vercel/
 .DS_Store
 public/admin-assets/
+
+# Reel videos (large, show learners) stay out of the public repo
+brand/reel/
