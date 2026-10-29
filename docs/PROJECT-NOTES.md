@@ -53,6 +53,32 @@ Everything decided so far, so nothing is lost between sessions.
 
 Admin login e-mail: frndimon@gmail.com (the password is **not** stored here).
 
+## Social Desk (AI comment replies) – state on 30 Oct 2026
+- **Live**: answers new Facebook + Instagram comments every 2 minutes for two workspaces:
+  - "Zero Fear": Facebook *Zero Fear Scooty & Bike Training* + Instagram @zerofearkolkata. Phone 79801 10273.
+  - "Seekho 2 Wheeler" (internal label only): Facebook *Kolkata Scooty Bike Training centre* + Instagram
+    @scooty_bike_training_centre. Replies say **Kolkata Scooty Bike Training Centre** (not Seekho yet; rename
+    later by editing the first line of Business facts). Phones 97484 81630 / 79801 08587, WhatsApp 97484 81630.
+- **Where**: web app zerofear.in/desk · Supabase project "Social Desk" (`wzesyetbiyxdgjyuhqoz`): tables, pg_cron
+  job `social-desk-worker`, Edge Function `desk` (v7). Meta app "Social desk kolkata" (development mode, owner is
+  admin) · AI: Claude Haiku 5.5 with a prepaid Anthropic credit ($5, auto-reload off). Keys sit in the desk's Keys tab
+  (table `app_secrets`), never in this repo.
+- **How replies work**: word lists hide abuse and spam; the AI reads every other comment together with its post
+  (caption, picture, the page's own comments), answers in the commenter's language and script (Banglish → Banglish),
+  short lines with emojis, both phone numbers. Inbox messages are **off**. Unsure / phone-number-only comments go to
+  "Needs you". Comments from before connecting are never answered.
+- **Facts the AI uses**: workspace `brand_facts` (Replies & rules tab). KSBTC: 7 branches (Tollygunge, Rabindra
+  Sarovar, Patuli, New Town, Sodepur, Barasat, Dumurjola), bike only at Tollygunge and Barasat, always "fees
+  **starting from** ₹2,500", every day 7 AM–7 PM, North Kolkata → suggest New Town / Sodepur.
+- **Doorstep fee**: the system finds the commenter's area on the map (Photon / OpenStreetMap; Nominatim blocks
+  Supabase), measures the distance from Netaji Metro / Kudghat ×1.3 for roads, and uses the website tiers
+  (≤2 km ₹4,500, ≤3 km ₹5,000, up to ₹8,000 at 10 km; beyond 10 km: no doorstep, suggest the nearest branch).
+  Settings in `workspaces.settings.doorstep` / `.branches`.
+- **Source code**: separate project `social-desk` (engine, web app, tests). It is **not on GitHub yet** — create a
+  private repo `frndimon-dev/social-desk` so it can be pushed. The deployed function in Supabase is the live copy.
+- **Next**: big test sheet (~150 real and invented comments) via `/desk/eval`; place-only comments should be answered
+  in the post's language; decide whether to answer the last 7 days of comments from before connecting.
+
 ## Still to do
 1. Google Business Profile: add https://zerofear.in as the website (confirm which profile belongs to Zero Fear).
 2. Delete the old Vercel projects (they send failed-deploy emails on every push).
