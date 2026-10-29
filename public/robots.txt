@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /admin
+Disallow: /desk
 
 Sitemap: https://zerofear.in/sitemap.xml
