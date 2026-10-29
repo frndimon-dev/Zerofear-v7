@@ -45,6 +45,7 @@ Everything decided so far, so nothing is lost between sessions.
 | Google Search Console | URL-prefix property `https://zerofear.in/`, verified by `public/google8a29fba7104d5b35.html` (keep it); sitemap.xml submitted, 21 pages |
 | Admin panel | `/admin` on the site — guide in `docs/ADMIN.md` |
 | Social scheduler | admin → Social; setup and secrets in `docs/SOCIAL.md` |
+| Social Desk (comment replies, all businesses) | web app at https://zerofear.in/desk (static files in `public/desk`, copied from the private `social-desk` project); engine and data in the separate Supabase project "Social Desk" |
 | Database, login, uploaded photos | Supabase project “Zerofear web” (`fhsslykxcwbpzqusouii`), setup in `supabase/admin-setup.sql` |
 | Old single-page site | `legacy/index.html` (reference only) |
 | Default texts, courses, prices | `src/data/site.ts`, `src/cms/schema.ts` |
