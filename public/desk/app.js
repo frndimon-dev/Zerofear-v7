@@ -55,6 +55,7 @@ async function boot() {
   const q = new URLSearchParams(location.search);
   if (q.get('connected')) state.msg = { text: `Connected: ${q.get('connected')}` };
   if (q.get('connect_error')) state.msg = { text: `Could not connect: ${q.get('connect_error')}`, isError: true };
+  if (q.get('pick')) { state.pick = true; state.tab = 'accounts'; }
   if (q.size) history.replaceState(null, '', location.pathname);
   const { data, error } = await sb.from('workspaces').select('*').order('created_at');
   if (error) { state.msg = { text: error.message, isError: true }; return render(); }
@@ -208,6 +209,7 @@ async function accounts() {
     location.href = url;
   });
   return h('div', {},
+    state.pick && await pickPages(),
     h('div', { class: 'card' }, h('h2', {}, `Accounts of ${state.ws.name}`),
       list.length ? list.map((a) => h('div', { class: 'acct' },
         h('span', {}, a.provider === 'instagram' ? '◎' : 'f'), h('b', {}, a.name), h('span', { class: 'pill' }, a.last_checked ? `checked ${fmt(a.last_checked)}` : 'not checked yet'),
@@ -221,6 +223,30 @@ async function accounts() {
       h('p', {}, h('button', { class: 'btn btn--primary', disabled: !state.status?.meta, onclick: connect }, '+ Connect Facebook & Instagram')),
       !state.status?.meta && h('p', { class: 'muted' }, 'The desk owner must add the Meta app keys first (Keys tab).'),
       h('p', { class: 'muted' }, `Log in with the Facebook account that manages ${state.ws.name}'s page. Its Instagram account must be a Professional account linked to that page. Comments from before connecting are never answered.`)));
+}
+
+// After the Facebook login: choose which of the pages belong to this business.
+async function pickPages() {
+  const { pages } = await api('found', { workspaceId: state.ws.id }).catch((e) => { toast(e.message, true); return { pages: [] }; });
+  if (!pages.length) { state.pick = false; return null; }
+  const boxes = pages.map((p) => {
+    const elsewhere = p.connectedTo && !p.connectedTo.here;
+    const box = h('input', { type: 'checkbox', value: p.page_id, checked: p.connectedTo?.here, disabled: elsewhere });
+    return h('label', { class: 'check' }, box,
+      h('span', {}, h('b', {}, p.name), p.ig_username ? ` + Instagram @${p.ig_username}` : ' (no Instagram linked)',
+        elsewhere && h('span', { class: 'pill' }, ` — already in ${p.connectedTo.name}`)));
+  });
+  const save = (e) => busy(e.target, async () => {
+    const pageIds = boxes.map((b) => b.querySelector('input')).filter((i) => i.checked && !i.disabled).map((i) => i.value);
+    const { connected } = await api('pick', { workspaceId: state.ws.id, pageIds });
+    state.pick = false;
+    toast(`Connected: ${connected.join(', ')}`);
+  });
+  return h('div', { class: 'card' }, h('h2', {}, `Which pages belong to ${state.ws.name}?`),
+    h('p', { class: 'muted' }, 'Tick only this business\'s page. Its Instagram account comes with it.'),
+    boxes,
+    h('p', {}, h('button', { class: 'btn btn--primary', onclick: save }, 'Connect chosen pages'), ' ',
+      h('button', { class: 'btn', onclick: () => { state.pick = false; render(); } }, 'Cancel')));
 }
 
 async function test() {
