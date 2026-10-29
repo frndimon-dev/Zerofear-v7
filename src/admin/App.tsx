@@ -8,6 +8,7 @@ import { CoursesTab } from './tabs/Courses';
 import { InfoTab } from './tabs/Info';
 import { BlogTab } from './tabs/Blog';
 import { HistoryTab } from './tabs/History';
+import { SocialTab } from './tabs/Social';
 
 export type Edit = (fn: (c: Overrides) => Overrides) => void;
 export type TabProps = { content: Overrides; edit: Edit; email: string; saveNow: () => Promise<boolean> };
@@ -18,6 +19,7 @@ const tabs = [
   { id: 'courses', label: 'Courses & prices', C: CoursesTab },
   { id: 'info', label: 'Contact & numbers', C: InfoTab },
   { id: 'blog', label: 'Blog', C: BlogTab },
+  { id: 'social', label: 'Social', C: SocialTab },
   { id: 'history', label: 'History', C: HistoryTab },
 ] as const;
 

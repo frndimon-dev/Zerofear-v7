@@ -21,6 +21,7 @@ which is created in the browser and shown on that page. It can be run again safe
 | Courses & prices | Name, level, short description, classes, starting price, photo |
 | Contact & numbers | Phone, WhatsApp, address, hours, social links, rating/review/learner numbers |
 | Blog | New posts, edit/hide posts, sections, cover + up to 12 photos, fonts |
+| Social | Schedule Google / Facebook / Instagram posts and stories, AI captions, Google review replies (setup: `docs/SOCIAL.md`) |
 
 ### Text limits
 Each text box allows at most as many words as the original text (and a few more letters), so
