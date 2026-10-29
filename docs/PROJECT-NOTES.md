@@ -11,7 +11,7 @@ Everything decided so far, so nothing is lost between sessions.
 | Tagline | Fear Out. Freedom In. |
 | Hero line | Ride without fear. / Can’t ride a cycle? You can still ride. |
 | Phone / WhatsApp | **79801 10273** (+91 79801 10273) |
-| Address (as on Google) | Near, 12, post, Samargarh, Paschim Putiary, Kolkata, West Bengal 700041 |
+| Address (as on Google) | 12, Samargarh Colony, Post Office, near Paschim Putiary, Kolkata, West Bengal 700041 |
 | Area | Near Netaji Metro · Tollygunge · Kudghat |
 | Courses | Basic Scooty, Advanced Scooty, Bike Training, RTO Test Preparation — from **₹2,500** |
 | Doorstep | Within 10 km of Netaji Metro / Kudghat: ≤2 km ₹4,500, ≤3 km ₹5,000, max ₹8,000 |

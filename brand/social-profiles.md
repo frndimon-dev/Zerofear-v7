@@ -9,7 +9,7 @@ anywhere on these profiles. Use the exact same name, phone and address everywher
 | Name | **Zero Fear Scooty & Bike Training** |
 | Short name | Zero Fear |
 | Phone / WhatsApp | +91 79801 10273 |
-| Address (as on Google) | Near, 12, post, Samargarh, Paschim Putiary, Kolkata, West Bengal 700041 |
+| Address (as on Google) | 12, Samargarh Colony, Post Office, near Paschim Putiary, Kolkata, West Bengal 700041 |
 | Area | Near Netaji Metro, Tollygunge, Kolkata |
 | Website | https://zerofear.in |
 | Username | zerofearkolkata |
