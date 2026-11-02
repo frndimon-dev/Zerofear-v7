@@ -206,8 +206,8 @@ async function business() {
 
 async function accounts() {
   const list = await accountsOf(state.ws);
-  const connect = (e) => busy(e.target, async () => {
-    const { url } = await api('connect', { workspaceId: state.ws.id, returnUrl: location.origin + location.pathname });
+  const connect = (e, kind) => busy(e.target, async () => {
+    const { url } = await api('connect', { workspaceId: state.ws.id, kind, returnUrl: location.origin + location.pathname });
     location.href = url;
   });
   return h('div', {},
@@ -222,7 +222,9 @@ async function accounts() {
           if (!confirm(`Disconnect ${a.name}?`)) return;
           const { error } = await sb.from('accounts').delete().eq('id', a.id); if (error) toast(error.message, true); else render();
         } }, 'Remove'))) : h('p', { class: 'muted' }, 'Nothing connected yet.'),
-      h('p', {}, h('button', { class: 'btn btn--primary', disabled: !state.status?.meta, onclick: connect }, '+ Connect Facebook & Instagram')),
+      h('p', {}, h('button', { class: 'btn btn--primary', disabled: !state.status?.meta, onclick: (e) => connect(e) }, '+ Connect Facebook & Instagram'), ' ',
+        h('button', { class: 'btn', disabled: !state.status?.ig, onclick: (e) => connect(e, 'instagram') }, '+ Instagram only (no Facebook page)')),
+      h('p', { class: 'muted' }, 'Instagram only: for an Instagram professional account that has no Facebook page. It is answered and gets stories like the others (no Facebook story).'),
       !state.status?.meta && h('p', { class: 'muted' }, 'The desk owner must add the Meta app keys first (Keys tab).'),
       h('p', { class: 'muted' }, `Log in with the Facebook account that manages ${state.ws.name}'s page. Its Instagram account must be a Professional account linked to that page. Comments from before connecting are never answered.`)));
 }
@@ -271,6 +273,8 @@ async function keys() {
   const appId = h('input', { class: 'input', autocomplete: 'off' });
   const appSecret = h('input', { class: 'input', type: 'password', autocomplete: 'off' });
   const ai = h('input', { class: 'input', type: 'password', autocomplete: 'off' });
+  const igId = h('input', { class: 'input', autocomplete: 'off' });
+  const igSecret = h('input', { class: 'input', type: 'password', autocomplete: 'off' });
   const st = state.status ?? {};
   return h('div', { class: 'card' }, h('h2', {}, 'Keys (desk owner only)'),
     h('p', { class: 'muted' }, 'Stored on the server; nobody can read them back here. Leave a box empty to keep the current value.'),
@@ -278,8 +282,11 @@ async function keys() {
     field(`Meta App Secret ${st.meta ? '✓ set' : ''}`, appSecret),
     field(`Anthropic API key ${st.ai ? '✓ set' : ''}`, ai, 'From console.anthropic.com → API Keys. Used only for comments the word lists don\'t understand.'),
     h('p', { class: 'muted' }, `Facebook "Valid OAuth Redirect URI": ${st.redirect ?? ''}`),
+    field(`Instagram App ID ${st.ig ? '✓ set' : ''}`, igId, 'Meta app → Use cases → Instagram → API setup with Instagram login.'),
+    field(`Instagram App Secret ${st.ig ? '✓ set' : ''}`, igSecret),
+    h('p', { class: 'muted' }, `Instagram login "Redirect URL": ${st.redirectIg ?? ''}`),
     h('button', { class: 'btn btn--primary', onclick: (e) => busy(e.target, async () => {
-      await api('secrets', { meta_app_id: appId.value, meta_app_secret: appSecret.value, anthropic_api_key: ai.value });
+      await api('secrets', { meta_app_id: appId.value, meta_app_secret: appSecret.value, ig_app_id: igId.value, ig_app_secret: igSecret.value, anthropic_api_key: ai.value });
       state.status = await api('status'); toast('Keys saved.');
     }) }, 'Save keys'),
     h('h3', {}, 'Run now'),
