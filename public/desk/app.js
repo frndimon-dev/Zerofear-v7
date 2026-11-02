@@ -2,6 +2,7 @@
 // database directly (row-level security keeps each business separate) and asks
 // the "desk" Edge Function for anything that talks to Facebook / Instagram.
 import { createClient } from './vendor/supabase.js'; // @supabase/supabase-js 2.117.0, bundled
+import { stories as storiesScreen } from './stories.js';
 
 const SUPABASE_URL = 'https://wzesyetbiyxdgjyuhqoz.supabase.co';
 const PUBLISHABLE_KEY = 'sb_publishable_WtpK81HvXHXHn-aroHl9MA_Nkt7UyKD';
@@ -72,7 +73,7 @@ async function render() {
   if (!state.session) { root.replaceChildren(login()); return; }
   if (!state.ws) { root.replaceChildren(h('p', { class: 'center' }, 'You are not a member of any business yet. Ask the desk owner to add your e-mail.')); return; }
   const { count } = await sb.from('comments').select('id', { count: 'exact', head: true }).eq('workspace_id', state.ws.id).in('status', ['held', 'failed']);
-  const tabs = [['inbox', 'Needs you', count], ['activity', 'Activity'], ['business', 'Replies & rules'], ['accounts', 'Accounts'], ['test', 'Try a comment']];
+  const tabs = [['inbox', 'Needs you', count], ['activity', 'Activity'], ['stories', 'Stories'], ['business', 'Replies & rules'], ['accounts', 'Accounts'], ['test', 'Try a comment']];
   if (state.status?.isAdmin) tabs.push(['keys', 'Keys']);
   const main = h('main', {});
   root.replaceChildren(
@@ -85,7 +86,8 @@ async function render() {
     main,
   );
   if (state.msg) main.append(h('p', { class: `toast ${state.msg.isError ? 'is-error' : ''}` }, state.msg.text));
-  const screens = { inbox, activity, business, accounts, test, keys };
+  const stories = () => storiesScreen({ h, sb, api, busy, toast, field, fmt, state, render });
+  const screens = { inbox, activity, stories, business, accounts, test, keys };
   main.append(await (screens[state.tab] ?? inbox)());
 }
 
