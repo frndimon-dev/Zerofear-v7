@@ -1,4 +1,4 @@
-// Social Desk web app: plain JavaScript, no build step. Reads and edits the
+// Business Desk (formerly Social Desk) web app: plain JavaScript, no build step. Reads and edits the
 // database directly (row-level security keeps each business separate) and asks
 // the "desk" Edge Function for anything that talks to Facebook / Instagram.
 import { createClient } from './vendor/supabase.js'; // @supabase/supabase-js 2.117.0, bundled
@@ -78,7 +78,7 @@ async function render() {
   const main = h('main', {});
   root.replaceChildren(
     h('header', { class: 'top' },
-      h('h1', {}, 'Social Desk'),
+      h('h1', {}, 'Business Desk'),
       state.workspaces.length > 1 && h('select', { onchange: (e) => { state.ws = state.workspaces.find((w) => w.id === e.target.value); localStorage.setItem('ws', state.ws.id); state.msg = null; render(); } },
         state.workspaces.map((w) => h('option', { value: w.id, selected: w.id === state.ws.id }, w.name))),
       h('button', { class: 'btn btn--small', onclick: () => sb.auth.signOut() }, 'Sign out')),
@@ -99,7 +99,7 @@ function login() {
     e.preventDefault(); err.textContent = '';
     const { error } = await sb.auth.signInWithPassword({ email: email.value.trim(), password: pass.value });
     if (error) err.textContent = /Invalid login/i.test(error.message) ? 'Wrong e-mail or password.' : error.message;
-  } }, h('h1', {}, 'Social Desk'), field('E-mail', email), field('Password', pass), err, h('button', { class: 'btn btn--primary', style: 'width:100%' }, 'Sign in'));
+  } }, h('h1', {}, 'Business Desk'), field('E-mail', email), field('Password', pass), err, h('button', { class: 'btn btn--primary', style: 'width:100%' }, 'Sign in'));
 }
 
 function commentCard(c, accounts, { editable }) {
