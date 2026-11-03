@@ -13,6 +13,11 @@ body{width:1080px;height:1920px;overflow:hidden;font-family:Hind;background:var(
 .brand{position:absolute;left:0;right:0;bottom:280px;text-align:center;font-size:38px;font-weight:600;text-shadow:0 2px 12px rgba(0,0,0,.9)}
 .fade{position:absolute;left:0;right:0;bottom:0;height:700px;background:linear-gradient(transparent,rgba(5,15,20,.85))}
 .brand b{color:var(--a)}
+/* Festival offer ribbon (set by the owner's Offers; added by the planner, never written by the AI) */
+.brand .fest{display:inline-block;margin-bottom:14px;padding:8px 34px;border-radius:14px;font-size:40px;font-weight:700;color:#3a1500;
+  background:linear-gradient(90deg,#ffb703,#ffd166 50%,#ffb703);box-shadow:0 6px 24px rgba(255,140,0,.55),0 0 0 4px rgba(255,255,255,.85);text-shadow:none}
+.brand .fest small{display:block;font-size:30px;font-weight:600}
+.hasfest .tp .card{top:1020px}.hasfest .poll .card{top:270px;height:580px}.hasfest .poll .q{top:820px}.hasfest .tr .head{top:1200px}
 .brand .tel{display:inline-block;margin-top:10px;background:#fff;color:var(--d);font-size:46px;font-weight:700;padding:2px 30px;border-radius:40px}
 .tag{display:inline-block;background:var(--a);color:var(--d);font-size:38px;font-weight:700;padding:2px 26px;border-radius:30px}
 
@@ -78,7 +83,8 @@ const B = D.brand || {};
 if (B.color) document.documentElement.style.setProperty('--c', B.color);
 if (B.accent) document.documentElement.style.setProperty('--a', B.accent);
 const esc = s => String(s || '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
-const brand = `<div class="fade"></div><div class="brand"><b>${esc(B.name)}</b>${D.branch ? ' · ' + esc(D.branch) : ''}<br><span class="tel">📞 ${esc((B.phones || []).join(' · '))}</span></div>`;
+const fest = D.offer && D.offer.text ? `<span class="fest">🪔 ${esc(D.offer.text)}${D.offer.until ? `<small>${esc(D.offer.until)} পর্যন্ত · বিস্তারিত জানতে কল করুন</small>` : ''}</span><br>` : '';
+const brand = `<div class="fade"></div><div class="brand">${fest}<b>${esc(B.name)}</b>${D.branch ? ' · ' + esc(D.branch) : ''}<br><span class="tel">📞 ${esc((B.phones || []).join(' · '))}</span></div>`;
 const ph = (u, extra = '') => `<div class="ph" style="background-image:url('${u}');${extra}"></div>`;
 const V = {
   poll: () => `<div class="poll" style="position:absolute;inset:0">
@@ -102,5 +108,6 @@ const V = {
       <div class="ticket">${D.price ? `<small>${esc(D.pre)}</small><b>${esc(D.price)}</b><span>${esc(D.sub)}</span>` : `<b class="np">${esc(D.sub || D.title)}</b>`}</div>${brand}</div>`,
 };
 if (D.type === 'clip') document.body.classList.add('clip');
+if (D.offer && D.offer.text) document.body.classList.add('hasfest');
 document.getElementById('app').innerHTML = (V[D.type] || V.offer)();
 </script></body></html>
