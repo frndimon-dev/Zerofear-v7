@@ -1,0 +1,186 @@
+<title>Zero Fear Listings Kit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Hind+Siliguri:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one narrow column; a sticky "business card" of the exact details, then one card per site, in the order to do them. */
+:root{
+  --bg:#f6f5ef; --paper:#ffffff; --ink:#0c0f16; --muted:#5b606b; --line:#e3e1d6;
+  --brand:#ffd60a; --brand-ink:#0c0f16; --ok:#1f7a4d; --warn:#9a5b00; --chip:#f0eee3;
+  --display:"Archivo Black","Arial Black",system-ui,sans-serif;
+  --body:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0c0f16; --paper:#151a24; --ink:#eef0f4; --muted:#9aa1ad; --line:#262d3a;
+  --brand:#ffd60a; --brand-ink:#0c0f16; --ok:#5fd39a; --warn:#ffb547; --chip:#1d2330; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c0f16; --paper:#151a24; --ink:#eef0f4; --muted:#9aa1ad; --line:#262d3a;
+  --brand:#ffd60a; --brand-ink:#0c0f16; --ok:#5fd39a; --warn:#ffb547; --chip:#1d2330; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+.wrap{max-width:760px;margin:0 auto;display:grid;gap:22px}
+h1{font:28px/1.15 var(--display);margin:0;text-wrap:balance;letter-spacing:.2px}
+h1 span{background:var(--brand);color:var(--brand-ink);padding:0 8px}
+h2{font:19px/1.3 var(--display);margin:0;text-wrap:balance}
+p{margin:0}
+.lead{color:var(--muted);max-width:62ch}
+.rules{display:grid;gap:6px;margin:0;padding-left:20px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:12px;min-width:0}
+.nap{border:2px solid var(--brand)}
+.label{font:600 12px/1.2 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.field{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start;border-top:1px dashed var(--line);padding-top:10px;min-width:0}
+.field:first-of-type{border-top:0;padding-top:0}
+.val{font:500 14px/1.5 var(--mono);white-space:pre-wrap;word-break:break-word;min-width:0;user-select:all}
+.copy{font:600 13px var(--body);border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:8px;padding:5px 12px;cursor:pointer;white-space:nowrap}
+.copy:focus-visible,.done input:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.copy.ok{background:var(--ok);color:var(--paper);border-color:var(--ok)}
+.site{gap:10px}
+.top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.top h2 small{font:600 13px var(--body);color:var(--muted);margin-left:6px}
+.pill{font:700 12px var(--body);border-radius:99px;padding:2px 10px;background:var(--chip);color:var(--muted)}
+.pill.hi{background:var(--brand);color:var(--brand-ink)}
+.steps{margin:0;padding-left:20px;display:grid;gap:4px}
+.go{display:inline-block;font:700 14px var(--body);color:var(--ink);text-decoration:underline;text-decoration-color:var(--brand);text-decoration-thickness:3px;text-underline-offset:3px}
+.note{font-size:14px;color:var(--warn)}
+.done{display:flex;gap:8px;align-items:center;font-weight:600}
+.done input{width:20px;height:20px;accent-color:var(--ok)}
+.site.isdone{opacity:.62}
+.progress{font:700 14px var(--body)}
+.bar{height:8px;background:var(--chip);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--brand);transition:width .3s}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+
+<div class="wrap">
+  <header class="card" style="gap:10px">
+    <h1>Zero Fear <span>লিস্টিং কিট</span></h1>
+    <p class="lead">প্রতিটা সাইটে ঠিক এই নাম, ঠিকানা আর ফোন নম্বর বসাবেন, একটা অক্ষরও না বদলে। Google এগুলো মিলিয়ে দেখে, সব জায়গায় এক থাকলে Maps-এ র‍্যাঙ্ক বাড়ে। প্রতিটা ঘরের পাশে <b>Copy</b> চাপুন, তারপর সাইটে গিয়ে পেস্ট করুন।</p>
+    <div class="progress" id="progressText">0 / 9 হয়েছে</div>
+    <div class="bar"><i id="progressBar"></i></div>
+  </header>
+
+  <section class="card">
+    <h2>তিনটে নিয়ম</h2>
+    <ul class="rules">
+      <li>কোনো সাইটে <b>দাম বা চার্জ লিখবেন না।</b> চার্জ জানতে ফোন করতে বলবেন।</li>
+      <li>Justdial, Sulekha ফোন করে টাকার প্যাকেজ বিক্রি করতে চাইবে। <b>Free listing-ই যথেষ্ট</b>, টাকা দেবেন না।</li>
+      <li>প্রতিটা সাইটে একটাই লিস্টিং। আগে থেকে পুরনো লিস্টিং থাকলে নতুন না বানিয়ে সেটা ঠিক করুন।</li>
+      <li><b>এলাকা শুধু দক্ষিণ কলকাতা</b> (নিচের Service areas)। সোদপুর, বারাসাত, নিউ টাউন বা অন্য কোনো ব্রাঞ্চের নাম, ঠিকানা, ফোন Zero Fear-এর কোথাও দেবেন না। ওগুলো শিখো টু হুইলারের থাকবে।</li>
+    </ul>
+  </section>
+
+  <section class="card nap" aria-label="Business details to copy">
+    <h2>ব্যবসার তথ্য (সব সাইটে এক)</h2>
+    <div class="field"><div><div class="label">Business name</div><div class="val">Zero Fear Scooty &amp; Bike Training</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="field"><div><div class="label">Phone / WhatsApp</div><div class="val">+91 79801 10273</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="field"><div><div class="label">Address</div><div class="val">12, Samargarh Colony, Post Office, near Paschim Putiary, Kolkata, West Bengal 700041</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="field"><div><div class="label">Street (if asked separately)</div><div class="val">12, Samargarh Colony, Post Office, near Paschim Putiary</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="field"><div><div class="label">Locality / Area (when the site asks)</div><div class="val">Tollygunge (near Netaji Metro)</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="field"><div><div class="label">City · State · PIN</div><div class="val">Kolkata · West Bengal · 700041</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="field"><div><div class="label">Website</div><div class="val">https://zerofear.in</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="field"><div><div class="label">Category</div><div class="val">Driving School (Motorcycle / Two-wheeler driving school if offered)</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="field"><div><div class="label">Short description (up to 160)</div><div class="val">One-to-one scooty &amp; bike training in Kolkata for complete beginners. No cycle needed. Near Netaji Metro, Tollygunge, plus doorstep training within 10 km.</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="field"><div><div class="label">Long description (up to 750)</div><div class="val">Zero Fear is a scooty and bike training school in Kolkata for complete beginners, including people who can't ride a cycle. Every class is one-to-one with a patient trainer, and our trainers have 8+ years of experience. You learn balance, throttle and braking on a calm practice ground first, then ride on real Kolkata roads when you're ready. Courses: Basic Scooty Training, Advanced Scooty Training, Bike (motorcycle) Training and RTO driving test preparation. Classes near Netaji Metro, Tollygunge, and doorstep training within 10 km, including Behala, Jadavpur, Garia, Naktala, Bansdroni, Kudghat and New Alipore. Women-friendly trainers for ladies, students and older learners. Call or WhatsApp to book your first class.</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="field"><div><div class="label">Services</div><div class="val">Scooty training for beginners, Scooty training for ladies, Bike / motorcycle training, Doorstep scooty training, RTO driving test preparation, Advanced scooty training</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="field"><div><div class="label">Service areas</div><div class="val">Tollygunge, Behala, Jadavpur, Garia, Naktala, Bansdroni, Kudghat, New Alipore, Regent Park, Netaji Nagar</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="field"><div><div class="label">Year started</div><div class="val">2026</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="field"><div><div class="label">Logo / profile picture</div><div class="val">zerofear-dp-dark-1080.png (the same picture as on Google)</div></div><button class="copy" type="button">Copy</button></div>
+    <p class="note">Opening hours: Google-এ যা দেওয়া আছে, প্রতিটা সাইটে ঠিক সেটাই দেবেন।</p>
+  </section>
+
+  <h2 style="margin-top:8px">এই ক্রমে করুন</h2>
+
+  <section class="card site" data-id="bing">
+    <div class="top"><h2>1. Bing Places <small>~5 মিনিট</small></h2><span class="pill hi">সবচেয়ে সহজ</span></div>
+    <ol class="steps"><li>Zero Fear-এর Google প্রোফাইল যে Google অ্যাকাউন্টে আছে, সেটা দিয়ে লগইন করুন।</li><li><b>Import from Google Business Profile</b> বেছে নিন। সব তথ্য নিজে থেকেই চলে আসবে।</li><li>নাম, ঠিকানা, ফোন উপরের সঙ্গে মিলিয়ে নিয়ে Submit করুন।</li></ol>
+    <a class="go" href="https://www.bingplaces.com" target="_blank" rel="noopener">bingplaces.com খুলুন ↗</a>
+    <label class="done"><input type="checkbox" id="c-bing"> হয়ে গেছে</label>
+  </section>
+
+  <section class="card site" data-id="apple">
+    <div class="top"><h2>2. Apple Business Connect <small>~15 মিনিট</small></h2><span class="pill hi">iPhone Maps</span></div>
+    <ol class="steps"><li>আপনার Apple ID দিয়ে লগইন করুন (আইপ্যাডেরটাই চলবে)।</li><li><b>Add Location</b> চাপুন, নাম আর ঠিকানা দিয়ে খুঁজুন। দোকান আগে থেকেই থাকলে Claim করুন, না থাকলে নতুন বানান।</li><li>Category, ফোন, ওয়েবসাইট, ছবি দিন। Apple ফোন করে বা কাগজ চেয়ে যাচাই করবে।</li></ol>
+    <a class="go" href="https://businessconnect.apple.com" target="_blank" rel="noopener">businessconnect.apple.com খুলুন ↗</a>
+    <label class="done"><input type="checkbox" id="c-apple"> হয়ে গেছে</label>
+  </section>
+
+  <section class="card site" data-id="justdial">
+    <div class="top"><h2>3. Justdial <small>~10 মিনিট</small></h2><span class="pill hi">কলকাতায় বেশি খোঁজে</span></div>
+    <ol class="steps"><li><b>লিস্টিং আগে থেকেই আছে, তাই নতুন বানাবেন না।</b> যে ফোন নম্বরে লিস্টিংটা খোলা, সেটা দিয়ে Justdial-এ বা <b>JD Mart / Justdial for Business</b> অ্যাপে লগইন করুন।</li><li><b>Edit Business / Business Details</b>-এ গিয়ে নাম বদলে উপরের নামটা হুবহু দিন। সঙ্গে ঠিকানা, ফোন, ওয়েবসাইট, category <i>Two Wheeler Driving Schools</i> মিলিয়ে নিন।</li><li>নাম বদলাতে Justdial প্রমাণ চাইতে পারে (বোর্ডের ছবি, ভিজিটিং কার্ড বা রসিদ)। অ্যাপে নাম বদলানো না গেলে Justdial-এ ফোন করে বলুন "ব্যবসার নাম বদলেছে"।</li><li>ওরা ফোন করে Paid প্যাকেজ বিক্রি করতে চাইবে। ভদ্রভাবে না বলবেন।</li></ol>
+    <a class="go" href="https://www.justdial.com/Free-Listing" target="_blank" rel="noopener">justdial.com Free Listing খুলুন ↗</a>
+    <label class="done"><input type="checkbox" id="c-justdial"> হয়ে গেছে</label>
+  </section>
+
+  <section class="card site" data-id="sulekha">
+    <div class="top"><h2>4. Sulekha <small>~10 মিনিট</small></h2><span class="pill hi">কলকাতার এলাকাভিত্তিক</span></div>
+    <ol class="steps"><li>সাইটে <b>List your business</b> / <b>Join as Pro</b> চাপুন।</li><li>Category: Driving Schools। শহর Kolkata, এলাকা Tollygunge।</li><li>বিবরণে Long description পেস্ট করুন। টাকার প্যাকেজ নেবেন না।</li></ol>
+    <a class="go" href="https://www.sulekha.com" target="_blank" rel="noopener">sulekha.com খুলুন ↗</a>
+    <label class="done"><input type="checkbox" id="c-sulekha"> হয়ে গেছে</label>
+  </section>
+
+  <section class="card site" data-id="urbanpro">
+    <div class="top"><h2>5. UrbanPro <small>~15 মিনিট</small></h2><span class="pill">ক্লাস খোঁজার সাইট</span></div>
+    <ol class="steps"><li><b>Register as Institute</b> (একক ট্রেনার নয়) বেছে নিন।</li><li>যে category সবচেয়ে কাছাকাছি সেটা দিন (Driving / Two Wheeler)।</li><li>বিবরণ, এলাকা, ওয়েবসাইট আর ৪–৫টা ক্লাসের ছবি দিন।</li></ol>
+    <a class="go" href="https://www.urbanpro.com" target="_blank" rel="noopener">urbanpro.com খুলুন ↗</a>
+    <label class="done"><input type="checkbox" id="c-urbanpro"> হয়ে গেছে</label>
+  </section>
+
+  <section class="card site" data-id="youtube">
+    <div class="top"><h2>6. YouTube চ্যানেল <small>আগে থেকেই আছে</small></h2><span class="pill">শুধু লিংকটা পাঠান</span></div>
+    <ol class="steps"><li>Zero Fear-এর Google অ্যাকাউন্টে একটা চ্যানেল খুলুন। Handle হিসেবে <b>@zerofearkolkata</b> নিন।</li><li>প্রোফাইল ছবি আর ব্যানার দিন (ব্যানার তৈরি আছে: zerofear-youtube-banner-2560x1440.jpg)।</li><li>Description-এ Long description পেস্ট করুন। Links-এ ওয়েবসাইট আর WhatsApp দিন। রিলগুলো Shorts হিসেবেও দিন।</li></ol>
+    <a class="go" href="https://www.youtube.com/create_channel" target="_blank" rel="noopener">YouTube চ্যানেল খুলুন ↗</a>
+    <label class="done"><input type="checkbox" id="c-youtube"> হয়ে গেছে</label>
+  </section>
+
+  <section class="card site" data-id="pinterest">
+    <div class="top"><h2>7. Pinterest Business <small>~10 মিনিট</small></h2><span class="pill">ঐচ্ছিক</span></div>
+    <ol class="steps"><li>Business অ্যাকাউন্ট খুলুন, ওয়েবসাইট দিন zerofear.in।</li><li><b>Claim website</b> চাইলে ও যে কোড বা meta tag দেবে, সেটা আমাকে পাঠাবেন। আমি ওয়েবসাইটে বসিয়ে দেব।</li><li>কয়েকটা ক্লাসের ছবি পিন করুন, প্রতিটার লিংকে ওয়েবসাইট দিন।</li></ol>
+    <a class="go" href="https://business.pinterest.com" target="_blank" rel="noopener">business.pinterest.com খুলুন ↗</a>
+    <label class="done"><input type="checkbox" id="c-pinterest"> হয়ে গেছে</label>
+  </section>
+
+  <section class="card site" data-id="linkedin">
+    <div class="top"><h2>8. LinkedIn Page <small>~10 মিনিট</small></h2><span class="pill">ঐচ্ছিক</span></div>
+    <ol class="steps"><li>নিজের LinkedIn দিয়ে লগইন করে <b>Create a Company Page</b> বেছে নিন।</li><li>নাম, URL <b>zerofearkolkata</b>, ওয়েবসাইট, Industry: Education, size 2–10।</li><li>Tagline-এ Short description, About-এ Long description পেস্ট করুন।</li></ol>
+    <a class="go" href="https://www.linkedin.com/company/setup/new/" target="_blank" rel="noopener">LinkedIn Page খুলুন ↗</a>
+    <label class="done"><input type="checkbox" id="c-linkedin"> হয়ে গেছে</label>
+  </section>
+
+  <section class="card site" data-id="foursquare">
+    <div class="top"><h2>9. Foursquare <small>~10 মিনিট</small></h2><span class="pill">ঐচ্ছিক</span></div>
+    <ol class="steps"><li>অ্যাকাউন্ট খুলে নাম দিয়ে খুঁজুন। থাকলে <b>Claim</b> করুন, না থাকলে <b>Add a place</b>।</li><li>নাম, ঠিকানা, ফোন, ওয়েবসাইট, category Driving School দিন।</li></ol>
+    <a class="go" href="https://foursquare.com" target="_blank" rel="noopener">foursquare.com খুলুন ↗</a>
+    <label class="done"><input type="checkbox" id="c-foursquare"> হয়ে গেছে</label>
+  </section>
+
+  <section class="card">
+    <h2>প্রতিটা হয়ে গেলে</h2>
+    <p>লিস্টিংয়ের লিংকটা আমাকে পাঠিয়ে দেবেন। আমি সেগুলো ওয়েবসাইটের ভিতরের Google তথ্যে (যেখানে Google মিলিয়ে দেখে যে এগুলো একই ব্যবসা) জুড়ে দেব। এতে লিস্টিংগুলোর জোর আরও বাড়ে।</p>
+  </section>
+</div>
+
+<script>
+const KEY = 'zf-listings-done';
+let done = {};
+try { done = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { done = {}; }
+const sites = [...document.querySelectorAll('.site')];
+function render() {
+  let n = 0;
+  sites.forEach((s) => { const on = !!done[s.dataset.id]; s.classList.toggle('isdone', on); s.querySelector('input').checked = on; if (on) n++; });
+  document.getElementById('progressText').textContent = `${n} / ${sites.length} হয়েছে`;
+  document.getElementById('progressBar').style.width = `${(n / sites.length) * 100}%`;
+}
+sites.forEach((s) => s.querySelector('input').addEventListener('change', (e) => {
+  done[s.dataset.id] = e.target.checked;
+  try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (err) {}
+  render();
+}));
+document.querySelectorAll('.copy').forEach((b) => b.addEventListener('click', () => {
+  const v = b.parentElement.querySelector('.val');
+  const flash = (t) => { b.textContent = t; b.classList.add('ok'); setTimeout(() => { b.textContent = 'Copy'; b.classList.remove('ok'); }, 1400); };
+  const select = () => { const r = document.createRange(); r.selectNodeContents(v); const s = getSelection(); s.removeAllRanges(); s.addRange(r); flash('Selected'); };
+  if (navigator.clipboard?.writeText) navigator.clipboard.writeText(v.textContent).then(() => flash('Copied'), select); else select();
+}));
+render();
+</script>
