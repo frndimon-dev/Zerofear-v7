@@ -2,7 +2,7 @@
 // database directly (row-level security keeps each business separate) and asks
 // the "desk" Edge Function for anything that talks to Facebook / Instagram.
 import { createClient } from './vendor/supabase.js'; // @supabase/supabase-js 2.117.0, bundled
-import { stories as storiesScreen } from './stories.js?v=20261103c';
+import { stories as storiesScreen } from './stories.js?v=20261103d';
 
 const SUPABASE_URL = 'https://wzesyetbiyxdgjyuhqoz.supabase.co';
 const PUBLISHABLE_KEY = 'sb_publishable_WtpK81HvXHXHn-aroHl9MA_Nkt7UyKD';
@@ -175,7 +175,7 @@ async function business() {
     const patch = {
       brand_facts: facts.value.trim(), dm_template: dm.value.trim(), replies,
       blocked_words: blocked.value.split(/[,\n]/).map((x) => x.trim().toLowerCase()).filter(Boolean),
-      settings: Object.fromEntries(Object.entries(toggles).map(([k, el]) => [k, el.checked])),
+      settings: { ...(ws.settings ?? {}), ...Object.fromEntries(Object.entries(toggles).map(([k, el]) => [k, el.checked])) }, // keep doorstep, branches, offers
     };
     const { error } = await sb.from('workspaces').update(patch).eq('id', ws.id);
     if (error) throw error;
