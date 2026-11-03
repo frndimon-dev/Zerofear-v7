@@ -115,7 +115,8 @@ export async function stories({ h, sb, api, busy, toast, field, fmt, state, rend
 
   // ---------- plan ----------
   const accName = Object.fromEntries((accounts ?? []).map((a) => [a.id, a.branch ? `${a.branch}` : a.name]));
-  const planMedia = await sign('library', (plan ?? []).map((p) => { const m = lib.find((x) => x.id === p.media_id); return m ? (m.kind === 'video' ? m.thumb_path : m.path) : null; }));
+  const pathOf = (id) => { const m = lib.find((x) => x.id === id); return m ? (m.kind === 'video' ? m.thumb_path : m.path) : null; };
+  const planMedia = await sign('library', (plan ?? []).flatMap((p) => [pathOf(p.media_id), pathOf(p.media2_id)]));
   const outs = await sign('stories', (plan ?? []).filter((p) => p.out_path).map((p) => p.out_path));
   const drafts = (plan ?? []).filter((p) => p.status === 'draft');
   const approveAll = (e) => busy(e.target, async () => {
@@ -126,12 +127,19 @@ export async function stories({ h, sb, api, busy, toast, field, fmt, state, rend
   const days = {}; for (const p of plan ?? []) { const d = new Date(p.slot_at).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }); (days[d] ??= []).push(p); }
   const card = (p) => {
     const m = lib.find((x) => x.id === p.media_id);
-    const img = m ? planMedia[m.kind === 'video' ? m.thumb_path : m.path] : '';
+    const img = planMedia[pathOf(p.media_id)] ?? '';
     const c = p.content ?? {};
+    // The story as it will look: the same template the worker uses, drawn here before approval.
+    const video = m?.kind === 'video';
+    const data = { ...c, type: video ? 'clip' : p.type, photo: img, photo2: planMedia[pathOf(p.media2_id)] ?? '' };
+    const src = `story.html?d=${encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(data)))))}`;
+    const preview = (w) => { const box = h('div', { class: 'prev', style: `width:${w}px;height:${Math.round(w * 16 / 9)}px;${video ? `background-image:url('${img}')` : ''}` },
+      h('iframe', { src, loading: 'lazy', tabindex: '-1', title: 'story preview', style: `transform:scale(${w / 1080})` })); return box; };
+    const open = () => { const w = Math.min(window.innerWidth * 0.9, window.innerHeight * 0.85 * 9 / 16); const ov = h('div', { class: 'modal', onclick: () => ov.remove() }, preview(Math.round(w))); document.body.append(ov); };
     const toggle = async () => { const next = p.status === 'skipped' ? 'draft' : 'skipped'; await sb.from('story_plan').update({ status: next, skip_reason: next === 'skipped' ? 'owner' : null }).eq('id', p.id); render(); };
     const edit = async () => { const t = prompt('Words on the story', c.title ?? ''); if (t === null) return; await sb.from('story_plan').update({ content: { ...c, title: t }, status: p.status === 'approved' ? 'approved' : 'draft', out_path: null }).eq('id', p.id); render(); };
     return h('div', { class: `st ${p.status}` },
-      img ? h('img', { src: img, alt: '' }) : h('div', { class: 'noimg' }),
+      img ? h('div', { onclick: open, style: 'cursor:zoom-in' }, preview(132)) : h('div', { class: 'noimg' }),
       h('b', {}, `${new Date(p.slot_at).toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' })} · ${TYPE_LABEL[p.type] ?? p.type}`),
       h('small', {}, accName[p.account_id] ?? ''), h('p', {}, c.title || c.problem || ''),
       h('small', { class: 'muted' }, PLAN_LABEL[p.status], p.error ? ` · ${p.error}` : ''),
