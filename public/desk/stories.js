@@ -36,9 +36,10 @@ export async function stories({ h, sb, api, busy, toast, field, fmt, state, rend
     mix: Object.fromEntries(Object.keys(TYPE_LABEL).filter((t) => t !== 'clip').map((t) => [t, inp(s.mix[t] ?? 0, { type: 'number', min: 0, max: 21, style: 'width:70px' })])),
   };
   // Offers (festival or any other): only these, between their dates, may appear on stories. Stored in workspaces.settings.offers.
-  const offerRow = (o = { text: '', from: '', to: '' }) => h('div', { class: 'offer row2' },
+  const offerRow = (o = { text: '', from: '', to: '', after: '' }) => h('div', { class: 'offer row2' },
     h('input', { class: 'input', placeholder: 'Offer text, e.g. পুজো অফার: ভর্তিতে বিশেষ ছাড়', value: o.text, 'data-k': 'text', style: 'flex:3' }),
     h('input', { class: 'input', type: 'date', value: o.from, 'data-k': 'from' }), h('input', { class: 'input', type: 'date', value: o.to, 'data-k': 'to' }),
+    h('input', { class: 'input', placeholder: 'After the end date, if someone asks (optional), e.g. দীপাবলি অফার', value: o.after ?? '', 'data-k': 'after', style: 'flex:2' }),
     h('button', { class: 'btn btn--small', onclick: (e) => e.target.closest('.offer').remove() }, '✕'));
   const offersBox = h('div', {}, ((ws.settings ?? {}).offers ?? []).map(offerRow));
   const readOffers = () => [...offersBox.querySelectorAll('.offer')].map((r) => Object.fromEntries([...r.querySelectorAll('input')].map((i) => [i.dataset.k, i.value.trim()]))).filter((o) => o.text);
@@ -63,7 +64,7 @@ export async function stories({ h, sb, api, busy, toast, field, fmt, state, rend
     field('Plan this many days ahead', f.days),
     field('Weekly mix (stories of each kind in 7 days)', h('div', { class: 'mix' }, Object.entries(f.mix).map(([t, el]) => h('label', {}, TYPE_LABEL[t], el)))),
     field('Offers (festival or any other)', h('div', {}, offersBox, h('button', { class: 'btn btn--small', onclick: () => offersBox.append(offerRow()) }, '+ Add offer')),
-      'Stories mention an offer only between its dates, in these words. No offer here = no offer on any story. Prices are never shown.'),
+      'Stories and comment replies mention an offer only between its dates (replies: “offer running till …, call for details”). The last box: what replies say after the end date when someone asks. No offer here = no offer anywhere. Prices are never shown.'),
     field('Approved tips (one per line)', f.tips, 'The AI only picks from these for tip stories. No tips = no tip stories.'),
     h('button', { class: 'btn btn--primary', onclick: save }, 'Save settings')));
 
