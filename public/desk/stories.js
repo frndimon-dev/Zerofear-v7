@@ -133,8 +133,8 @@ export async function stories({ h, sb, api, busy, toast, field, fmt, state, rend
     const video = m?.kind === 'video';
     const data = { ...c, type: video ? 'clip' : p.type, photo: img, photo2: planMedia[pathOf(p.media2_id)] ?? '' };
     const src = `story.html?d=${encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(data)))))}`;
-    const preview = (w) => { const box = h('div', { class: 'prev', style: `width:${w}px;height:${Math.round(w * 16 / 9)}px;${video ? `background-image:url('${img}')` : ''}` },
-      h('iframe', { src, loading: 'lazy', tabindex: '-1', title: 'story preview', style: `transform:scale(${w / 1080})` })); return box; };
+    const preview = (w) => { const box = h('div', { class: 'prev', style: `position:relative;overflow:hidden;border-radius:10px;background:#ddd center/cover;width:${w}px;height:${Math.round(w * 16 / 9)}px;${video ? `background-image:url('${img}')` : ''}` },
+      h('iframe', { src, loading: 'lazy', tabindex: '-1', title: 'story preview', scrolling: 'no', width: '1080', height: '1920', style: `position:absolute;left:0;top:0;width:1080px;height:1920px;border:0;pointer-events:none;transform-origin:0 0;transform:scale(${w / 1080})` })); return box; };
     const open = () => { const w = Math.min(window.innerWidth * 0.9, window.innerHeight * 0.85 * 9 / 16); const ov = h('div', { class: 'modal', onclick: () => ov.remove() }, preview(Math.round(w))); document.body.append(ov); };
     const toggle = async () => { const next = p.status === 'skipped' ? 'draft' : 'skipped'; await sb.from('story_plan').update({ status: next, skip_reason: next === 'skipped' ? 'owner' : null }).eq('id', p.id); render(); };
     const edit = async () => { const t = prompt('Words on the story', c.title ?? ''); if (t === null) return; await sb.from('story_plan').update({ content: { ...c, title: t }, status: p.status === 'approved' ? 'approved' : 'draft', out_path: null }).eq('id', p.id); render(); };
