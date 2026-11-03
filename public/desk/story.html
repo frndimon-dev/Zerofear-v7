@@ -56,6 +56,7 @@ body{width:1080px;height:1920px;overflow:hidden;font-family:Hind;background:var(
 .of .ticket small{display:block;font-size:44px;font-weight:600}
 .of .ticket b{display:block;font-size:150px;line-height:1.05}
 .of .ticket span{display:block;font-size:44px;font-weight:600}
+.of .ticket b.np{font-size:64px;line-height:1.25;padding:10px 0}
 .of .top{position:absolute;top:220px;left:60px;right:60px}
 .of .top h1{font-size:88px;line-height:1.1;text-shadow:0 6px 30px rgba(0,0,0,.8)}
 
@@ -98,7 +99,7 @@ const V = {
   clip: () => `<div class="cl" style="position:absolute;inset:0"><div class="top">${D.kicker ? `<span class="tag">${esc(D.kicker)}</span><br><br>` : ''}<h1>${esc(D.title || D.problem)}</h1></div>${brand}</div>`,
   offer: () => `<div class="of" style="position:absolute;inset:0">${ph(D.photo)}<div class="grad"></div>
       <div class="top"><span class="tag">${esc(D.kicker)}</span><h1 style="margin-top:24px">${esc(D.title)}</h1></div>
-      <div class="ticket"><small>${esc(D.pre)}</small><b>${esc(D.price)}</b><span>${esc(D.sub)}</span></div>${brand}</div>`,
+      <div class="ticket">${D.price ? `<small>${esc(D.pre)}</small><b>${esc(D.price)}</b><span>${esc(D.sub)}</span>` : `<b class="np">${esc(D.sub || D.title)}</b>`}</div>${brand}</div>`,
 };
 if (D.type === 'clip') document.body.classList.add('clip');
 document.getElementById('app').innerHTML = (V[D.type] || V.offer)();
