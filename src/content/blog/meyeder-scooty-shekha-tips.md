@@ -4,7 +4,7 @@ description: "মহিলাদের স্কুটি শেখা নিয
 date: 2027-01-19
 category: Women
 lang: bn
-image: /_astro/b/meyeder-scooty-shekha-tips.cf602c46.webp
+image: /_astro/b/meyeder-scooty-shekha-tips.7635e336.webp
 imageAlt: "শাড়ি পরে লাল স্কুটি চালাচ্ছেন এক শিক্ষার্থী"
 imagePosition: 50% 35%
 keywords: [মহিলাদের স্কুটি শেখা, শাড়ি পরে স্কুটি চালানো, মেয়েদের স্কুটি ট্রেনিং কলকাতা, কুর্তি পরে স্কুটি, ladies scooty training kolkata]

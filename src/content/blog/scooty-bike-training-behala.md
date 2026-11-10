@@ -10,7 +10,7 @@ imagePosition: 50% 35%
 keywords: [scooty training behala, bike training behala, scooty driving school behala, scooty training thakurpukur, two wheeler training sakherbazar, doorstep scooty training behala]
 ---
 
-Looking for scooty training in Behala? Then you already know the problem: there is nowhere quiet to start. People from Sakherbazar and Thakurpukur usually tell us the same thing on the first call. "Our para lanes are full of parked cars, and the main road is Diamond Harbour Road."
+Looking for scooty training in Behala? Then you already know the problem: there is nowhere quiet to start. Ask anyone in Sakherbazar or Thakurpukur and you hear the same thing: "Our para lanes are full of parked cars, and the main road is Diamond Harbour Road."
 
 This page is for you. It covers where Behala learners practise with us, how long the trip takes, and when it makes more sense for the trainer to come to your door.
 

@@ -4,7 +4,7 @@ description: "Scooty training for Kalighat, Hazra, Bhowanipore, Chetla and New A
 date: 2027-01-01
 category: Area
 lang: en
-image: /_astro/b/scooty-lessons-kalighat-hazra-bhowanipore.c6969342.webp
+image: /_astro/b/scooty-lessons-kalighat-hazra-bhowanipore.8a1a76a9.webp
 imageAlt: "Learner riding a motorbike through a quiet residential lane"
 imagePosition: 50% 40%
 keywords: [scooty training kalighat, scooty classes hazra, learn scooty bhowanipore, scooty training new alipore, scooty lessons chetla, two wheeler training south kolkata]

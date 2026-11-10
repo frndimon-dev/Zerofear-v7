@@ -24,7 +24,7 @@ Then there's E.M. Bypass. Many people from Santoshpur and the Bypass side eventu
 
 This is why a cousin teaching you "just in the lane behind the house" so often ends with one scare near a parked car and the scooty sitting under a cover for months.
 
-## How people get to our centre
+## Scooty training from Jadavpur: getting to our centre
 
 | From | Easiest way | Roughly |
 |---|---|---|
@@ -35,7 +35,7 @@ This is why a cousin teaching you "just in the lane behind the house" so often e
 
 From Kavi Nazrul the metro runs through Gitanjali and Masterda Surya Sen and then reaches Netaji (Kudghat). The centre is a short walk from there, at 12, Samargarh Colony. If you're near Garia, this is usually quicker than any road route at office time.
 
-Exact distance depends on where your lane is, so treat these as rough numbers. If you're unsure, send us your location on WhatsApp and we'll tell you the simplest way to reach us.
+These are rough numbers. Send us your location on WhatsApp and we'll tell you the simplest way to reach us.
 
 ## What you learn when you come to us
 
@@ -45,7 +45,7 @@ Complete beginners take [Basic Scooty Training](/courses/basic-scooty-training):
 
 For geared motorcycles there's [Bike Training](/courses/bike-training), also 15 classes: getting to know the bike first, then clutch and gears, then putting clutch, gear and throttle together, then road riding.
 
-A lot of people from this side are students or office-goers. Evening classes after office hours are possible. Tell us your free times when you call and we'll work around them.
+Evening classes after office hours are possible, so tell us your free times when you call.
 
 ## When doorstep training makes more sense
 
@@ -59,7 +59,7 @@ The fee depends on how far you are from Netaji Metro / Kudghat:
 | 2 to 3 km | ₹5,000 |
 | Beyond 3 km | goes up with distance, up to ₹8,000 |
 
-Most homes in this area are more than 3 km away, so your fee will be in the third row. The calculator on the [doorstep training page](/doorstep-training) shows your exact amount. With doorstep classes, your trainer picks the quietest stretch near your home and a time when it's calm, so your first classes still happen away from the main road.
+Most homes in this area are more than 3 km away, so your fee will be in the third row. The calculator on the [doorstep training page](/doorstep-training) shows your exact amount. Your trainer picks the quietest stretch near your home, so your first classes still happen away from the main road.
 
 ## Which one should you choose?
 

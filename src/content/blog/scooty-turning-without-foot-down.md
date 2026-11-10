@@ -16,7 +16,7 @@ On our homepage there's a learner who had a foot down on every turn on Day 3 and
 
 ## Why the foot goes down
 
-Your foot isn't the problem. It's a reaction. Somewhere in the turn, the scooty felt like it was falling, and your body grabbed for the ground. That feeling almost always comes from one of these:
+The foot is a reaction: somewhere in the turn the scooty felt like it was falling, and your body grabbed for the ground. That feeling almost always comes from one of these:
 
 1. You're still braking while you turn.
 2. You let go of the throttle completely in the middle of the turn.
@@ -27,33 +27,33 @@ Fix the cause and the foot stays on the floorboard by itself.
 
 ## Mistake 1: braking in the turn
 
-**What happens:** you reach the corner, realise it's tighter than you thought, and squeeze the brake while the handle is already turned. The scooty dips and wobbles, and down goes the foot. If it's the front brake, the handle can twist too, which is how a lot of small falls happen.
+**What happens:** you reach the corner, realise it's tighter than you thought, and squeeze the brake while the handle is already turned. The scooty dips and wobbles, and down goes the foot. With the front brake, the handle can twist too.
 
-**Fix:** do all your slowing down while you're still going straight. Look at the turn early, roll off the throttle, brake gently, and finish braking before you turn the handle. Turning into your lane off N.S.C. Bose Road at 6 pm with an auto right behind you is when this matters most. Slow early and the auto waits; brake late in the turn and you wobble in front of it.
+**Fix:** do all your slowing down while you're still going straight. Look at the turn early, roll off the throttle, brake gently, and finish braking before you turn the handle. Turning into your lane off N.S.C. Bose Road at 6 pm with an auto right behind you is when this matters most.
 
 ## Mistake 2: closing the throttle mid-turn
 
-**What happens:** a scooty has no gears to hold its speed. The moment you let go of the throttle completely, it slows suddenly and leans more than you expect. Beginners do this out of fear, then feel the lean, then put a foot down.
+**What happens:** a scooty has no gears to hold its speed. The moment you let go of the throttle completely, it slows suddenly and leans more than you expect. Out comes the foot.
 
-**Fix:** keep a small, steady bit of throttle through the whole turn. Not more, not less. Think "same sound from the engine all the way round." Once you can see where the turn ends, add a little more and stand the scooty back up.
+**Fix:** keep a small, steady bit of throttle through the whole turn. Think "same sound from the engine all the way round." Once you can see where the turn ends, add a little more and stand the scooty back up.
 
 ## Mistake 3: looking at the ground
 
-**What happens:** your scooty goes where your eyes go. Stare at the pothole or the kerb and that's where it heads. Look down at the front wheel and your balance goes with it.
+**What happens:** your scooty goes where your eyes go. Stare at the pothole and that's where it heads.
 
-**Fix:** turn your head, not just your eyes, and look at where you want to come out of the turn. If you're turning left into a lane, look down the lane, past the rickshaw parked at the corner, to the end. This feels strange the first few times. It's also the single biggest change most learners notice.
+**Fix:** turn your head, not just your eyes, and look at where you want to come out of the turn. If you're turning left into a lane, look down the lane, past the rickshaw parked at the corner, to the end.
 
 ## Mistake 4: coming in too fast
 
-**What happens:** you get confident on the straight bit, carry the speed into the turn, get scared, and then do everything above at once.
+**What happens:** you carry speed from the straight into the turn, get scared, and do everything above at once.
 
-**Fix:** go into every turn slower than you think you need to. A turn taken too slowly feels slightly silly. A turn taken too fast feels terrifying. The first one teaches you something; the second just teaches you to be scared of turns.
+**Fix:** go into every turn slower than you think you need to. Too slow feels slightly silly. Too fast teaches you to be scared of turns.
 
-## The rear brake trick for slow turns
+## Scooty turning tips for slow, tight corners
 
 Very slow, tight turns are the hardest, because a scooty is least stable at walking pace. There's a trick for this: keep that small steady throttle and drag the rear brake lightly at the same time.
 
-It sounds backwards, gas and brake together. But it keeps the drive steady while the brake controls your speed, so the scooty doesn't lurch or die halfway round. Use only the **rear** brake (left lever on most scooties) for this, never the front. It's what makes tight lane corners and parking turns feel calm instead of shaky.
+It sounds backwards, but it keeps the drive steady while the brake controls your speed, so the scooty doesn't lurch or die halfway round. Use only the **rear** brake (left lever on most scooties) for this, never the front. It's what makes tight lane corners and parking turns feel calm instead of shaky.
 
 ## U-turn practice you can do
 
@@ -74,16 +74,14 @@ Our [RTO test tips](/blog/rto-two-wheeler-test-tips) explain why the figure 8 ma
 
 **Speed breaker right after a corner:** common in residential lanes. Finish the turn, straighten up, then deal with the breaker. Don't try both at once.
 
-**Puja crowds:** turns into crowded lanes happen at walking pace. This is where the rear brake trick earns its keep.
-
 ## Where this fits in the course
 
-In our [Basic Scooty Training](/courses/basic-scooty-training), classes 7 to 9 are only about turning: left, right, slowing before the turn, using the indicator. We don't hurry this part, because it's where people who learned from a friend usually get stuck. If you can already ride but turns still scare you, tell us. We can focus your classes on that. The [common beginner mistakes](/blog/beginner-scooty-mistakes) post covers a few related habits too.
+In our [Basic Scooty Training](/courses/basic-scooty-training), classes 7 to 9 are only about turning: left, right, slowing before the turn, using the indicator. We don't hurry this part, because it's where people who learned from a friend usually get stuck. If you can already ride but turns still scare you, tell us. We can focus your classes on that. See also [common beginner mistakes](/blog/beginner-scooty-mistakes).
 
 ## Questions people ask
 
 **Is it wrong to put my foot down in a turn?**
-It isn't a crime, and nobody gets it right on day one. But dragging a foot can catch on the road and twist your ankle, and it stops you learning to balance properly. Treat it as a sign that you're braking or looking in the wrong place.
+Nobody gets it right on day one. But dragging a foot can catch on the road and twist your ankle, and it stops you learning to balance properly. Treat it as a sign that you're braking or looking in the wrong place.
 
 **Should I lean my body or the scooty?**
 At the slow speeds you ride in Kolkata lanes, let the scooty lean a little and keep your body relaxed and in line with it. Don't fight it by sitting stiff and upright.

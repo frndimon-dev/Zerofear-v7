@@ -4,8 +4,8 @@ description: "Bike training for Gariahat, Ballygunge, Dhakuria, Lake Gardens and
 date: 2027-01-15
 category: Area
 lang: en
-image: /_astro/b/learn-to-ride-gariahat-ballygunge-lake-gardens.2c1aa57c.webp
-imageAlt: "Learner riding a scooty on a quiet lane, practising on his own"
+image: /_astro/b/learn-to-ride-gariahat-ballygunge-lake-gardens.97b151d2.webp
+imageAlt: "Older learner riding a red scooty on her own down a quiet south Kolkata lane"
 imagePosition: 50% 40%
 keywords: [bike training gariahat, scooty training ballygunge, learn bike dhakuria, scooty classes lake gardens, bike training golf green, two wheeler training jodhpur park]
 ---

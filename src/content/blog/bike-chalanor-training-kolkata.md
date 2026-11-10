@@ -4,7 +4,7 @@ description: "বাইক চালানোর ট্রেনিং-এ ১�
 date: 2026-12-01
 category: Bike
 lang: bn
-image: /_astro/b/bike-chalanor-training-kolkata.f9a5aa75.webp
+image: /_astro/b/bike-chalanor-training-kolkata.543650f3.webp
 imageAlt: "ট্রেনার বাইকে বসা শিক্ষার্থীকে ক্লাচ আর গিয়ার বোঝাচ্ছেন"
 imagePosition: 50% 40%
 keywords: [বাইক চালানোর ট্রেনিং, বাইক শেখা কলকাতা, বাইক চালানো শিখব কীভাবে, মেয়েদের বাইক ট্রেনিং, clutch gear শেখা]
