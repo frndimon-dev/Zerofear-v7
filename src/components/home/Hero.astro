@@ -50,7 +50,7 @@ const learners = site.stats[2]?.value ?? '5000+';
     const start = () => {
       const phone = matchMedia('(max-width: 760px)').matches;
       v.src = (phone ? v.dataset.m : v.dataset.d)!;
-      v.addEventListener('playing', () => v.classList.add('is-on'), { once: true });
+      v.addEventListener('playing', () => { v.classList.add('is-on'); v.parentElement?.classList.add('has-video'); }, { once: true });
       v.play().catch(() => {});
       // Pause while the hero is off screen, to save battery and data.
       new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause())).observe(v);
@@ -99,6 +99,11 @@ const learners = site.stats[2]?.value ?? '5000+';
   @media (max-width: 760px) {
     .hero__media { height: 58svh; }
     .hero__top { top: calc(var(--hy-m) * 1%); transform: translateY(calc(var(--hy-m) * -1%)); }
+    /* While the class video plays, faces are in the upper half of the frame, so the
+       headline moves to the bottom of the video (over the scooty, never a face). */
+    /* Keep heads in frame: crop the tall phone video from near the top, not the middle */
+    .hero__video { object-position: 50% 12%; }
+    .has-video .hero__top { top: 100%; transform: translateY(-100%); transition: top .5s ease, transform .5s ease; }
     .hero__title { font-size: calc(clamp(2rem, 9vw, 2.6rem) * var(--hsize)); }
     .hero__top--one .hero__title { font-size: min(calc(clamp(2rem, 9vw, 2.6rem) * var(--hsize)), 10.5vw); }
     .hero__bar { padding-block: 16px 24px; gap: 14px; }
