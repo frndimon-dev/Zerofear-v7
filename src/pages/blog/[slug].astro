@@ -14,7 +14,7 @@ const found = posts.find((p) => p.id === Astro.params.slug);
 if (!found) return Astro.rewrite('/404');
 const post = found;
 const html = renderMarkdown(post.body);
-const { title, description, date, updated, category, image, imageAlt, cover, keywords, gallery, headingFont } = post.data;
+const { title, description, date, updated, category, image, imageAlt, cover, keywords, gallery, headingFont, lang = 'en' } = post.data;
 const fontVars = headingFont ? `--font-blog:${fonts[headingFont].css};--font-blog-weight:${fonts[headingFont].weight}` : undefined;
 const related = posts.filter((p) => p.id !== post.id).sort((a, b) => Number(b.data.category === category) - Number(a.data.category === category)).slice(0, 3);
 const url = new URL(`/blog/${post.id}`, site.url).href;
@@ -32,6 +32,7 @@ const schema = [
     publisher: { '@type': 'Organization', name: site.name, logo: { '@type': 'ImageObject', url: new URL('/favicon.svg', site.url).href } },
     mainEntityOfPage: url,
     keywords: keywords.join(', '),
+    inLanguage: lang === 'bn' ? 'bn-IN' : 'en-IN',
   },
   {
     '@context': 'https://schema.org',
@@ -44,7 +45,7 @@ const schema = [
   },
 ];
 ---
-<Base title={`${title} | ${site.name}`} description={description} image={image} type="article">
+<Base title={`${title} | ${site.name}`} description={description} image={image} type="article" lang={lang}>
   <article class="article" style={fontVars}>
     <header class="container article__head">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/blog">Blog</a></nav>

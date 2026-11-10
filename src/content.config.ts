@@ -17,6 +17,7 @@ const blog = defineCollection({
     imagePosition: z.string().optional(), // e.g. '50% 20%'
     keywords: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+    lang: z.enum(['en', 'bn']).default('en'), // bn = the post is written in Bengali
   }),
 });
 

@@ -8,13 +8,14 @@ import { site } from '../data/site';
 import { usedFonts, blogFont } from '../cms';
 import { googleFontsHref, fonts } from '../cms/fonts';
 
-interface Props { title?: string; description?: string; image?: string; type?: 'website' | 'article'; noindex?: boolean }
+interface Props { title?: string; description?: string; image?: string; type?: 'website' | 'article'; noindex?: boolean; lang?: 'en' | 'bn' }
 const {
   title = `Scooty & Bike Training in Kolkata | No Cycling Needed | ${site.name}`,
   description = site.description,
   image = '/og.png',
   type = 'website',
   noindex = false,
+  lang = 'en',
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 
@@ -44,7 +45,7 @@ const localBusiness = {
 };
 ---
 <!doctype html>
-<html lang="en">
+<html lang={lang === 'bn' ? 'bn-IN' : 'en-IN'}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -69,6 +70,13 @@ const localBusiness = {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href={googleFontsHref(usedFonts)} rel="stylesheet" />
+    {lang === 'bn' && (
+      <>
+        <!-- Bengali posts: a Bengali font behind the Latin ones, so Bengali letters render cleanly -->
+        <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        <style is:inline>:root{--font:'Manrope','Hind Siliguri','Noto Sans Bengali',sans-serif}.article{--font-blog:'Bricolage Grotesque','Hind Siliguri',sans-serif}.article .prose{line-height:1.8}</style>
+      </>
+    )}
     <style set:html={`:root{--font-blog:${fonts[blogFont].css};--font-blog-weight:${fonts[blogFont].weight}}`}></style>
 
     <script type="application/ld+json" set:html={JSON.stringify(localBusiness)} />

@@ -28,6 +28,7 @@ export type Post = {
     keywords: string[];
     gallery: Photo[];
     headingFont?: FontKey;
+    lang?: 'en' | 'bn';
   };
 };
 
