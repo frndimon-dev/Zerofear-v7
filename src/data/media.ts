@@ -4,7 +4,7 @@
 // server is not hit for every visitor. Replace a file = new file name (scripts/media-hash.py).
 export const media = {
   "fb1.mp4": "/_astro/m/fb1.fd4d1340.mp4",
-  "fb1.webp": "/_astro/m/fb1.e6439bd2.webp",
+  "fb1.webp": "/_astro/m/fb1.03c319ce.webp",
   "fb2.mp4": "/_astro/m/fb2.7c58efca.mp4",
   "fb2.webp": "/_astro/m/fb2.8af42ca6.webp",
   "fb3.mp4": "/_astro/m/fb3.36f9824a.mp4",
