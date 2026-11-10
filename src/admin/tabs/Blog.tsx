@@ -78,6 +78,8 @@ export function BlogTab({ content, edit }: TabProps) {
       <ul class="posts">
         {all.map((r) => {
           const isBuilt = !saved.has(r.slug);
+          // A post dated in the future is published automatically on that day (see lib/blog.ts).
+          const today = new Date().toISOString().slice(0, 10); // UTC date, same rule as the site
           const isHidden = hidden.has(r.slug);
           return (
             <li class={isHidden ? 'is-hidden' : ''}>
@@ -88,7 +90,8 @@ export function BlogTab({ content, edit }: TabProps) {
                 <span>
                   {r.draft && !isBuilt && <span class="badge badge--warn">Draft (not on the site)</span>}
                   {isHidden && <span class="badge badge--bad">Hidden</span>}
-                  {!r.draft && !isHidden && <span class="badge badge--ok">On the site</span>}
+                  {!r.draft && !isHidden && r.date.slice(0, 10) > today && <span class="badge badge--warn">Scheduled: goes live {new Date(r.date.slice(0, 10)).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}, 5:30 am</span>}
+                  {!r.draft && !isHidden && r.date.slice(0, 10) <= today && <span class="badge badge--ok">On the site</span>}
                 </span>
               </div>
               <div class="posts__ctrl">
