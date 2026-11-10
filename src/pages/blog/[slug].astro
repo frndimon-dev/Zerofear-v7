@@ -122,6 +122,9 @@ const schema = [
   .prose :global(strong) { color: var(--navy); }
   .prose :global(table) { width: 100%; border-collapse: collapse; margin: 0 0 24px; font-size: 1rem; }
   .prose :global(th), .prose :global(td) { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .article__layout > :global(*) { min-width: 0; } /* lets a wide table scroll instead of stretching the column */
+  /* Wide tables scroll sideways inside the article on phones instead of widening the page */
+  @media (max-width: 760px) { .prose :global(table) { display: block; overflow-x: auto; font-size: 0.92rem; } .prose :global(th), .prose :global(td) { padding: 8px 10px; min-width: 90px; } }
   .prose :global(th) { background: var(--bg-soft); }
   .prose :global(em) { color: var(--muted); }
 

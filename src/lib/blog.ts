@@ -80,8 +80,11 @@ export function getPosts(): Promise<Post[]> {
         const cover: Photo = { src: f.data.image, alt: f.data.imageAlt, focus: { d: { x, y } } };
         return { id: f.id, body: f.body ?? '', data: { ...f.data, cover, gallery: [] } };
       });
+    // Scheduled posts: a post dated in the future stays off the site (lists, its own page,
+    // sitemap, RSS) until that day. Dates are midnight UTC = 5:30 am in Kolkata.
+    const now = process.env.BLOG_PREVIEW ? Infinity : Date.now(); // BLOG_PREVIEW=1 shows them locally
     return [...db, ...fromFiles]
-      .filter((p) => !hidden.has(p.id))
+      .filter((p) => !hidden.has(p.id) && p.data.date.valueOf() <= now)
       .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
   })();
   return cache;
