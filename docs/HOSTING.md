@@ -28,3 +28,11 @@ reads one row every day. GitHub only runs scheduled workflows from the default b
 ## Old Vercel setup
 The site used to run on Vercel (`zerofear-v7` project). Vercel’s free plan is for non-commercial sites only,
 so it moved to Hostinger. The Vercel projects can be deleted once zerofear.in is live.
+
+## Home-page videos and before/after photos
+Hero videos, the before/after photos and the video reviews live in `public/_astro/m/` with a content hash in
+each file name (map in `src/data/media.ts`). Astro's server sends everything under `/_astro/` with a one-year
+`immutable` cache header, so Hostinger's CDN (hcdn) serves them from cache instead of the Node.js app. Files in
+`public/images/` get no cache header and are fetched from the app every time.
+To replace media: put the new files in a folder and run `python3 scripts/media-hash.py <folder>`.
+Nothing here is stored in Supabase; the admin panel only stores the text (days, lines, quotes, names).

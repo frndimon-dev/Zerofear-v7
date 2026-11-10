@@ -2,6 +2,13 @@
 import Icon from '../Icon.astro';
 import { reviews, site } from '../../data/site';
 import { text as t } from '../../cms';
+import { media } from '../../data/media';
+const clips = [1, 2, 3, 4].map((i) => ({
+  src: media[`fb${i}.mp4` as keyof typeof media],
+  poster: media[`fb${i}.webp` as keyof typeof media],
+  quote: t(`reviews.v${i}q`).plain,
+  name: t(`reviews.v${i}n`).plain,
+}));
 const reviewCount = site.stats[1]?.value ?? '300+';
 const ratingValue = (site.stats[0]?.value ?? '4.9').replace('★', '');
 
@@ -26,6 +33,36 @@ const videoLinks = [
         <Icon name="arrow" />
       </a>
     </div>
+
+    <!-- Video reviews: only the small cover photo loads with the page; a video
+         downloads when someone taps it. -->
+    <div class="vrev">
+      <div class="vrev__head">
+        <h3>{t('reviews.vtitle').plain}</h3>
+        <span class="vrev__lang">{t('reviews.vlang').plain}</span>
+      </div>
+      <ul class="vrev__list">
+        {clips.map((c) => (
+          <li class="vrev__item">
+            <button class="vrev__play" type="button" data-video={c.src} aria-label={`Play video: ${c.name}`}>
+              <img src={c.poster} alt="" width="360" height="640" loading="lazy" decoding="async" />
+              <span class="vrev__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor" /></svg></span>
+            </button>
+            <p class="vrev__quote">“{c.quote}”</p>
+            <p class="vrev__name">{c.name}</p>
+          </li>
+        ))}
+      </ul>
+      <button class="btn btn--outline vrev__full" type="button" data-full={media['fbfull.mp4']} data-poster={media['fbfull.webp']}>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>
+        {t('reviews.vfull').plain} <small>(1 min)</small>
+      </button>
+    </div>
+
+    <dialog class="vrev__dialog" data-dialog>
+      <button class="vrev__close" type="button" data-close aria-label="Close video">✕</button>
+      <video controls playsinline preload="none"></video>
+    </dialog>
 
     <ul class="reviews" data-reviews>
       {reviews.map((r) => (
@@ -65,6 +102,36 @@ const videoLinks = [
     if (text !== undefined) node.textContent = text;
     return node;
   };
+
+  // Video reviews: swap the cover for the video on tap; only one plays at a time.
+  document.querySelectorAll<HTMLButtonElement>('.vrev__play').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll<HTMLVideoElement>('.vrev__item video').forEach((v) => v.pause());
+      const v = document.createElement('video');
+      v.src = btn.dataset.video!;
+      v.controls = true;
+      v.playsInline = true;
+      v.autoplay = true;
+      v.className = 'vrev__video';
+      v.addEventListener('play', () => document.querySelectorAll<HTMLVideoElement>('.vrev__item video').forEach((o) => o !== v && o.pause()));
+      btn.replaceWith(v);
+      v.play().catch(() => {});
+    });
+  });
+  const dialog = document.querySelector<HTMLDialogElement>('[data-dialog]');
+  const full = document.querySelector<HTMLButtonElement>('[data-full]');
+  const fullVideo = dialog?.querySelector('video');
+  full?.addEventListener('click', () => {
+    if (!dialog || !fullVideo) return;
+    document.querySelectorAll<HTMLVideoElement>('.vrev__item video').forEach((v) => v.pause());
+    if (!fullVideo.src) { fullVideo.poster = full.dataset.poster!; fullVideo.src = full.dataset.full!; }
+    dialog.showModal();
+    fullVideo.play().catch(() => {});
+  });
+  const closeDialog = () => { fullVideo?.pause(); dialog?.close(); };
+  dialog?.querySelector('[data-close]')?.addEventListener('click', closeDialog);
+  dialog?.addEventListener('click', (e) => { if (e.target === dialog) closeDialog(); });
+  dialog?.addEventListener('close', () => fullVideo?.pause());
 
   fetchTable<ReviewRow>('learner_reviews', 'select=*&active=eq.true&order=sort_order.asc&limit=6').then((rows) => {
     const valid = rows.filter((r) => r.name && (r.review_text || r.quote));
@@ -109,10 +176,38 @@ const videoLinks = [
   :global(.review__avatar) { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: var(--navy); color: #fff; font-weight: 700; }
 
 
+  .vrev { margin-bottom: clamp(36px, 5vw, 56px); }
+  .vrev__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+  .vrev__head h3 { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.5rem, 2.4vw, 2rem); line-height: 1; }
+  .vrev__lang { font-size: 0.85rem; color: var(--muted); }
+  .vrev__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .vrev__item { display: flex; flex-direction: column; }
+  .vrev__play, :global(.vrev__video) { position: relative; display: block; width: 100%; aspect-ratio: 9 / 16; border: 0; padding: 0; border-radius: 16px; overflow: hidden; background: var(--navy); cursor: pointer; }
+  .vrev__play img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s ease; }
+  .vrev__play:hover img { transform: scale(1.03); }
+  .vrev__play::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(12,15,22,0) 55%, rgba(12,15,22,.45)); }
+  /* Bottom corner, so the play button never covers a face */
+  .vrev__icon { position: absolute; z-index: 1; left: 12px; bottom: 12px; width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; background: var(--yellow); color: var(--navy); box-shadow: 0 6px 24px rgba(0,0,0,.3); }
+  .vrev__icon svg { width: 22px; height: 22px; margin-left: 3px; }
+  :global(.vrev__video) { object-fit: cover; }
+  .vrev__quote { margin-top: 12px; font-size: 0.98rem; line-height: 1.45; font-weight: 600; }
+  .vrev__name { margin-top: 6px; font-size: 0.85rem; color: var(--muted); }
+  .vrev__full { margin-top: 20px; gap: 8px; }
+  .vrev__full small { color: var(--muted); font-weight: 600; }
+  .vrev__dialog { padding: 0; border: 0; border-radius: 16px; background: #000; width: min(92vw, 420px); max-height: 92svh; overflow: visible; }
+  .vrev__dialog::backdrop { background: rgba(12,15,22,.85); }
+  .vrev__dialog video { display: block; width: 100%; max-height: 92svh; aspect-ratio: 9 / 16; border-radius: 16px; background: #000; }
+  .vrev__close { position: absolute; top: -44px; right: 0; width: 36px; height: 36px; border-radius: 50%; border: 0; background: #fff; color: var(--navy); font-size: 1rem; cursor: pointer; }
+
   .reviews__more { margin-top: 32px; text-align: center; color: var(--muted); }
   .reviews__more a { color: var(--blue); font-weight: 600; }
 
   @media (max-width: 900px) {
     .reviews { grid-template-columns: 1fr; }
+    /* Phones: swipe through the video cards */
+    .vrev__list { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); gap: 12px; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); scrollbar-width: none; }
+    .vrev__list::-webkit-scrollbar { display: none; }
+    .vrev__item { flex: 0 0 62%; scroll-snap-align: start; }
+    .vrev__full { width: 100%; justify-content: center; }
   }
 </style>

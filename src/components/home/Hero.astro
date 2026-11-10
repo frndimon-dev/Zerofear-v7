@@ -3,6 +3,7 @@ import Icon from '../Icon.astro';
 import CmsImg from '../CmsImg.astro';
 import { site, courses, formatINR, waLink } from '../../data/site';
 import { text as t, photo, heroLayout as L } from '../../cms';
+import { media } from '../../data/media';
 const prices = courses.map((c) => c.price).filter((p): p is number => p !== null);
 const fromPrice = prices.length ? Math.min(...prices) : null;
 const rating = site.stats[0]?.value ?? '4.9★';
@@ -13,6 +14,12 @@ const learners = site.stats[2]?.value ?? '5000+';
        The headline position is set in the admin panel (yD / yM). -->
   <div class="hero__media" style={`--hy-d:${L.yD};--hy-m:${L.yM};--hsize:${L.size}`}>
     <CmsImg photo={photo('hero.main')} eager class="hero__img" />
+    <!-- Silent class video over the photo. It loads only after the page has
+         finished loading, never on data-saver or slow connections, and never for
+         people who asked their device for less motion. The photo stays as the
+         first picture, so the page opens as fast as before. -->
+    <video class="hero__video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"
+      data-hero-video data-d={media['hero-d.mp4']} data-m={media['hero-m.mp4']}></video>
     <div class:list={['container hero__top', { 'hero__top--one': L.oneLine, 'hero__top--center': L.align === 'center' }]}>
       <p class="hero__kicker"><span class="dot"></span> <span set:html={t('hero.kicker').html} /></p>
       <h1 class="hero__title" set:html={t('hero.title').html} />
@@ -34,11 +41,32 @@ const learners = site.stats[2]?.value ?? '5000+';
   </div>
 </section>
 
+<script>
+  const v = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+  const conn = (navigator as any).connection;
+  const slow = conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ''));
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (v && !slow && !calm) {
+    const start = () => {
+      const phone = matchMedia('(max-width: 760px)').matches;
+      v.src = (phone ? v.dataset.m : v.dataset.d)!;
+      v.addEventListener('playing', () => { v.classList.add('is-on'); v.parentElement?.classList.add('has-video'); }, { once: true });
+      v.play().catch(() => {});
+      // Pause while the hero is off screen, to save battery and data.
+      new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause())).observe(v);
+    };
+    if (document.readyState === 'complete') setTimeout(start, 300);
+    else addEventListener('load', () => setTimeout(start, 300), { once: true });
+  }
+</script>
+
 <style>
   .hero { background: var(--navy); }
   .hero__media { position: relative; isolation: isolate; height: min(72svh, 680px); min-height: 340px; overflow: hidden; }
   .hero__media :global(.hero__img), .hero__media :global(.hero__img img) { position: absolute; inset: 0; width: 100%; height: 100%; }
   .hero__media :global(img) { object-fit: cover; z-index: -2; animation: hero-zoom 14s ease-out both; }
+  .hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; opacity: 0; transition: opacity .8s ease; pointer-events: none; }
+  .hero__video.is-on { opacity: 1; }
   @keyframes hero-zoom { from { transform: scale(1.06); } to { transform: scale(1); } }
   /* Shade at the top and bottom for the headline, and a fade into the bar below */
   .hero__media::after {
@@ -71,6 +99,11 @@ const learners = site.stats[2]?.value ?? '5000+';
   @media (max-width: 760px) {
     .hero__media { height: 58svh; }
     .hero__top { top: calc(var(--hy-m) * 1%); transform: translateY(calc(var(--hy-m) * -1%)); }
+    /* While the class video plays, faces are in the upper half of the frame, so the
+       headline moves to the bottom of the video (over the scooty, never a face). */
+    /* Keep heads in frame: crop the tall phone video from near the top, not the middle */
+    .hero__video { object-position: 50% 12%; }
+    .has-video .hero__top { top: 100%; transform: translateY(-100%); transition: top .5s ease, transform .5s ease; }
     .hero__title { font-size: calc(clamp(2rem, 9vw, 2.6rem) * var(--hsize)); }
     .hero__top--one .hero__title { font-size: min(calc(clamp(2rem, 9vw, 2.6rem) * var(--hsize)), 10.5vw); }
     .hero__bar { padding-block: 16px 24px; gap: 14px; }

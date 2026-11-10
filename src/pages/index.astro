@@ -9,6 +9,7 @@ import Women from '../components/home/Women.astro';
 import Doorstep from '../components/home/Doorstep.astro';
 import PhotoStrip from '../components/home/PhotoStrip.astro';
 import Reviews from '../components/home/Reviews.astro';
+import Progress from '../components/home/Progress.astro';
 import MissionBand from '../components/home/MissionBand.astro';
 import BlogTeaser from '../components/home/BlogTeaser.astro';
 import Faq from '../components/home/Faq.astro';
@@ -17,7 +18,7 @@ import { homeOrder } from '../cms';
 
 // Section order and visibility are set in the admin panel.
 const blocks: Record<string, any> = {
-  ticker: Ticker, about: AboutIntro, courses: Courses, women: Women, how: HowItWorks, gallery: PhotoStrip,
+  ticker: Ticker, about: AboutIntro, courses: Courses, women: Women, how: HowItWorks, progress: Progress, gallery: PhotoStrip,
   doorstep: Doorstep, reviews: Reviews, mission: MissionBand, blog: BlogTeaser, faq: Faq, contact: Contact,
 };
 const order = homeOrder().map((id) => blocks[id]).filter(Boolean);

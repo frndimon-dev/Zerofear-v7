@@ -87,7 +87,14 @@ export function photo(id: string): Photo {
 
 export function homeOrder(): string[] {
   const saved = (overrides.order ?? []).filter((id) => defaultOrder.includes(id));
-  const order = [...saved, ...defaultOrder.filter((id) => !saved.includes(id))];
+  // A section added later (not in the saved order) goes right after the section
+  // it follows by default, not to the end of the page.
+  const order = [...saved];
+  defaultOrder.forEach((id, i) => {
+    if (order.includes(id)) return;
+    const prev = defaultOrder.slice(0, i).reverse().find((p) => order.includes(p));
+    order.splice(prev ? order.indexOf(prev) + 1 : 0, 0, id);
+  });
   const hidden = new Set(overrides.hidden ?? []);
   return order.filter((id) => !hidden.has(id));
 }
