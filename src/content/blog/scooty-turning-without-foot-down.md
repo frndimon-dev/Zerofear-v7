@@ -12,7 +12,7 @@ keywords: [scooty turning tips, how to turn scooty, scooty u turn, foot down whi
 
 You can ride straight. You can stop. But every time a turn comes, your left foot shoots out and scrapes the road like a third wheel. These scooty turning tips are for exactly that stage, and it's one of the most common places beginners get stuck.
 
-On our homepage there's a learner who had a foot down on every turn on Day 3 and was taking clean turns by Day 8. Nothing magic happened in those five days. The fix was four habits, one at a time. Here they are.
+On our homepage there's a learner who had a foot down on every turn on Day 3 and was taking clean turns by Day 8. Nothing magic happened in those five days. What changed was four habits, fixed one at a time. Here they are.
 
 ## Why the foot goes down
 

@@ -81,6 +81,6 @@ Each class is about 30 minutes, and evening classes are possible. Tell us your t
 Not in the beginner course. Busy roads and junctions are covered in the Advanced course, once your basics are solid. Our [road riding checklist](/blog/road-riding-checklist) shows what you should be comfortable with first.
 
 **Can women learn with doorstep classes at home?**
-Yes. Many families prefer it. See our [women riders](/women-riders) page.
+Yes. Your trainer comes to you, and the class is still one-to-one. See our [women riders](/women-riders) page.
 
 Call or WhatsApp **79801 10273** and tell us your area. We're at 12, Samargarh Colony, near Netaji Metro, Paschim Putiary.

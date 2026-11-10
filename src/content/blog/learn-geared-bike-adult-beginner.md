@@ -59,7 +59,7 @@ The clutch lever connects and disconnects the engine from the rear wheel. Pull i
 
 Stalling feels dramatic but is harmless. The engine stops, the bike jerks a little and halts. You pull the clutch in, find neutral, start again. No damage, no shame.
 
-What takes practice is letting the clutch out slowly at the right spot. That's a skill your hand learns through repetition, not something you can learn from reading. Your trainer will spend real time on it.
+What takes practice is letting the clutch out slowly at the right spot. That's a skill your hand learns through repetition, not something you can learn from reading. Your trainer will spend real time on it. If stalling is already your problem, our post on the [clutch biting point](/blog/bike-clutch-biting-point-stalling) has a simple drill.
 
 ## Coming from a scooty?
 

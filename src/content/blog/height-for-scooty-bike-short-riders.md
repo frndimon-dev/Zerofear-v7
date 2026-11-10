@@ -70,7 +70,7 @@ A geared bike is usually heavier and taller, so it asks more of a short rider. M
 
 ## How we handle height in class
 
-In our [Basic Scooty Training](/courses/basic-scooty-training), if your feet don't reach the ground flat, we pick a lower practice scooty where possible, teach the slide-and-stop from the first balance class, and give you a little more time at the stop-and-start stage. It usually adds a class or two, not weeks. Many of our learners are women, and plenty of them are on the shorter side; our [women riders page](/women-riders) has more on how classes run.
+In our [Basic Scooty Training](/courses/basic-scooty-training), if your feet don't reach the ground flat, we teach the slide-and-stop from the first balance class, and give you a little more time at the stop-and-start stage. It usually adds a class or two, not weeks. Our [women riders page](/women-riders) has more on how classes run.
 
 ## Questions people ask
 
