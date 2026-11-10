@@ -4,6 +4,7 @@
 
 import type { FontKey } from './fonts';
 import { gallery as defaultGallery } from '../data/site';
+import { media } from '../data/media';
 
 export type Pt = { x: number; y: number }; // object-position in %
 export type Box = { x: number; y: number; w: number; h: number }; // % of the image
@@ -148,6 +149,35 @@ export const sections: Section[] = [
     },
   },
   {
+    id: 'progress', label: 'Before & after (3 learners)', movable: true,
+    texts: {
+      eyebrow: line('Section name', 'Real progress'),
+      title: h('Headline', 'Same learner. *New confidence.*'),
+      lead: line('Text', 'Real learners, real photos from class. Everyone moves at their own pace.'),
+      l1d1: line('Learner 1: day on first photo', 'Day 2'),
+      l1d2: line('Learner 1: day on second photo', 'Day 10'),
+      l1from: line('Learner 1: before', 'Trainer on the pillion'),
+      l1to: line('Learner 1: after', 'Riding solo'),
+      l2d1: line('Learner 2: day on first photo', 'Day 4'),
+      l2d2: line('Learner 2: day on second photo', 'Day 15'),
+      l2from: line('Learner 2: before', 'Started on a scooty'),
+      l2to: line('Learner 2: after', 'Now rides a bike'),
+      l3d1: line('Learner 3: day on first photo', 'Day 3'),
+      l3d2: line('Learner 3: day on second photo', 'Day 8'),
+      l3from: line('Learner 3: before', 'Foot down on turns'),
+      l3to: line('Learner 3: after', 'Clean turns, feet up'),
+      button: line('Button', 'Start your first ride'),
+    },
+    photos: {
+      p1a: { label: 'Learner 1: first photo', photo: { src: media['p1a.webp'], alt: 'Learner on an early class, trainer sitting behind her on the scooty', w: 600, h: 750 }, frames: [frames.card45] },
+      p1b: { label: 'Learner 1: second photo', photo: { src: media['p1b.webp'], alt: 'The same learner riding a red scooty on her own', w: 600, h: 750 }, frames: [frames.card45] },
+      p2a: { label: 'Learner 2: first photo', photo: { src: media['p2a.webp'], alt: 'Learner riding a scooty slowly past a roadside shop', w: 600, h: 750 }, frames: [frames.card45] },
+      p2b: { label: 'Learner 2: second photo', photo: { src: media['p2b.webp'], alt: 'The same learner riding a motorbike down a lane', w: 600, h: 750 }, frames: [frames.card45] },
+      p3a: { label: 'Learner 3: first photo', photo: { src: media['p3a.webp'], alt: 'Learner turning a scooty with one foot near the ground', w: 600, h: 750 }, frames: [frames.card45] },
+      p3b: { label: 'Learner 3: second photo', photo: { src: media['p3b.webp'], alt: 'The same learner turning a red scooty with both feet up', w: 600, h: 750 }, frames: [frames.card45] },
+    },
+  },
+  {
     id: 'gallery', label: 'Training in action (photos)', movable: true,
     texts: {
       eyebrow: line('Section name', 'Training in action'),
@@ -177,6 +207,17 @@ export const sections: Section[] = [
     texts: {
       eyebrow: line('Section name', 'Reviews'),
       title: h('Headline', 'They were scared too. *Now they ride.*'),
+      vtitle: line('Video reviews: heading', 'Hear it from them'),
+      v1q: line('Video 1: quote', 'Everyone told me you can’t ride a scooty if you can’t ride a cycle.'),
+      v1n: line('Video 1: name', 'Bijoyini Roy'),
+      v2q: line('Video 2: quote', 'You teach every step with care. Today is day 9 and I could lift my feet.'),
+      v2n: line('Video 2: name', 'Zero Fear learners'),
+      v3q: line('Video 3: quote', 'After two or three classes I was riding on my own. The trainers are very helpful.'),
+      v3n: line('Video 3: name', 'Zero Fear learner'),
+      v4q: line('Video 4: quote', 'If you’re still thinking about it, stop worrying. Just get in touch.'),
+      v4n: line('Video 4: name', 'Anirban Goswami'),
+      vfull: line('Video reviews: full video button', 'Watch the full video'),
+      vlang: line('Video reviews: language note', 'Videos are in Bengali'),
     },
   },
   {
