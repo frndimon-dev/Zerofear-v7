@@ -73,7 +73,7 @@ async function render() {
   if (!state.session) { root.replaceChildren(login()); return; }
   if (!state.ws) { root.replaceChildren(h('p', { class: 'center' }, 'You are not a member of any business yet. Ask the desk owner to add your e-mail.')); return; }
   const { count } = await sb.from('comments').select('id', { count: 'exact', head: true }).eq('workspace_id', state.ws.id).in('status', ['held', 'failed']);
-  const tabs = [['inbox', 'Needs you', count], ['activity', 'Activity'], ['stories', 'Stories'], ['business', 'Replies & rules'], ['accounts', 'Accounts'], ['test', 'Try a comment']];
+  const tabs = [['inbox', 'Needs you', count], ['activity', 'Activity'], ['stories', 'Stories'], ['business', 'Replies & rules'], ['accounts', 'Accounts'], ['test', 'Try a comment'], ['whatsapp', 'WhatsApp']];
   if (state.status?.isAdmin) tabs.push(['keys', 'Keys']);
   const main = h('main', {});
   root.replaceChildren(
@@ -87,7 +87,7 @@ async function render() {
   );
   if (state.msg) main.append(h('p', { class: `toast ${state.msg.isError ? 'is-error' : ''}` }, state.msg.text));
   const stories = () => storiesScreen({ h, sb, api, busy, toast, field, fmt, state, render });
-  const screens = { inbox, activity, stories, business, accounts, test, keys };
+  const screens = { inbox, activity, stories, business, accounts, test, keys, whatsapp };
   main.append(await (screens[state.tab] ?? inbox)());
 }
 
@@ -267,6 +267,52 @@ async function test() {
         r.ai ? h('p', {}, h('b', {}, 'AI: '), `${r.ai.kind}${r.ai.confident ? '' : ' (not sure → waits for you)'} — ${r.ai.reply || '(no reply)'}${r.ai.send_dm ? ' · + inbox message' : ''}`)
           : r.rules.kind === 'unknown' ? h('p', { class: 'muted' }, 'AI is off or has no key: this comment would wait for you.') : null);
     }) }, 'Check')), out);
+}
+
+// ---------- WhatsApp: try the bot as a pretend customer, and the owner's alerts ----------
+async function waApi(action, body = {}) {
+  const { data } = await sb.auth.getSession();
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/wa`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: `Bearer ${data.session?.access_token ?? ''}`, apikey: PUBLISHABLE_KEY },
+    body: JSON.stringify({ action, workspaceId: state.ws.id, ...body }),
+  });
+  const out = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(out.error || `Error ${res.status}`);
+  return out;
+}
+
+async function whatsapp() {
+  const email = state.session.user.email.toLowerCase();
+  const { data: chat } = await sb.from('wa_chats').select('id').eq('workspace_id', state.ws.id).eq('phone', `test:${email}`).maybeSingle();
+  const { data: msgs } = chat ? await sb.from('wa_messages').select('dir, text, at').eq('chat_id', chat.id).order('at') : { data: [] };
+  const { data: alerts } = await sb.from('wa_alerts').select('id, kind, summary, at, done, wa_chats(phone, name, is_test)').eq('workspace_id', state.ws.id).eq('done', false).order('at', { ascending: false }).limit(30);
+  const log = h('div', { class: 'wa-log' }, (msgs ?? []).map((m) => h('div', { class: `wa-msg wa-msg--${m.dir}` }, m.text)));
+  const box = h('textarea', { class: 'input', rows: 2, placeholder: 'Write as a customer, e.g. "ami scooty shikhte chai"' });
+  const send = h('button', { class: 'btn btn--primary', onclick: (e) => busy(e.target, async () => {
+    const text = box.value.trim(); if (!text) return;
+    log.append(h('div', { class: 'wa-msg wa-msg--in' }, text)); box.value = '';
+    const typing = h('div', { class: 'wa-msg wa-msg--out muted' }, '…'); log.append(typing); log.scrollTop = log.scrollHeight;
+    const r = await waApi('try', { text });
+    typing.remove();
+    for (const t of r.replies) log.append(h('div', { class: 'wa-msg wa-msg--out' }, t));
+    if (!r.replies.length) log.append(h('div', { class: 'wa-msg wa-msg--out muted' }, '(no reply: this goes to you)'));
+    log.scrollTop = log.scrollHeight;
+  }) }, 'Send');
+  setTimeout(() => { log.scrollTop = log.scrollHeight; }, 0);
+  return h('div', {},
+    h('div', { class: 'card' }, h('h2', {}, `WhatsApp bot — ${state.ws.name}`),
+      h('p', { class: 'muted' }, 'Chat with the bot as if you were a customer. Nothing is sent to WhatsApp. It answers with the same rules, fees, map distances and admission message it will use for real.'),
+      log, box,
+      h('p', {}, send, ' ',
+        h('button', { class: 'btn', onclick: (e) => busy(e.target, async () => { await waApi('reset'); render(); }) }, 'Start a new chat'), ' ',
+        h('button', { class: 'btn', onclick: (e) => busy(e.target, async () => { const r = await waApi('offer'); toast(`Offer follow-up would say: ${r.text}`); }) }, 'Preview offer follow-up'))),
+    h('div', { class: 'card' }, h('h2', {}, 'Needs you (WhatsApp)'),
+      !(alerts ?? []).length ? h('p', { class: 'muted' }, 'Nothing right now.') :
+        (alerts ?? []).map((a) => h('div', { class: 'wa-alert' },
+          h('b', {}, a.kind), ' · ', fmt(a.at), a.wa_chats?.is_test ? ' · test chat' : ` · ${a.wa_chats?.name || ''} ${a.wa_chats?.phone || ''}`,
+          h('p', {}, a.summary),
+          h('button', { class: 'btn btn--small', onclick: (e) => busy(e.target, async () => { await sb.from('wa_alerts').update({ done: true }).eq('id', a.id); render(); }) }, 'Done')))));
 }
 
 async function keys() {
