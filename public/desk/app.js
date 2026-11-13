@@ -12,7 +12,7 @@ const KINDS = [['thanks', 'Thanks / praise'], ['price', 'Price questions'], ['lo
 const LANGS = [['en', 'English'], ['bn', 'বাংলা'], ['hi', 'Hindi']];
 const STATUS_LABEL = { new: 'waiting', replied: 'replied', hidden: 'hidden', held: 'needs you', ignored: 'no action', failed: 'failed' };
 
-const state = { session: null, workspaces: [], ws: null, tab: localStorage.getItem('tab') || 'inbox', status: null, msg: null, filter: 'all' };
+const state = { session: null, workspaces: [], ws: null, tab: new URLSearchParams(location.search).get('tab') || localStorage.getItem('tab') || 'inbox', status: null, msg: null, filter: 'all' };
 
 // ---------- tiny DOM helper ----------
 function h(tag, props = {}, ...children) {
@@ -269,6 +269,30 @@ async function test() {
     }) }, 'Check')), out);
 }
 
+// ---------- notifications on this phone / iPad ----------
+const VAPID_PUBLIC = 'BJkSJPZIQHu13ifjoEJ31fMqrJ-UR2m7_-dKy49KdNuAe3CysCmcLki5bEWLfKJn07-dCwfnC2nT7rJ-V_G3bEA';
+const pushSupported = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+
+async function pushOn() {
+  if (!pushSupported()) throw new Error(/iPad|iPhone/.test(navigator.userAgent) && !isStandalone()
+    ? 'On iPad/iPhone: tap Share → "Add to Home Screen", open Business Desk from the Home Screen, then tap this button again.'
+    : 'This browser cannot show notifications.');
+  if (await Notification.requestPermission() !== 'granted') throw new Error('Notifications were not allowed. Allow them in Settings → Notifications → Business Desk.');
+  const reg = await navigator.serviceWorker.ready;
+  const key = Uint8Array.from(atob(VAPID_PUBLIC.replace(/-/g, '+').replace(/_/g, '/')), (c) => c.charCodeAt(0));
+  const sub = (await reg.pushManager.getSubscription()) ?? await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key });
+  const j = sub.toJSON();
+  const { error } = await sb.from('push_subs').upsert({ email: state.session.user.email.toLowerCase(), endpoint: j.endpoint, sub: j }, { onConflict: 'endpoint' });
+  if (error) throw new Error(error.message);
+}
+async function pushIsOn() {
+  if (!pushSupported() || Notification.permission !== 'granted') return false;
+  const reg = await navigator.serviceWorker.getRegistration();
+  return !!(reg && await reg.pushManager.getSubscription());
+}
+
 // ---------- WhatsApp: try the bot as a pretend customer, and the owner's alerts ----------
 async function waApi(action, body = {}) {
   const { data } = await sb.auth.getSession();
@@ -300,7 +324,12 @@ async function whatsapp() {
     log.scrollTop = log.scrollHeight;
   }) }, 'Send');
   setTimeout(() => { log.scrollTop = log.scrollHeight; }, 0);
+  const on = await pushIsOn();
   return h('div', {},
+    h('div', { class: 'card' }, h('h2', {}, '🔔 Notifications on this device'),
+      on ? h('p', {}, '✅ On. Discount requests, complaints and questions the bot can\'t answer will pop up here straight away.')
+        : [h('p', { class: 'muted' }, 'Get a notification the moment a customer asks for a discount, complains, or asks something the bot can\'t answer. On iPad/iPhone, first add Business Desk to the Home Screen (Share → Add to Home Screen) and open it from there.'),
+          h('button', { class: 'btn btn--primary', onclick: (e) => busy(e.target, async () => { await pushOn(); toast('Notifications are on for this device.'); }) }, 'Turn on notifications')]),
     h('div', { class: 'card' }, h('h2', {}, `WhatsApp bot — ${state.ws.name}`),
       h('p', { class: 'muted' }, 'Chat with the bot as if you were a customer. Nothing is sent to WhatsApp. It answers with the same rules, fees, map distances and admission message it will use for real.'),
       log, box,
