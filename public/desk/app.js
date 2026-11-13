@@ -325,7 +325,14 @@ async function whatsapp() {
   }) }, 'Send');
   setTimeout(() => { log.scrollTop = log.scrollHeight; }, 0);
   const on = await pushIsOn();
+  const waSt = state.status?.isAdmin ? await waApi('wa-status').catch(() => null) : null;
+  const tok = h('input', { class: 'input', type: 'password', autocomplete: 'off', placeholder: 'Temporary / permanent access token' });
+  const pid = h('input', { class: 'input', autocomplete: 'off', placeholder: 'Phone number ID (digits)', value: waSt?.phoneNumberId || '' });
   return h('div', {},
+    state.status?.isAdmin && h('div', { class: 'card' }, h('h2', {}, '🔗 Connect a WhatsApp number (desk owner)'),
+      h('p', { class: 'muted' }, `Token: ${waSt?.token ? '✓ saved' : 'not set'} · Phone number ID: ${waSt?.phoneNumberId || 'not set'}. Paste from Meta → WhatsApp → API Setup. Stored on the server only.`),
+      field('Access token', tok), field('Phone number ID', pid),
+      h('button', { class: 'btn btn--primary', onclick: (e) => busy(e.target, async () => { await waApi('set-wa', { token: tok.value, phoneNumberId: pid.value }); toast('Saved.'); }) }, 'Save')),
     h('div', { class: 'card' }, h('h2', {}, '🔔 Notifications on this device'),
       on ? h('p', {}, '✅ On. Discount requests, complaints and questions the bot can\'t answer will pop up here straight away.')
         : [h('p', { class: 'muted' }, 'Get a notification the moment a customer asks for a discount, complains, or asks something the bot can\'t answer. On iPad/iPhone, first add Business Desk to the Home Screen (Share → Add to Home Screen) and open it from there.'),
