@@ -73,7 +73,7 @@ async function render() {
   if (!state.session) { root.replaceChildren(login()); return; }
   if (!state.ws) { root.replaceChildren(h('p', { class: 'center' }, 'You are not a member of any business yet. Ask the desk owner to add your e-mail.')); return; }
   const { count } = await sb.from('comments').select('id', { count: 'exact', head: true }).eq('workspace_id', state.ws.id).in('status', ['held', 'failed']);
-  const tabs = [['inbox', 'Needs you', count], ['activity', 'Activity'], ['stories', 'Stories'], ['business', 'Replies & rules'], ['accounts', 'Accounts'], ['test', 'Try a comment'], ['whatsapp', 'WhatsApp']];
+  const tabs = [['inbox', 'Needs you', count], ['activity', 'Activity'], ['stories', 'Stories'], ['business', 'Replies & rules'], ['accounts', 'Accounts'], ['messages', 'Messages'], ['test', 'Try a comment'], ['whatsapp', 'WhatsApp']];
   if (state.status?.isAdmin) tabs.push(['keys', 'Keys']);
   const main = h('main', {});
   root.replaceChildren(
@@ -87,7 +87,7 @@ async function render() {
   );
   if (state.msg) main.append(h('p', { class: `toast ${state.msg.isError ? 'is-error' : ''}` }, state.msg.text));
   const stories = () => storiesScreen({ h, sb, api, busy, toast, field, fmt, state, render });
-  const screens = { inbox, activity, stories, business, accounts, test, keys, whatsapp };
+  const screens = { inbox, activity, stories, business, accounts, messages, test, keys, whatsapp };
   main.append(await (screens[state.tab] ?? inbox)());
 }
 
@@ -291,6 +291,40 @@ async function pushIsOn() {
   if (!pushSupported() || Notification.permission !== 'granted') return false;
   const reg = await navigator.serviceWorker.getRegistration();
   return !!(reg && await reg.pushManager.getSubscription());
+}
+
+// ---------- Messages: the bot's real chats on Instagram, Facebook (and WhatsApp later). Read-only:
+// to answer yourself, reply from the Instagram / Facebook app (the bot then stays quiet in that chat for 12 hours).
+async function messages() {
+  const { data: chats } = await sb.from('wa_chats').select('id, phone, name, paused_until, last_in_at, last_out_at, offer_sent_at')
+    .eq('workspace_id', state.ws.id).eq('is_test', false).not('phone', 'like', 'dry:%').order('last_in_at', { ascending: false, nullsFirst: false }).limit(60);
+  const { data: accs } = await sb.from('accounts').select('id, name').eq('workspace_id', state.ws.id);
+  const accName = Object.fromEntries((accs ?? []).map((a) => [a.id, a.name]));
+  const where = (phone) => {
+    const [kind, acc] = phone.split(':');
+    if (kind === 'ig') return `📸 Instagram · ${accName[acc] ?? ''}`;
+    if (kind === 'fb') return `💬 Facebook · ${accName[acc] ?? ''}`;
+    return '🟢 WhatsApp';
+  };
+  if (!(chats ?? []).length) return h('div', { class: 'card' }, h('h2', {}, 'Messages'),
+    h('p', { class: 'muted' }, 'No chats yet. When someone messages your Instagram or Facebook page, the bot answers within a minute or two and the chat shows up here.'));
+  const open = state.openChat;
+  const list = await Promise.all((chats ?? []).map(async (c) => {
+    const paused = c.paused_until && new Date(c.paused_until) > new Date();
+    const head = h('div', { class: 'msg-head', onclick: () => { state.openChat = open === c.id ? null : c.id; render(); } },
+      h('b', {}, c.name || 'Unknown'), ' · ', h('span', { class: 'muted' }, where(c.phone)), ' · ', fmt(c.last_in_at || c.last_out_at),
+      paused ? h('span', { class: 'count' }, 'you are replying — bot quiet') : null,
+      c.offer_sent_at ? h('span', { class: 'muted' }, ' · offer sent') : null);
+    if (open !== c.id) return h('div', { class: 'card msg-chat' }, head);
+    const { data: msgs } = await sb.from('wa_messages').select('dir, text, at').eq('chat_id', c.id).order('at').limit(200);
+    return h('div', { class: 'card msg-chat' }, head,
+      h('div', { class: 'wa-log' }, (msgs ?? []).map((m) => h('div', { class: `wa-msg wa-msg--${m.dir}` },
+        m.dir === 'staff' ? h('small', { class: 'muted' }, 'You / staff: ') : m.dir === 'out' ? h('small', { class: 'muted' }, 'Bot: ') : null, m.text,
+        h('small', { class: 'muted wa-time' }, ` ${fmt(m.at)}`)))),
+      h('p', { class: 'muted' }, 'To answer yourself, reply from the Instagram or Facebook app; the bot then stays quiet in this chat for 12 hours.'));
+  }));
+  return h('div', {}, h('div', { class: 'card' }, h('h2', {}, `Messages — ${state.ws.name}`),
+    h('p', { class: 'muted' }, 'Every Instagram and Facebook chat the bot handles. Tap a chat to read it. Complaints, discount requests and questions the bot can\'t answer also come as notifications and under the WhatsApp tab → Needs you.')), list);
 }
 
 // ---------- WhatsApp: try the bot as a pretend customer, and the owner's alerts ----------

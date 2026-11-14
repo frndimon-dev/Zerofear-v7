@@ -93,3 +93,8 @@ main { max-width: 900px; margin: 0 auto; padding: 16px; }
 .wa-msg--out { align-self: flex-start; background: #fff; }
 .wa-msg--staff { align-self: flex-start; background: #fff3c4; }
 .wa-alert { border-top: 1px solid rgba(0,0,0,.1); padding: 8px 0; }
+
+/* Messages tab */
+.msg-head { cursor: pointer; display: flex; flex-wrap: wrap; gap: .25rem .4rem; align-items: center; }
+.msg-chat .wa-log { margin-top: .75rem; }
+.wa-time { display: block; font-size: .7rem; }
