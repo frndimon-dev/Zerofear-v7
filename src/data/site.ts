@@ -347,3 +347,23 @@ export const waLink = (text: string) =>
   `https://wa.me/${site.whatsapp.number}?text=${encodeURIComponent(text)}`;
 
 export const formatINR = (n: number) => '₹' + n.toLocaleString('en-IN');
+
+// Offer shown in the floating offer tab (bottom corner). It hides itself after `to` (India date),
+// so an old offer never stays on the site. Set `offer` to null when there is none.
+export const offer = {
+  id: 'festive-2026-11',
+  title: 'Festive Season Offer',
+  line: 'Flat ₹1000 off on scooty & bike training',
+  oldPrice: '₹4000',
+  newPrice: '₹3000',
+  save: '₹1000',
+  from: '2026-11-15',
+  to: '2026-11-20', // last day of the offer (inclusive)
+  untilText: '20 November',
+  // Photo for the offer card (the full poster is for WhatsApp / social: /images/offers/zerofear-festive-nov2026.jpg).
+  image: '/images/hero-trainer-guiding.webp',
+  imageAlt: 'Zero Fear trainer guiding a beginner on a scooty',
+} as {
+  id: string; title: string; line: string; oldPrice: string; newPrice: string; save: string;
+  from: string; to: string; untilText: string; image: string; imageAlt: string;
+} | null;

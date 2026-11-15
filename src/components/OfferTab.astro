@@ -1,0 +1,140 @@
+---
+// Floating offer tab: a small pill in the corner that opens an offer card.
+// Shown only between offer.from and offer.to (checked in the browser by India date), never on booking/admin pages.
+import { offer, site, waLink } from '../data/site';
+const path = Astro.url.pathname;
+const show = !!offer && !path.startsWith('/book') && !path.startsWith('/admin');
+const wa = offer ? waLink(`Hi Zero Fear, I want the ${offer.title} (${offer.newPrice} instead of ${offer.oldPrice}). Please share the details.`) : '';
+---
+{show && offer && (
+  <div class="offer-tab" data-offer={offer.id} data-from={offer.from} data-to={offer.to} hidden>
+    <button class="offer-pill" type="button" aria-haspopup="dialog" aria-controls="offer-card" aria-expanded="false">
+      <span class="offer-dot" aria-hidden="true"></span>
+      <span class="offer-pill-text"><strong>{offer.title}</strong><span>Save {offer.save} · till {offer.untilText}</span></span><span class="offer-pill-short">{offer.save} off</span>
+      <svg class="offer-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="offer-hide" type="button" aria-label="Hide offer">×</button>
+
+    <div class="offer-card" id="offer-card" role="dialog" aria-modal="false" aria-labelledby="offer-title" hidden>
+      <button class="offer-close" type="button" aria-label="Close">×</button>
+      <div class="offer-media"><img class="offer-img" src={offer.image} alt={offer.imageAlt} loading="lazy" decoding="async" /><span class="offer-badge">Flat {offer.save} off</span></div>
+      <div class="offer-body">
+        <p class="offer-kicker">Limited time · till {offer.untilText}</p>
+        <h2 id="offer-title" class="offer-title">{offer.title}</h2>
+        <p class="offer-line">{offer.line}</p>
+        <p class="offer-price"><s>{offer.oldPrice}</s><span>{offer.newPrice}</span></p>
+        <div class="offer-actions">
+          <a class="btn btn--primary" href={wa} target="_blank" rel="noopener">Claim on WhatsApp</a>
+          <a class="btn btn--outline" href={`tel:${site.phone.tel}`}>Call {site.phone.display}</a>
+        </div>
+        <p class="offer-note">One-to-one classes near Netaji Metro, Kudghat.</p>
+      </div>
+    </div>
+  </div>
+)}
+
+<style>
+  .offer-tab { position: fixed; left: 20px; bottom: 20px; z-index: 70; font-family: var(--font); }
+  .offer-tab[hidden] { display: none; }
+  .offer-pill {
+    display: flex; align-items: center; gap: 12px; padding: 10px 16px 10px 14px; border: 0; border-radius: 999px;
+    background: var(--navy); color: #fff; cursor: pointer; text-align: left;
+    box-shadow: 0 10px 30px rgba(12, 15, 22, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+    transform: translateY(16px); opacity: 0; transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s, box-shadow .2s;
+  }
+  .offer-tab.is-in .offer-pill { transform: none; opacity: 1; }
+  .offer-pill:hover { box-shadow: 0 14px 36px rgba(12, 15, 22, 0.34), 0 0 0 1px rgba(255, 214, 10, 0.5) inset; }
+  .offer-pill:focus-visible, .offer-hide:focus-visible, .offer-close:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
+  .offer-dot { position: relative; width: 10px; height: 10px; border-radius: 50%; background: var(--yellow); flex: none; }
+  .offer-dot::after { content: ''; position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--yellow); opacity: .6; animation: offer-ping 1.8s ease-out infinite; }
+  @keyframes offer-ping { from { transform: scale(.5); opacity: .7; } to { transform: scale(1.6); opacity: 0; } }
+  .offer-pill-text { display: grid; line-height: 1.2; }
+  .offer-pill-text strong { font-weight: 800; font-size: .95rem; letter-spacing: .01em; }
+  .offer-pill-text span { font-size: .8rem; color: #c9ccd3; }
+  .offer-chev { width: 18px; height: 18px; color: var(--yellow); transition: transform .3s; }
+  .offer-tab.is-open .offer-chev { transform: rotate(180deg); }
+  .offer-hide {
+    position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; border-radius: 50%; border: 0; cursor: pointer;
+    background: #fff; color: var(--navy); font-size: 16px; line-height: 1; box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    opacity: 0; transition: opacity .2s;
+  }
+  .offer-tab.is-in:hover .offer-hide, .offer-hide:focus-visible { opacity: 1; }
+  .offer-card {
+    position: absolute; left: 0; bottom: calc(100% + 12px); width: 340px; max-height: calc(100vh - 120px); overflow: auto;
+    background: #fff; color: var(--text); border-radius: var(--radius-lg);
+    box-shadow: 0 24px 60px rgba(12, 15, 22, 0.28); transform-origin: bottom left;
+    animation: offer-pop .32s cubic-bezier(.2,.8,.2,1);
+  }
+  .offer-card[hidden] { display: none; }
+  @keyframes offer-pop { from { transform: translateY(10px) scale(.96); opacity: 0; } to { transform: none; opacity: 1; } }
+  .offer-media { position: relative; }
+  .offer-img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 28%; border-radius: var(--radius-lg) var(--radius-lg) 0 0; background: var(--navy); }
+  .offer-badge {
+    position: absolute; left: 14px; bottom: -14px; background: var(--yellow); color: var(--navy);
+    font-family: var(--font-display); font-size: 1.15rem; letter-spacing: .02em; text-transform: uppercase;
+    padding: 6px 12px 4px; border-radius: 10px; box-shadow: 0 6px 16px rgba(12,15,22,.18);
+  }
+  .offer-close {
+    position: sticky; float: right; margin: 10px 10px -44px 0; z-index: 2; top: 10px; right: 10px; width: 34px; height: 34px; border-radius: 50%; border: 0; cursor: pointer;
+    background: rgba(12, 15, 22, .72); color: #fff; font-size: 22px; line-height: 1; backdrop-filter: blur(6px);
+  }
+  .offer-body { padding: 26px 20px 20px; }
+  .offer-pill-short { display: none; }
+  .offer-kicker { margin: 0 0 4px; font-size: .78rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #8a6d00; }
+  .offer-title { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 1.9rem; line-height: 1; text-transform: uppercase; letter-spacing: .01em; }
+  .offer-line { margin: 8px 0 0; color: var(--muted); font-size: .95rem; }
+  .offer-price { display: flex; align-items: baseline; gap: 12px; margin: 12px 0 14px; }
+  .offer-price s { color: var(--muted); font-size: 1.1rem; text-decoration-color: #ff3b30; text-decoration-thickness: 2px; }
+  .offer-price span { font-family: var(--font-display); font-size: 2.3rem; line-height: 1; background: var(--yellow); padding: 4px 12px 2px; border-radius: 10px; }
+  .offer-actions { display: grid; gap: 8px; }
+  .offer-actions .btn { width: 100%; justify-content: center; }
+  .offer-note { margin: 10px 0 0; font-size: .8rem; color: var(--muted); text-align: center; }
+  @media (max-width: 760px) {
+    /* Phones: a compact chip on the right, above the call / WhatsApp bar; the card opens as a sheet. */
+    .offer-tab { left: auto; right: 12px; bottom: calc(76px + env(safe-area-inset-bottom)); }
+    .offer-pill { padding: 8px 12px 8px 11px; gap: 8px; }
+    .offer-pill-text { display: none; }
+    .offer-pill-short { display: inline; font-weight: 800; font-size: .88rem; white-space: nowrap; }
+    .offer-chev { width: 16px; height: 16px; }
+    .offer-hide { opacity: 1; right: auto; left: -8px; }
+    .offer-card { position: fixed; left: 12px; right: 12px; bottom: calc(130px + env(safe-area-inset-bottom)); width: auto; max-height: calc(100vh - 150px); transform-origin: bottom right; }
+    .offer-title { font-size: 1.5rem; }
+    .offer-price { margin: 8px 0 10px; }
+    .offer-price span { font-size: 1.8rem; }
+    .offer-img { aspect-ratio: 16 / 8; }
+    .offer-body { padding: 22px 16px 14px; }
+    .offer-note { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .offer-pill, .offer-card, .offer-chev { transition: none; animation: none; }
+    .offer-dot::after { animation: none; }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('.offer-tab');
+  if (root) {
+    const id = root.dataset.offer ?? '';
+    const today = new Date(Date.now() + 330 * 60_000).toISOString().slice(0, 10); // India date
+    const store = (k: string, v?: string) => { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch { /* private mode */ } return null; };
+    const live = (!root.dataset.from || root.dataset.from <= today) && (!root.dataset.to || today <= root.dataset.to);
+    const hiddenUntil = store(`offer-hidden:${id}`);
+    if (live && !(hiddenUntil && hiddenUntil >= today)) {
+      const pill = root.querySelector<HTMLButtonElement>('.offer-pill')!;
+      const card = root.querySelector<HTMLElement>('.offer-card')!;
+      const open = (yes: boolean) => {
+        card.hidden = !yes; root.classList.toggle('is-open', yes); pill.setAttribute('aria-expanded', String(yes));
+        if (yes) store(`offer-seen:${id}`, '1');
+      };
+      root.hidden = false;
+      requestAnimationFrame(() => setTimeout(() => root.classList.add('is-in'), 400));
+      pill.addEventListener('click', () => open(card.hidden));
+      root.querySelector('.offer-close')!.addEventListener('click', () => { open(false); pill.focus(); });
+      root.querySelector('.offer-hide')!.addEventListener('click', () => { store(`offer-hidden:${id}`, today); root.remove(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !card.hidden) { open(false); pill.focus(); } });
+      document.addEventListener('click', (e) => { if (!card.hidden && !root.contains(e.target as Node)) open(false); });
+      // First visit while the offer runs: open the card once, after the visitor has had a look at the page.
+      if (!store(`offer-seen:${id}`)) setTimeout(() => { if (card.hidden && document.visibilityState === 'visible') open(true); }, 7000);
+    }
+  }
+</script>
