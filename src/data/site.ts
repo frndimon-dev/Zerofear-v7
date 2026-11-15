@@ -363,7 +363,9 @@ export const offer = {
   // Photo for the offer card (the full poster is for WhatsApp / social: /images/offers/zerofear-festive-nov2026.jpg).
   image: '/images/hero-trainer-guiding.webp',
   imageAlt: 'Zero Fear trainer guiding a beginner on a scooty',
+  poster: '/images/offers/zerofear-festive-nov2026-720.jpg',
+  posterAlt: 'Zero Fear Festive Season offer: flat ₹1000 off, ₹4000 now ₹3000, valid till 20th November',
 } as {
   id: string; title: string; line: string; oldPrice: string; newPrice: string; save: string;
-  from: string; to: string; untilText: string; image: string; imageAlt: string;
+  from: string; to: string; untilText: string; image: string; imageAlt: string; poster: string; posterAlt: string;
 } | null;
