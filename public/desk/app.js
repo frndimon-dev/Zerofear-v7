@@ -354,7 +354,10 @@ function loadFacebookSdk() {
   });
 }
 async function connectWhatsApp() {
-  const FB = await loadFacebookSdk();
+  // iPad/iPhone Safari only opens the Facebook window if FB.login runs straight from the tap (no waiting first),
+  // so the SDK is loaded when the WhatsApp tab opens, not on the tap.
+  const FB = window.FB;
+  if (!FB) { loadFacebookSdk().catch(() => {}); throw new Error('Facebook is still loading. Wait 2 seconds and tap again.'); }
   let session = null;
   const onMsg = (ev) => {
     if (!/facebook\.com$/.test(new URL(ev.origin).hostname)) return;
@@ -374,6 +377,7 @@ async function connectWhatsApp() {
 }
 
 async function whatsapp() {
+  if (state.status?.isAdmin) loadFacebookSdk().catch(() => {});
   const email = state.session.user.email.toLowerCase();
   const { data: chat } = await sb.from('wa_chats').select('id').eq('workspace_id', state.ws.id).eq('phone', `test:${email}`).maybeSingle();
   const { data: msgs } = chat ? await sb.from('wa_messages').select('dir, text, at').eq('chat_id', chat.id).order('at') : { data: [] };
