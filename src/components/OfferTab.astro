@@ -17,17 +17,13 @@ const wa = offer ? waLink(`Hi Zero Fear, I want the ${offer.title} (${offer.newP
 
     <div class="offer-card" id="offer-card" role="dialog" aria-modal="false" aria-labelledby="offer-title" hidden>
       <button class="offer-close" type="button" aria-label="Close">×</button>
-      <div class="offer-media"><img class="offer-img" src={offer.image} alt={offer.imageAlt} loading="lazy" decoding="async" /><span class="offer-badge">Flat {offer.save} off</span></div>
+      <img class="offer-poster" src={offer.poster} alt={offer.posterAlt} width="720" height="900" decoding="async" />
       <div class="offer-body">
-        <p class="offer-kicker">Limited time · till {offer.untilText}</p>
-        <h2 id="offer-title" class="offer-title">{offer.title}</h2>
-        <p class="offer-line">{offer.line}</p>
-        <p class="offer-price"><s>{offer.oldPrice}</s><span>{offer.newPrice}</span></p>
+        <h2 id="offer-title" class="sr-only">{offer.title}: {offer.line}, {offer.oldPrice} now {offer.newPrice}, till {offer.untilText}</h2>
         <div class="offer-actions">
           <a class="btn btn--primary" href={wa} target="_blank" rel="noopener">Claim on WhatsApp</a>
           <a class="btn btn--outline" href={`tel:${site.phone.tel}`}>Call {site.phone.display}</a>
         </div>
-        <p class="offer-note">One-to-one classes near Netaji Metro, Kudghat.</p>
       </div>
     </div>
   </div>
@@ -67,28 +63,16 @@ const wa = offer ? waLink(`Hi Zero Fear, I want the ${offer.title} (${offer.newP
   }
   .offer-card[hidden] { display: none; }
   @keyframes offer-pop { from { transform: translateY(10px) scale(.96); opacity: 0; } to { transform: none; opacity: 1; } }
-  .offer-media { position: relative; }
-  .offer-img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 28%; border-radius: var(--radius-lg) var(--radius-lg) 0 0; background: var(--navy); }
-  .offer-badge {
-    position: absolute; left: 14px; bottom: -14px; background: var(--yellow); color: var(--navy);
-    font-family: var(--font-display); font-size: 1.15rem; letter-spacing: .02em; text-transform: uppercase;
-    padding: 6px 12px 4px; border-radius: 10px; box-shadow: 0 6px 16px rgba(12,15,22,.18);
-  }
+  .offer-poster { display: block; width: 100%; height: auto; max-height: calc(100vh - 260px); object-fit: contain; background: #0c0f16; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .offer-close {
     position: sticky; float: right; margin: 10px 10px -44px 0; z-index: 2; top: 10px; right: 10px; width: 34px; height: 34px; border-radius: 50%; border: 0; cursor: pointer;
     background: rgba(12, 15, 22, .72); color: #fff; font-size: 22px; line-height: 1; backdrop-filter: blur(6px);
   }
-  .offer-body { padding: 26px 20px 20px; }
+  .offer-body { padding: 14px 16px 16px; }
   .offer-pill-short { display: none; }
-  .offer-kicker { margin: 0 0 4px; font-size: .78rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #8a6d00; }
-  .offer-title { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 1.9rem; line-height: 1; text-transform: uppercase; letter-spacing: .01em; }
-  .offer-line { margin: 8px 0 0; color: var(--muted); font-size: .95rem; }
-  .offer-price { display: flex; align-items: baseline; gap: 12px; margin: 12px 0 14px; }
-  .offer-price s { color: var(--muted); font-size: 1.1rem; text-decoration-color: #ff3b30; text-decoration-thickness: 2px; }
-  .offer-price span { font-family: var(--font-display); font-size: 2.3rem; line-height: 1; background: var(--yellow); padding: 4px 12px 2px; border-radius: 10px; }
   .offer-actions { display: grid; gap: 8px; }
   .offer-actions .btn { width: 100%; justify-content: center; }
-  .offer-note { margin: 10px 0 0; font-size: .8rem; color: var(--muted); text-align: center; }
   @media (max-width: 760px) {
     /* Phones: a compact chip on the right, above the call / WhatsApp bar; the card opens as a sheet. */
     .offer-tab { left: auto; right: 12px; bottom: calc(76px + env(safe-area-inset-bottom)); }
@@ -98,12 +82,8 @@ const wa = offer ? waLink(`Hi Zero Fear, I want the ${offer.title} (${offer.newP
     .offer-chev { width: 16px; height: 16px; }
     .offer-hide { opacity: 1; right: auto; left: -8px; }
     .offer-card { position: fixed; left: 12px; right: 12px; bottom: calc(130px + env(safe-area-inset-bottom)); width: auto; max-height: calc(100vh - 150px); transform-origin: bottom right; }
-    .offer-title { font-size: 1.5rem; }
-    .offer-price { margin: 8px 0 10px; }
-    .offer-price span { font-size: 1.8rem; }
-    .offer-img { aspect-ratio: 16 / 8; }
-    .offer-body { padding: 22px 16px 14px; }
-    .offer-note { display: none; }
+    .offer-poster { max-height: calc(100vh - 330px); }
+    .offer-body { padding: 10px 12px 12px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .offer-pill, .offer-card, .offer-chev { transition: none; animation: none; }
