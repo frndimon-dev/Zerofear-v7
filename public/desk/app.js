@@ -340,6 +340,39 @@ async function waApi(action, body = {}) {
   return out;
 }
 
+// Meta Embedded Signup with coexistence: keeps the number in the WhatsApp Business app and adds the bot.
+const META_APP_ID = '1679538737209802';
+const ES_CONFIG_ID = '1006530825277758';
+function loadFacebookSdk() {
+  if (window.FB) return Promise.resolve(window.FB);
+  return new Promise((resolve, reject) => {
+    window.fbAsyncInit = () => { window.FB.init({ appId: META_APP_ID, autoLogAppEvents: true, xfbml: false, version: 'v23.0' }); resolve(window.FB); };
+    const sc = document.createElement('script');
+    sc.src = 'https://connect.facebook.net/en_US/sdk.js'; sc.async = true; sc.crossOrigin = 'anonymous';
+    sc.onerror = () => reject(new Error('Could not load Facebook. Check the internet and try again.'));
+    document.head.append(sc);
+  });
+}
+async function connectWhatsApp() {
+  const FB = await loadFacebookSdk();
+  let session = null;
+  const onMsg = (ev) => {
+    if (!/facebook\.com$/.test(new URL(ev.origin).hostname)) return;
+    try { const d = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data; if (d?.type === 'WA_EMBEDDED_SIGNUP') session = d; } catch { /* other messages */ }
+  };
+  window.addEventListener('message', onMsg);
+  try {
+    const code = await new Promise((resolve, reject) => FB.login((r) => (r.authResponse?.code ? resolve(r.authResponse.code) : reject(new Error('Signup was closed before it finished.'))), {
+      config_id: ES_CONFIG_ID, response_type: 'code', override_default_response_type: true,
+      extras: { setup: {}, featureType: 'whatsapp_business_app_onboarding', sessionInfoVersion: '3' },
+    }));
+    await new Promise((r) => setTimeout(r, 1500));
+    if (session?.event === 'CANCEL') throw new Error(`Signup stopped${session.data?.current_step ? ' at ' + session.data.current_step : ''}${session.data?.error_message ? ': ' + session.data.error_message : ''}.`);
+    const d = session?.data ?? {};
+    return await waApi('es-finish', { code, wabaId: d.waba_id, phoneNumberId: d.phone_number_id });
+  } finally { window.removeEventListener('message', onMsg); }
+}
+
 async function whatsapp() {
   const email = state.session.user.email.toLowerCase();
   const { data: chat } = await sb.from('wa_chats').select('id').eq('workspace_id', state.ws.id).eq('phone', `test:${email}`).maybeSingle();
@@ -363,7 +396,14 @@ async function whatsapp() {
   const tok = h('input', { class: 'input', type: 'password', autocomplete: 'off', placeholder: 'Temporary / permanent access token' });
   const pid = h('input', { class: 'input', autocomplete: 'off', placeholder: 'Phone number ID (digits)', value: waSt?.phoneNumberId || '' });
   return h('div', {},
-    state.status?.isAdmin && h('div', { class: 'card' }, h('h2', {}, '🔗 Connect a WhatsApp number (desk owner)'),
+    state.status?.isAdmin && h('div', { class: 'card' }, h('h2', {}, '🟢 WhatsApp bot on your own number (desk owner)'),
+      h('p', { class: 'muted' }, waSt?.phoneNumberId
+        ? `Connected (number ID ${waSt.phoneNumberId}). The bot is ${waSt.live ? 'ON: it answers customers.' : 'OFF: messages are only recorded; you answer from the app as before.'}`
+        : 'Connect the number you already use in the WhatsApp Business app. The number, the app, your chats and calls stay as they are; the bot only adds replies. You will log in to Facebook, choose the business, choose "Connect your existing WhatsApp Business app", enter the number, then scan a QR code with the WhatsApp Business app on that phone.'),
+      h('p', {},
+        h('button', { class: 'btn btn--primary', onclick: (e) => busy(e.target, async () => { const r = await connectWhatsApp(); toast(`Connected. ${r.out?.subscribe?.status === 200 ? '' : 'Note: ' + JSON.stringify(r.out).slice(0, 200)}`); }) }, waSt?.phoneNumberId ? 'Connect again' : 'Connect WhatsApp number'), ' ',
+        waSt?.phoneNumberId && h('button', { class: 'btn', onclick: (e) => busy(e.target, async () => { await waApi('wa-live', { live: !waSt.live }); toast(waSt.live ? 'Bot switched off.' : 'Bot switched on.'); }) }, waSt.live ? 'Switch bot off' : 'Switch bot on'))),
+    state.status?.isAdmin && h('details', { class: 'card' }, h('summary', {}, 'Advanced: paste a token by hand'),
       h('p', { class: 'muted' }, `Token: ${waSt?.token ? '✓ saved' : 'not set'} · Phone number ID: ${waSt?.phoneNumberId || 'not set'}. Paste from Meta → WhatsApp → API Setup. Stored on the server only.`),
       field('Access token', tok), field('Phone number ID', pid),
       h('button', { class: 'btn btn--primary', onclick: (e) => busy(e.target, async () => { await waApi('set-wa', { token: tok.value, phoneNumberId: pid.value }); toast('Saved.'); }) }, 'Save')),
