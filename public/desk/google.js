@@ -11,6 +11,10 @@ function problems(text) {
   if (LINK.test(text)) out.push('Google rejects links in the text. Use a button instead.');
   return out;
 }
+// Ready photos per business (JPG on the business's own website; Google needs JPG/PNG links).
+const PHOTOS = {
+  'Seekho 2 Wheeler': { base: 'https://seekho2wheeler.com/assets/img/gbp/', files: ['first-day', 'trainer-walk', 'road-solo', 'scooty-solo', 'learner', 'class-explain', 'group-ride', 'team-road', 'bike-guide', 'bike-ride', 'tollygunge', 'rabindra-sarovar', 'new-town', 'barasat', 'sodepur', 'howrah'] },
+};
 const POST_STATUS = { draft: 'draft', scheduled: 'scheduled', posting: 'posting…', posted: 'posted ✓', failed: 'failed' };
 const REVIEW_STATUS = { new: 'new', drafted: 'reply waiting for you', posted: 'replied ✓', skipped: 'answered before', failed: 'failed' };
 const stars = (n) => '★'.repeat(n) + '☆'.repeat(Math.max(0, 5 - n));
@@ -76,7 +80,16 @@ export async function google({ h, sb, api, busy, toast, field, fmt, state, rende
           const r = await api('google-caption', { workspaceId: ws.id, notes: notes.value, imageUrl: image.value.trim() }); text.value = r.text; check();
         }) }, '✨ Write with AI')),
       field('Post text', text), warn,
-      field('Photo link', image, 'Optional. A JPG/PNG link that anyone can open.'),
+      field('Photo link', image, 'Optional. A JPG/PNG link that anyone can open, or tap a photo below.'),
+      PHOTOS[ws.name] && h('div', { style: 'display:flex;gap:6px;overflow-x:auto;padding:4px 0 10px' }, PHOTOS[ws.name].files.map((f) => {
+        const url = `${PHOTOS[ws.name].base}${f}.jpg`;
+        const img = h('img', { src: url, alt: f, loading: 'lazy', style: 'height:72px;border-radius:8px;cursor:pointer;flex:none;border:3px solid transparent' });
+        img.addEventListener('click', () => {
+          image.value = image.value === url ? '' : url;
+          img.parentElement.querySelectorAll('img').forEach((x) => { x.style.borderColor = x.src === image.value ? '#2563eb' : 'transparent'; });
+        });
+        return img;
+      })),
       h('div', { class: 'row2' }, field('Button', cta), field('Button link', ctaUrl)),
       field('When', when, 'India time. It goes out within 5 minutes of this time.'),
       h('p', {}, h('button', { class: 'btn btn--primary', onclick: save('scheduled') }, 'Schedule'), ' ', h('button', { class: 'btn', onclick: save('draft') }, 'Save draft')),
