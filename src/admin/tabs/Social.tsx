@@ -113,7 +113,7 @@ export function SocialTab(_: TabProps) {
         {!accounts.length && <p class="muted">No accounts connected yet.</p>}
       </div>
       <div class="social__connect">
-        <button type="button" class="btn btn--light" disabled={!!busy || !status?.google} onClick={() => connect('google')}>+ Connect Google Business Profile</button>
+        <p class="muted">Google Business Profile is managed in Business Desk → Google (zerofear.in/desk).</p>
         <button type="button" class="btn btn--light" disabled={!!busy || !status?.meta} onClick={() => connect('meta')}>+ Connect Facebook & Instagram</button>
       </div>
 
