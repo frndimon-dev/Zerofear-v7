@@ -71,3 +71,6 @@ end $$;
 
 grant select, insert, update, delete on public.social_accounts, public.social_posts, public.social_reviews, public.social_settings to authenticated;
 revoke all on public.social_tokens from anon, authenticated;
+grant usage on schema public to service_role;
+-- The server (SUPABASE_SECRET_KEY = service_role) needs these; newer projects do not grant them by default.
+grant select, insert, update, delete on public.social_accounts, public.social_posts, public.social_reviews, public.social_settings, public.social_tokens to service_role;
