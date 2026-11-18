@@ -3,6 +3,7 @@
 // the "desk" Edge Function for anything that talks to Facebook / Instagram.
 import { createClient } from './vendor/supabase.js'; // @supabase/supabase-js 2.117.0, bundled
 import { stories as storiesScreen } from './stories.js?v=20261103e';
+import { google as googleScreen } from './google.js?v=20261118a';
 
 const SUPABASE_URL = 'https://wzesyetbiyxdgjyuhqoz.supabase.co';
 const PUBLISHABLE_KEY = 'sb_publishable_WtpK81HvXHXHn-aroHl9MA_Nkt7UyKD';
@@ -73,7 +74,7 @@ async function render() {
   if (!state.session) { root.replaceChildren(login()); return; }
   if (!state.ws) { root.replaceChildren(h('p', { class: 'center' }, 'You are not a member of any business yet. Ask the desk owner to add your e-mail.')); return; }
   const { count } = await sb.from('comments').select('id', { count: 'exact', head: true }).eq('workspace_id', state.ws.id).in('status', ['held', 'failed']);
-  const tabs = [['inbox', 'Needs you', count], ['activity', 'Activity'], ['stories', 'Stories'], ['business', 'Replies & rules'], ['accounts', 'Accounts'], ['messages', 'Messages'], ['test', 'Try a comment'], ['whatsapp', 'WhatsApp']];
+  const tabs = [['inbox', 'Needs you', count], ['activity', 'Activity'], ['stories', 'Stories'], ['business', 'Replies & rules'], ['accounts', 'Accounts'], ['google', 'Google'], ['messages', 'Messages'], ['test', 'Try a comment'], ['whatsapp', 'WhatsApp']];
   if (state.status?.isAdmin) tabs.push(['keys', 'Keys']);
   const main = h('main', {});
   root.replaceChildren(
@@ -87,7 +88,8 @@ async function render() {
   );
   if (state.msg) main.append(h('p', { class: `toast ${state.msg.isError ? 'is-error' : ''}` }, state.msg.text));
   const stories = () => storiesScreen({ h, sb, api, busy, toast, field, fmt, state, render });
-  const screens = { inbox, activity, stories, business, accounts, messages, test, keys, whatsapp };
+  const google = () => googleScreen({ h, sb, api, busy, toast, field, fmt, state, render });
+  const screens = { inbox, activity, stories, business, accounts, google, messages, test, keys, whatsapp };
   main.append(await (screens[state.tab] ?? inbox)());
 }
 
@@ -205,7 +207,7 @@ async function business() {
 }
 
 async function accounts() {
-  const list = await accountsOf(state.ws);
+  const list = (await accountsOf(state.ws)).filter((a) => a.provider !== 'google');
   const connect = (e, kind) => busy(e.target, async () => {
     const { url } = await api('connect', { workspaceId: state.ws.id, kind, returnUrl: location.origin + location.pathname });
     location.href = url;
@@ -435,6 +437,8 @@ async function keys() {
   const ai = h('input', { class: 'input', type: 'password', autocomplete: 'off' });
   const igId = h('input', { class: 'input', autocomplete: 'off' });
   const igSecret = h('input', { class: 'input', type: 'password', autocomplete: 'off' });
+  const gId = h('input', { class: 'input', autocomplete: 'off' });
+  const gSecret = h('input', { class: 'input', type: 'password', autocomplete: 'off' });
   const st = state.status ?? {};
   return h('div', { class: 'card' }, h('h2', {}, 'Keys (desk owner only)'),
     h('p', { class: 'muted' }, 'Stored on the server; nobody can read them back here. Leave a box empty to keep the current value.'),
@@ -445,8 +449,11 @@ async function keys() {
     field(`Instagram App ID ${st.ig ? '✓ set' : ''}`, igId, 'Meta app → Use cases → Instagram → API setup with Instagram login.'),
     field(`Instagram App Secret ${st.ig ? '✓ set' : ''}`, igSecret),
     h('p', { class: 'muted' }, `Instagram login "Redirect URL": ${st.redirectIg ?? ''}`),
+    field(`Google OAuth client ID ${st.google ? '✓ set' : ''}`, gId, 'Google Cloud → Google Auth Platform → Clients (Web application).'),
+    field(`Google OAuth client secret ${st.google ? '✓ set' : ''}`, gSecret),
+    h('p', { class: 'muted' }, `Google "Authorised redirect URI": ${st.redirectGoogle ?? ''}`),
     h('button', { class: 'btn btn--primary', onclick: (e) => busy(e.target, async () => {
-      await api('secrets', { meta_app_id: appId.value, meta_app_secret: appSecret.value, ig_app_id: igId.value, ig_app_secret: igSecret.value, anthropic_api_key: ai.value });
+      await api('secrets', { meta_app_id: appId.value, meta_app_secret: appSecret.value, ig_app_id: igId.value, ig_app_secret: igSecret.value, anthropic_api_key: ai.value, google_client_id: gId.value, google_client_secret: gSecret.value });
       state.status = await api('status'); toast('Keys saved.');
     }) }, 'Save keys'),
     h('h3', {}, 'Run now'),
