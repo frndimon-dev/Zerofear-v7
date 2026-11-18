@@ -5,6 +5,9 @@ import * as meta from '../../../../../lib/social/meta';
 
 // Google / Facebook send the owner back here after they allow access.
 export const GET: APIRoute = async ({ url, params, redirect }) => {
+  // Google Business Profile now lives in Business Desk: hand Google's answer over to it
+  // (this address is the redirect URI registered in Google Cloud, so it stays).
+  if (params.provider === 'google') return redirect(`https://wzesyetbiyxdgjyuhqoz.supabase.co/functions/v1/desk/oauth-google${url.search}`, 302);
   const back = (msg: string, ok: boolean) => redirect(`/admin?${new URLSearchParams({ [ok ? 'connected' : 'connect_error']: msg })}#social`);
   try {
     const state = readState(url.searchParams.get('state') ?? '');
