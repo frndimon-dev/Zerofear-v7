@@ -200,10 +200,15 @@ export async function google({ h, sb, api, busy, toast, field, fmt, state, rende
       h('span', { class: 'pill' }, `${p.topic && p.topic !== 'STANDARD' ? `${TOPIC[p.topic]} · ` : ''}${POST_STATUS[p.status] ?? p.status}`),
       h('p', { class: 'muted', style: 'flex-basis:100%;margin:2px 0' }, p.text.slice(0, 220) + (p.text.length > 220 ? '…' : '')),
       p.error && h('p', { class: 'muted', style: 'flex-basis:100%;color:#c0392b;margin:2px 0' }, p.error),
-      (p.status === 'failed' || p.status === 'draft') && h('button', { class: 'btn btn--small', onclick: async () => {
-        const { error } = await sb.from('gbp_posts').update({ status: 'scheduled', attempts: 0, error: null, scheduled_at: new Date().toISOString() }).eq('id', p.id);
-        if (error) toast(error.message, true); else toast('It will go out within 5 minutes.');
-      } }, p.status === 'draft' ? 'Send now' : 'Retry'),
+      (p.status === 'failed' || p.status === 'draft') && h('button', { class: 'btn btn--small', onclick: (e) => busy(e.target, async () => {
+        const patch = { status: 'scheduled', attempts: 0, error: null, scheduled_at: new Date().toISOString() };
+        if (!p.media_path && p.library_media_id) { // crop the library photo to 1200×900 first
+          const { data: m } = await sb.from('media').select('path').eq('id', p.library_media_id).maybeSingle();
+          if (m?.path) { const { data: su } = await sb.storage.from('library').createSignedUrl(m.path, 600); if (su?.signedUrl) patch.media_path = await cropUpload(sb, ws.id, su.signedUrl); }
+        }
+        const { error } = await sb.from('gbp_posts').update(patch).eq('id', p.id); if (error) throw error;
+        toast('It will go out within 5 minutes.'); render();
+      }) }, p.status === 'draft' ? 'Send now' : 'Retry'),
       p.status === 'scheduled' && h('button', { class: 'btn btn--small', onclick: async () => {
         const { error } = await sb.from('gbp_posts').update({ status: 'pending' }).eq('id', p.id); if (error) toast(error.message, true); else render();
       } }, 'Hold'),
