@@ -30,6 +30,14 @@ async function to1200x900(file) {
   return await new Promise((res) => c.toBlob(res, 'image/jpeg', 0.86));
 }
 
+async function cropUpload(sb, wsId, srcUrl) {
+  const res = await fetch(srcUrl); if (!res.ok) throw new Error('Could not load the photo.');
+  const blob = await to1200x900(await res.blob());
+  const path = `${wsId}/gbp/${crypto.randomUUID()}.jpg`;
+  const up = await sb.storage.from('library').upload(path, blob, { contentType: 'image/jpeg' }); if (up.error) throw up.error;
+  return path;
+}
+
 export async function google({ h, sb, api, busy, toast, field, fmt, state, render }) {
   const ws = state.ws;
   const [{ data: locs }, { data: posts }, { data: reviews }, { data: lib }] = await Promise.all([
@@ -44,7 +52,7 @@ export async function google({ h, sb, api, busy, toast, field, fmt, state, rende
 
   // Signed links for every picture shown here (private library bucket).
   const libById = Object.fromEntries((lib ?? []).map((m) => [m.id, m]));
-  const extraIds = pending.flatMap((p) => p.extras ?? []).filter((id) => !libById[id]);
+  const extraIds = pending.flatMap((p) => [...(p.extras ?? []), p.library_media_id]).filter((id) => id && !libById[id]);
   if (extraIds.length) { const { data } = await sb.from('media').select('id, path, kind, thumb_path').in('id', extraIds); (data ?? []).forEach((m) => { libById[m.id] = m; }); }
   const paths = [...new Set([...pending.map((p) => p.media_path), ...Object.values(libById).map((m) => (m.kind === 'video' ? m.thumb_path : m.path))].filter(Boolean))];
   const urls = {};
@@ -83,22 +91,26 @@ export async function google({ h, sb, api, busy, toast, field, fmt, state, rende
     const warn = h('p', { class: 'muted' });
     const check = () => { const x = problems(box.value); warn.textContent = x.length ? `⚠ ${x.join(' ')}` : `${box.value.length}/1500`; warn.style.color = x.length ? '#c0392b' : ''; };
     box.addEventListener('input', check); check();
-    const img = h('img', { src: urls[p.media_path] ?? '', alt: '', style: `width:100%;max-width:480px;aspect-ratio:4/3;object-fit:cover;border-radius:10px;background:#eee;display:${p.media_path ? 'block' : 'none'}` });
+    let srcUrl = urls[p.media_path] ?? thumbOf(libById[p.library_media_id]) ?? '';
+    let cropped = !!p.media_path;
+    const img = h('img', { src: srcUrl, alt: '', style: `width:100%;max-width:480px;aspect-ratio:4/3;object-fit:cover;object-position:50% 35%;border-radius:10px;background:#eee;display:${srcUrl ? 'block' : 'none'}` });
     const extras = (p.extras ?? []).map((id) => libById[id]).filter(Boolean);
     return h('div', { class: 'card' },
       h('p', {}, h('b', {}, `${fmt(p.scheduled_at)} · ${p.accounts?.name ?? ''}`), ' ', h('span', { class: 'pill' }, p.theme ? `topic: ${p.theme}` : '')),
-      img, p.media_path ? null : h('p', { class: 'muted' }, 'No photo (the library had none left). Tap "Another photo".'),
+      img, srcUrl ? null : h('p', { class: 'muted' }, 'No photo (the library had none left). Tap "Another photo".'),
       extras.length ? h('div', {}, h('p', { class: 'muted', style: 'margin:8px 0 4px' }, 'Also goes to the profile\'s Photos:'),
         h('div', { style: 'display:flex;gap:6px' }, extras.map((m) => h('img', { src: thumbOf(m) ?? '', alt: m.kind, title: m.kind === 'video' ? 'video' : 'photo', style: `${thumbStyle};cursor:default` })))) : null,
       box, warn,
       h('p', {},
         h('button', { class: 'btn btn--primary', onclick: (e) => busy(e.target, async () => {
           const x = problems(box.value); if (x.length) throw new Error(x.join(' '));
-          const { error } = await sb.from('gbp_posts').update({ text: box.value.trim(), status: 'scheduled' }).eq('id', p.id); if (error) throw error;
+          const patch = { text: box.value.trim(), status: 'scheduled' };
+          if (!cropped && srcUrl) { patch.media_path = await cropUpload(sb, ws.id, srcUrl); cropped = true; } // 1200×900 for Google
+          const { error } = await sb.from('gbp_posts').update(patch).eq('id', p.id); if (error) throw error;
           toast(`Approved. It goes out ${fmt(p.scheduled_at)}.`);
         }) }, '✓ Approve'), ' ',
         h('button', { class: 'btn', onclick: (e) => busy(e.target, async () => { const r = await api('google-rewrite', { postId: p.id }); box.value = r.text; check(); }) }, '✨ Rewrite'), ' ',
-        h('button', { class: 'btn', onclick: (e) => busy(e.target, async () => { const r = await api('google-rephoto', { postId: p.id }); img.src = r.url; img.style.display = 'block'; }) }, '🖼 Another photo'), ' ',
+        h('button', { class: 'btn', onclick: (e) => busy(e.target, async () => { const r = await api('google-rephoto', { postId: p.id }); srcUrl = r.url; cropped = false; img.src = r.url; img.style.display = 'block'; }) }, '🖼 Another photo'), ' ',
         h('button', { class: 'btn btn--danger', onclick: (e) => busy(e.target, async () => {
           const { error } = await sb.from('gbp_posts').update({ status: 'skipped' }).eq('id', p.id); if (error) throw error; render();
         }) }, 'Skip')));
@@ -146,7 +158,8 @@ export async function google({ h, sb, api, busy, toast, field, fmt, state, rende
   const strip = h('div', { style: 'display:flex;gap:6px;overflow-x:auto;padding:4px 0 10px' }, photos.map((m) => {
     const im = h('img', { src: urls[m.path], alt: '', loading: 'lazy', style: thumbStyle });
     im.addEventListener('click', () => busy(im, async () => {
-      const r = await api('google-crop', { workspaceId: ws.id, mediaId: m.id }); setPhoto(r.media_path, r.url, m.id);
+      const path = await cropUpload(sb, ws.id, urls[m.path]);
+      const { data } = await sb.storage.from('library').createSignedUrl(path, 3600); setPhoto(path, data.signedUrl, m.id);
       strip.querySelectorAll('img').forEach((x) => { x.style.borderColor = x === im ? '#2563eb' : 'transparent'; });
     }));
     return im;
