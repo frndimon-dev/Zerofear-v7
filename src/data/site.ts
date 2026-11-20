@@ -358,13 +358,14 @@ export const offer = {
   newPrice: '₹3000',
   save: '₹1000',
   from: '2026-11-15',
-  to: '2026-11-20', // last day of the offer (inclusive)
-  untilText: '20 November',
+  to: '2026-11-22', // last day of the offer (inclusive); owner extended it to Sunday 22 Nov
+  untilText: '22 November',
   // Photo for the offer card (the full poster is for WhatsApp / social: /images/offers/zerofear-festive-nov2026.jpg).
   image: '/images/hero-trainer-guiding.webp',
   imageAlt: 'Zero Fear trainer guiding a beginner on a scooty',
-  poster: '/images/offers/zerofear-festive-nov2026-720.jpg',
-  posterAlt: 'Zero Fear Festive Season offer: flat ₹1000 off, ₹4000 now ₹3000, valid till 20th November',
+  // The printed poster says "till 20th November"; while the offer runs to the 22nd, show the class photo instead.
+  poster: '/images/hero-trainer-guiding.webp',
+  posterAlt: 'Zero Fear trainer guiding a beginner on a scooty',
 } as {
   id: string; title: string; line: string; oldPrice: string; newPrice: string; save: string;
   from: string; to: string; untilText: string; image: string; imageAlt: string; poster: string; posterAlt: string;
