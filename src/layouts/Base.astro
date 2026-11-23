@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import MobileBar from '../components/MobileBar.astro';
 import OfferTab from '../components/OfferTab.astro';
-import { site } from '../data/site';
+import { site, ads } from '../data/site';
 // Importing the CMS first applies admin-panel edits before any component renders.
 import { usedFonts, blogFont } from '../cms';
 import { googleFontsHref, fonts } from '../cms/fonts';
@@ -81,6 +81,25 @@ const localBusiness = {
     <style set:html={`:root{--font-blog:${fonts[blogFont].css};--font-blog-weight:${fonts[blogFont].weight}}`}></style>
 
     <script type="application/ld+json" set:html={JSON.stringify(localBusiness)} />
+    {ads.googleAdsId && (
+      <>
+        <!-- Google Ads: counts taps on phone and WhatsApp links as conversions (only when an Ads ID is set in site.ts). -->
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ads.googleAdsId}`}></script>
+        <script is:inline define:vars={{ id: ads.googleAdsId, call: ads.callLabel, wa: ads.whatsappLabel }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){ dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', id);
+          document.addEventListener('click', function (e) {
+            var a = e.target.closest && e.target.closest('a[href]');
+            if (!a) return;
+            var href = a.getAttribute('href') || '';
+            var label = href.indexOf('tel:') === 0 ? call : /wa\.me|api\.whatsapp\.com/.test(href) ? wa : '';
+            if (label) gtag('event', 'conversion', { send_to: id + '/' + label });
+          }, true);
+        </script>
+      </>
+    )}
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>

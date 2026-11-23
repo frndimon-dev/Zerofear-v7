@@ -370,3 +370,12 @@ export const offer = {
   id: string; title: string; line: string; oldPrice: string; newPrice: string; save: string;
   from: string; to: string; untilText: string; image: string; imageAlt: string; poster: string; posterAlt: string;
 } | null;
+
+// Google Ads conversion tracking. Leave googleAdsId empty to load nothing.
+// Fill these from Google Ads → Goals → Conversions (tag "AW-XXXXXXXXX" and each action's label).
+// A conversion is counted when a visitor taps a phone link (tel:) or a WhatsApp link (wa.me).
+export const ads = {
+  googleAdsId: '', // e.g. 'AW-123456789'
+  callLabel: '', // label of the "Phone call clicks" conversion action
+  whatsappLabel: '', // label of the "WhatsApp clicks" conversion action
+};
