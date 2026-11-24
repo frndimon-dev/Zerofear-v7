@@ -4,6 +4,7 @@
 import { createClient } from './vendor/supabase.js'; // @supabase/supabase-js 2.117.0, bundled
 import { stories as storiesScreen } from './stories.js?v=20261103e';
 import { google as googleScreen } from './google.js?v=20261119d';
+import { footage as footageScreen } from './footage.js?v=20261124a';
 
 const SUPABASE_URL = 'https://wzesyetbiyxdgjyuhqoz.supabase.co';
 const PUBLISHABLE_KEY = 'sb_publishable_WtpK81HvXHXHn-aroHl9MA_Nkt7UyKD';
@@ -75,6 +76,7 @@ async function render() {
   if (!state.ws) { root.replaceChildren(h('p', { class: 'center' }, 'You are not a member of any business yet. Ask the desk owner to add your e-mail.')); return; }
   const { count } = await sb.from('comments').select('id', { count: 'exact', head: true }).eq('workspace_id', state.ws.id).in('status', ['held', 'failed']);
   const tabs = [['inbox', 'Needs you', count], ['activity', 'Activity'], ['stories', 'Stories'], ['business', 'Replies & rules'], ['accounts', 'Accounts'], ['google', 'Google'], ['messages', 'Messages'], ['test', 'Try a comment'], ['whatsapp', 'WhatsApp']];
+  if (state.status?.isAdmin) tabs.splice(3, 0, ['footage', 'Footage']);
   if (state.status?.isAdmin) tabs.push(['keys', 'Keys']);
   const main = h('main', {});
   root.replaceChildren(
@@ -89,7 +91,8 @@ async function render() {
   if (state.msg) main.append(h('p', { class: `toast ${state.msg.isError ? 'is-error' : ''}` }, state.msg.text));
   const stories = () => storiesScreen({ h, sb, api, busy, toast, field, fmt, state, render });
   const google = () => googleScreen({ h, sb, api, busy, toast, field, fmt, state, render });
-  const screens = { inbox, activity, stories, business, accounts, google, messages, test, keys, whatsapp };
+  const footage = () => footageScreen({ h, sb, api, busy, toast, field, fmt, state, render });
+  const screens = { inbox, activity, stories, footage, business, accounts, google, messages, test, keys, whatsapp };
   main.append(await (screens[state.tab] ?? inbox)());
 }
 
