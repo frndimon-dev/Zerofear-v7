@@ -2,8 +2,9 @@
 // Videos stay in Google Photos; this screen shows them straight from there. Each clip has what is said (Sarvam),
 // who is in it (faces), what happens and a reel idea (Claude). Server: supabase/functions/footage (lib_* actions).
 const SUPABASE_URL = 'https://wzesyetbiyxdgjyuhqoz.supabase.co';
-const KIND = { tip: 'টিপস', first_day: 'প্রথম দিন', transformation: 'আগে-পরে', review: 'রিভিউ', interview: 'ইন্টারভিউ', practice: 'প্র্যাকটিস', fear: 'ভয়', fun: 'মজা', other: 'অন্যান্য' };
+const KIND = { tip: 'টিপস ও ট্রিকস', first_day: 'প্রথম দিন', transformation: 'আগে-পরে', review: 'রিভিউ', interview: 'ইন্টারভিউ', practice: 'প্র্যাকটিস', fear: 'ভয়', fun: 'মজা', other: 'অন্যান্য' };
 const TAGS = { height: 'হাইট', saree: 'শাড়ি', bike: 'বাইক', scooty: 'স্কুটি', brake: 'ব্রেক', u_turn: 'ইউ-টার্ন', balance: 'ব্যালান্স', clutch_gear: 'ক্লাচ-গিয়ার', main_road: 'বড় রাস্তা', traffic: 'ট্রাফিক', rain: 'বৃষ্টি', night: 'রাত', senior: 'বয়স্ক', fall: 'পড়ে যাওয়া', smile: 'হাসি', landmark: 'চেনা জায়গা' };
+const en = (t) => String(t ?? '').replace(/[০-৯]/g, (d) => '০১২৩৪৫৬৭৮৯'.indexOf(d));
 const css = `
 .fb-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.fb-top input{flex:1;min-width:180px}
 .fb-chips{display:flex;gap:6px;overflow-x:auto;padding:6px 0;scrollbar-width:none}.fb-chips button{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font:inherit;font-size:.85rem;cursor:pointer}
@@ -65,7 +66,7 @@ export async function footage({ h, sb, busy, toast }) {
     for (const c of r.clips) {
       if (body.sort === 'new' && c.day !== lastDay) { lastDay = c.day; grid.append(h('div', { class: 'fb-day' }, dayLabel(c.day))); box = null; }
       if (!box) { box = h('div', { class: 'fb-grid' }); grid.append(box); }
-      box.append(h('button', { class: 'fb-t', style: `background-image:url('${c.url}=w300-h400-no')`, title: c.summary || '', onclick: () => open(c.id) },
+      box.append(h('button', { class: 'fb-t', style: `background-image:url('${c.url}=w300-h400-no')`, title: en(c.summary), onclick: () => open(c.id) },
         c.score != null && h('span', { class: `s ${c.score >= 7 ? 'hi' : ''}` }, `${c.score}`),
         c.used_in && h('span', { class: 'u' }, 'ব্যবহৃত'),
         h('span', { class: 'k' }, (c.transcript ? '💬 ' : '') + (KIND[c.kind] || '')),
@@ -90,21 +91,25 @@ export async function footage({ h, sb, busy, toast }) {
       h('div', { class: 'fb-row', style: 'justify-content:space-between;margin:0 0 8px' },
         h('b', {}, `${dayLabel(c.day)} · ${new Date(c.taken_at).toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Kolkata' })} · ${secs(c.dur_s)}`),
         h('button', { class: 'btn btn--small', onclick: () => modal.remove() }, '✕')),
-      h('video', { src: `${c.url}=m22`, poster: `${c.url}=w720-no`, controls: true, playsinline: true, preload: 'metadata' }),
-      h('p', {}, c.summary || ''),
-      c.idea && h('div', { class: 'fb-idea' }, '💡 ', c.idea),
+      (() => { const v = h('video', { src: `${c.url}=m22`, poster: `${c.url}=w720-no`, controls: true, playsinline: true, preload: 'metadata' });
+        const alt = h('a', { class: 'btn btn--primary', style: 'display:none;width:100%;margin-top:8px', href: `${c.url}=m22`, target: '_blank', rel: 'noopener noreferrer' }, '▶ ভিডিও চালান (নতুন পাতায়)');
+        v.addEventListener('error', () => { alt.style.display = 'flex'; }, true);
+        return h('div', {}, v, alt, h('a', { class: 'muted', style: 'display:block;margin-top:4px;font-size:.8rem', href: `${c.url}=m22`, target: '_blank', rel: 'noopener noreferrer' }, 'ভিডিও না চললে এখানে চাপুন')); })(),
+      h('p', {}, en(c.summary)),
+      c.idea && h('div', { class: 'fb-idea' }, '💡 ', en(c.idea)),
+      h('p', { class: 'muted' }, '📍 ব্রাঞ্চ: ', c.branch || 'এখনও চেনা হয়নি (জায়গা চেনানোর ধাপের পরে দেখাবে)'),
       h('div', { class: 'chips' },
         c.kind && h('span', { class: 'chip' }, KIND[c.kind] || c.kind),
-        (c.tags || []).map((t) => h('span', { class: 'chip' }, TAGS[t] || t)),
+        (c.tags || []).filter((t) => TAGS[t]).map((t) => h('span', { class: 'chip' }, TAGS[t])),
         c.score != null && h('span', { class: 'chip' }, `স্কোর ${c.score}/10`),
         q.face_visible === false && h('span', { class: 'chip' }, 'মুখ দেখা যায় না'),
         q.shaky && h('span', { class: 'chip' }, 'কাঁপা'), q.dark && h('span', { class: 'chip' }, 'অন্ধকার'),
         q.place_hint && h('span', { class: 'chip' }, '📍 ' + q.place_hint)),
       h('h3', {}, 'কী বলা হয়েছে'),
-      said ? h('div', { class: 'fb-say' }, said) : h('p', { class: 'muted' }, noTalk),
+      said ? h('div', { class: 'fb-say' }, en(said)) : h('p', { class: 'muted' }, noTalk),
       r.people.length ? h('p', { class: 'muted' }, `এই ক্লিপে ${r.people.length} জন (মুখ চেনা হয়েছে)। নাম দেওয়ার পাতা আসছে।`) : null,
       h('div', { class: 'fb-row' }, usedBtn,
-        h('a', { class: 'btn btn--small', href: `${c.url}=dv`, target: '_blank', rel: 'noopener' }, 'আসল ভিডিও খুলুন')));
+        h('a', { class: 'btn btn--small', href: `${c.url}=dv`, target: '_blank', rel: 'noopener noreferrer' }, 'আসল ভিডিও খুলুন')));
   }
 
   call('lib_stats').then((s) => {
