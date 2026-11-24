@@ -6,7 +6,7 @@ const KIND = { tip: 'টিপস ও ট্রিকস', first_day: 'প্র
 const TAGS = { height: 'হাইট', saree: 'শাড়ি', bike: 'বাইক', scooty: 'স্কুটি', brake: 'ব্রেক', u_turn: 'ইউ-টার্ন', balance: 'ব্যালান্স', clutch_gear: 'ক্লাচ-গিয়ার', main_road: 'বড় রাস্তা', traffic: 'ট্রাফিক', rain: 'বৃষ্টি', night: 'রাত', senior: 'বয়স্ক', fall: 'পড়ে যাওয়া', smile: 'হাসি', landmark: 'চেনা জায়গা' };
 const en = (t) => String(t ?? '').replace(/[০-৯]/g, (d) => '০১২৩৪৫৬৭৮৯'.indexOf(d));
 const BRANCHES = [['tollygunge', 'টালিগঞ্জ'], ['rabindra-sarovar', 'রবীন্দ্র সরোবর'], ['patuli', 'পাটুলি'], ['new-town', 'নিউ টাউন'], ['barasat', 'বারাসাত'], ['sodepur', 'সোদপুর'], ['howrah', 'হাওড়া']];
-const ROLES = [['', '— কে? —'], ['trainer', 'ট্রেনার'], ['learner', 'শিক্ষার্থী'], ['ex_trainer', 'পুরনো ট্রেনার (কখনও দেখাবে না)'], ['staff', 'স্টাফ / সায়ন'], ['other', 'অন্য']];
+const ROLES = [['', '— কে? —'], ['owner', 'মালিক / কো-ওনার'], ['trainer', 'ট্রেনার'], ['learner', 'শিক্ষার্থী'], ['ex_trainer', 'পুরনো ট্রেনার (কখনও দেখাবে না)'], ['staff', 'স্টাফ'], ['other', 'অন্য']];
 const css = `
 .fb-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.fb-top input{flex:1;min-width:180px}
 .fb-chips{display:flex;gap:6px;overflow-x:auto;padding:6px 0;scrollbar-width:none}.fb-chips button{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font:inherit;font-size:.85rem;cursor:pointer}
@@ -129,7 +129,7 @@ export async function footage({ h, sb, busy, toast }) {
     const card = (p) => {
       const name = h('input', { value: p.name || '', placeholder: 'নাম (যেমন বিশ্বরূপ)' });
       const role = h('select', {}, ROLES.map(([v, l]) => h('option', { value: v, selected: (p.role || '') === v }, l)));
-      const br = h('select', {}, [['', '— ব্রাঞ্চ —'], ...BRANCHES].map(([v, l]) => h('option', { value: v, selected: (p.branch || '') === v }, l)));
+      const br = h('select', {}, [['', '— ব্রাঞ্চ —'], ['all', 'সব ব্রাঞ্চে যায়'], ...BRANCHES].map(([v, l]) => h('option', { value: v, selected: (p.branch || '') === v }, l)));
       const hide = h('input', { type: 'checkbox', checked: !!p.no_show, style: 'width:auto' });
       const msg = h('small', { class: 'muted' });
       const saveBtn = h('button', { class: 'btn btn--small btn--primary' }, 'সেভ');
@@ -146,7 +146,7 @@ export async function footage({ h, sb, busy, toast }) {
       return el;
     };
     pplBox.replaceChildren(
-      h('p', { class: 'muted' }, 'যাদের সবচেয়ে বেশি দেখা গেছে। ট্রেনারদের নাম আর ব্রাঞ্চ দিন: তাদের সব ক্লিপে ব্রাঞ্চ নিজে বসে যাবে। একই মানুষ দুবার এলে দুটোতেই একই নাম দিন।'),
+      h('p', { class: 'muted' }, 'যাদের সবচেয়ে বেশি দেখা গেছে। যে ট্রেনার একটাই ব্রাঞ্চে ক্লাস নেয়, তার নাম আর ব্রাঞ্চ দিন: তার সব ক্লিপে ব্রাঞ্চ নিজে বসে যাবে। মালিক/কো-ওনার (যেমন সায়ন) বা যে ট্রেনার সব ব্রাঞ্চে যায়, তাদের ব্রাঞ্চে "সব ব্রাঞ্চে যায়" দিন: তাদের মুখ দেখে ব্রাঞ্চ ঠিক হবে না। একই মানুষ দুবার এলে দুটোতেই একই নাম দিন।'),
       h('div', { class: 'fb-ppl' }, r.people.map(card)));
   }
 
