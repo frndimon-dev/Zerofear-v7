@@ -4,7 +4,7 @@
 import { createClient } from './vendor/supabase.js'; // @supabase/supabase-js 2.117.0, bundled
 import { stories as storiesScreen } from './stories.js?v=20261103e';
 import { google as googleScreen } from './google.js?v=20261119d';
-import { footage as footageScreen } from './footage.js?v=20261124d';
+import { footage as footageScreen } from './footage.js?v=20261124e';
 
 const SUPABASE_URL = 'https://wzesyetbiyxdgjyuhqoz.supabase.co';
 const PUBLISHABLE_KEY = 'sb_publishable_WtpK81HvXHXHn-aroHl9MA_Nkt7UyKD';

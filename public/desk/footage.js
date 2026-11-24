@@ -106,7 +106,7 @@ export async function footage({ h, sb, busy, toast }) {
         return h('div', {}, v, alt, h('a', { class: 'muted', style: 'display:block;margin-top:4px;font-size:.8rem', href: `${c.url}=m22`, target: '_blank', rel: 'noopener noreferrer' }, 'ভিডিও না চললে এখানে চাপুন')); })(),
       h('p', {}, en(c.summary)),
       c.idea && h('div', { class: 'fb-idea' }, '💡 ', en(c.idea)),
-      h('p', { class: 'muted' }, '📍 ব্রাঞ্চ: ', c.branch ? (Object.fromEntries(BRANCHES)[c.branch] || c.branch) : 'এখনও চেনা হয়নি (👤 মানুষ চেনান-এ ট্রেনারের ব্রাঞ্চ দিলে বসবে)'),
+      h('p', { class: 'muted' }, '📍 ব্রাঞ্চ: ', c.branch ? (Object.fromEntries(BRANCHES)[c.branch] || c.branch) + (c.branch_why === 'default' ? ' (সম্ভবত — কোনো ব্রাঞ্চের ট্রেনার দেখা যায়নি)' : c.branch_why && c.branch_why.startsWith('trainer') ? ` (${c.branch_why.replace('trainer', 'ট্রেনার').trim()})` : c.branch_why === 'same shoot' ? ' (একই শ্যুটের অন্য ক্লিপে সেখানকার ট্রেনার আছে)' : '') : 'এখনও চেনা হয়নি (👤 মানুষ চেনান-এ ট্রেনারের ব্রাঞ্চ দিলে বসবে)'),
       h('div', { class: 'chips' },
         c.kind && h('span', { class: 'chip' }, KIND[c.kind] || c.kind),
         (c.tags || []).filter((t) => TAGS[t]).map((t) => h('span', { class: 'chip' }, TAGS[t])),
