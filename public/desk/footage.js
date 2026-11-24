@@ -88,7 +88,7 @@ export async function footage({ h, sb, busy, toast }) {
     usedBtn.onclick = () => busy(usedBtn, async () => { await call('lib_mark', { id, used_in: c.used_in ? '' : 'used' }); modal.remove(); load(true); });
     sheet.replaceChildren(
       h('div', { class: 'fb-row', style: 'justify-content:space-between;margin:0 0 8px' },
-        h('b', {}, `${dayLabel(c.day)} · ${new Date(c.taken_at).toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' })} · ${secs(c.dur_s)}`),
+        h('b', {}, `${dayLabel(c.day)} · ${new Date(c.taken_at).toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Kolkata' })} · ${secs(c.dur_s)}`),
         h('button', { class: 'btn btn--small', onclick: () => modal.remove() }, '✕')),
       h('video', { src: `${c.url}=m22`, poster: `${c.url}=w720-no`, controls: true, playsinline: true, preload: 'metadata' }),
       h('p', {}, c.summary || ''),
