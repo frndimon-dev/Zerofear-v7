@@ -351,21 +351,20 @@ export const formatINR = (n: number) => '₹' + n.toLocaleString('en-IN');
 // Offer shown in the floating offer tab (bottom corner). It hides itself after `to` (India date),
 // so an old offer never stays on the site. Set `offer` to null when there is none.
 export const offer = {
-  id: 'festive-2026-11',
-  title: 'Festive Season Offer',
+  id: 'monthend-2026-11',
+  title: 'Month End Offer',
   line: 'Flat ₹1000 off on scooty & bike training',
   oldPrice: '₹4000',
   newPrice: '₹3000',
   save: '₹1000',
-  from: '2026-11-15',
-  to: '2026-11-22', // last day of the offer (inclusive); owner extended it to Sunday 22 Nov
-  untilText: '22 November',
-  // Photo for the offer card (the full poster is for WhatsApp / social: /images/offers/zerofear-festive-nov2026.jpg).
-  image: '/images/hero-trainer-guiding.webp',
-  imageAlt: 'Zero Fear trainer guiding a beginner on a scooty',
-  // The printed poster says "till 20th November"; while the offer runs to the 22nd, show the class photo instead.
-  poster: '/images/hero-trainer-guiding.webp',
-  posterAlt: 'Zero Fear trainer guiding a beginner on a scooty',
+  from: '2026-11-25',
+  to: '2026-11-30', // last day of the offer (inclusive); owner 25 Nov: month-end offer till 30 November
+  untilText: '30 November',
+  // Full poster (1080×1350) for WhatsApp / social: /images/offers/zerofear-monthend-nov2026.jpg
+  image: '/images/trainers-walk-alongside.webp',
+  imageAlt: 'Zero Fear trainers walking beside a learner on a scooty',
+  poster: '/images/offers/zerofear-monthend-nov2026-720.jpg',
+  posterAlt: 'Zero Fear Month End Offer: flat ₹1000 off on scooty and bike training, ₹4000 now ₹3000, valid till 30th November',
 } as {
   id: string; title: string; line: string; oldPrice: string; newPrice: string; save: string;
   from: string; to: string; untilText: string; image: string; imageAlt: string; poster: string; posterAlt: string;
