@@ -25,7 +25,7 @@ const css = `
 .fb-ppl{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
 .fb-p{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff;display:flex;flex-direction:column;gap:6px}
 .fb-p img{width:72px;height:72px;border-radius:50%;object-fit:cover;background:#ddd}
-.fb-views{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:4px 0 8px}.fb-views button{border:2px solid var(--line);background:#fff;border-radius:12px;padding:10px 6px;font:inherit;font-weight:800;font-size:.95rem;cursor:pointer;line-height:1.2}.fb-views button small{display:block;font-weight:500;font-size:.72rem;color:var(--muted,#667)}
+.fb-views{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:4px 0 8px}.fb-views button{border:2px solid var(--line);background:#fff;border-radius:12px;padding:10px 6px;font:inherit;font-weight:800;font-size:.95rem;cursor:pointer;line-height:1.2}.fb-views button small{display:block;font-weight:500;font-size:.72rem;color:var(--muted,#667)}
 .fb-views button.on{border-color:#e5254d;background:#fff1f3;color:#b0102f}
 .fb-t .v{left:4px;top:4px;background:#e5254d;font-weight:800}.fb-t .v.mid{background:#d97706}.fb-t .v.low{background:#6b7280}
 .fb-j{border:2px solid #f3c2cb;background:#fff8f9;border-radius:14px;padding:12px;margin:10px 0}
@@ -59,7 +59,7 @@ export async function footage({ h, sb, busy, toast }) {
   }, label)));
   const chips = h('div', {});
   f.view ??= 'make';
-  const VIEWS = [['make', '🔥 বানানোর মতো', 'ভাইরাল সম্ভাবনা আগে'], ['tips', '💡 টিপস ও ট্রিকস', 'শেখানোর ক্লিপ'], ['all', '🎞️ সব ফুটেজ', 'দিন ধরে']];
+  const VIEWS = [['journey', '🦋 আগে → পরে', 'একই জনের দিন-দিন'], ['make', '🔥 বানানোর মতো', 'ভাইরাল সম্ভাবনা আগে'], ['tips', '💡 টিপস ও ট্রিকস', 'শেখানোর ক্লিপ'], ['all', '🎞️ সব ফুটেজ', 'দিন ধরে']];
   const views = h('div', { class: 'fb-views' });
   const repaintViews = () => views.replaceChildren(...VIEWS.map(([v, t, sub]) => h('button', { class: f.view === v ? 'on' : '', onclick: () => { f.view = v; save(); repaintViews(); load(true); } }, t, h('small', {}, sub))));
   repaintViews();
@@ -79,7 +79,40 @@ export async function footage({ h, sb, busy, toast }) {
   const dayLabel = (d) => new Date(d + 'T12:00:00').toLocaleDateString('bn-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }).replace(/[০-৯]/g, (x) => '০১২৩৪৫৬৭৮৯'.indexOf(x));
   const secs = (s) => { s = Math.round(s || 0); return s >= 60 ? `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}` : `${s}s`; };
 
+  async function loadJourneys() {
+    grid.replaceChildren(h('p', { class: 'muted' }, 'খোঁজা হচ্ছে…')); more.style.display = 'none';
+    let r; try { r = await call('lib_journeys'); } catch (e) { grid.replaceChildren(h('p', { class: 'toast is-error' }, e.message)); return; }
+    if (!r.people.length) { grid.replaceChildren(h('p', { class: 'muted' }, 'এখনও তৈরি হচ্ছে — একই শিক্ষার্থীর প্রথম আর শেষ দিন মেলানো চলছে। একটু পরে দেখুন।')); return; }
+    grid.replaceChildren(h('p', { class: 'muted' }, `${r.people.length} জন শিক্ষার্থী — যার বদল সবচেয়ে চোখে পড়ে সে আগে`),
+      h('div', { class: 'fb-ppl' }, ...r.people.map((p) => { const j = p.journey;
+        return h('button', { class: 'fb-p', style: 'text-align:left;cursor:pointer;font:inherit', onclick: () => openJourney(p) },
+          h('div', { class: 'fb-ph' }, h('img', { src: p.cover_crop ? `data:image/jpeg;base64,${p.cover_crop}` : '', alt: '' }),
+            h('div', {}, h('b', {}, en(j.title)), h('div', { class: 'muted', style: 'font-size:.8rem' }, `${en(j.days)} দিন ক্যামেরায় · ${dayLabel(j.first.day)} → ${dayLabel(j.last.day)}`))),
+          h('div', {}, h('span', { class: 'chip', style: 'background:#e5254d;color:#fff' }, `🔥 ${j.viral_pct}%`), ' ', h('span', { class: 'chip' }, `বদল ${j.score}/10`)));
+      })));
+  }
+  function openJourney(p) {
+    const j = p.journey;
+    const vid = (c, s) => h('div', {}, h('b', {}, c === j.first ? `প্রথম দিন · ${dayLabel(c.day)}` : `শেষ দিন · ${dayLabel(c.day)}`),
+      h('video', { src: `${c.url}=m22#t=${Math.max(0, (s || 0) - 1)}`, controls: true, playsinline: true, preload: 'metadata', style: 'width:100%;max-height:45vh;background:#000;border-radius:10px' }),
+      h('div', { class: 'muted', style: 'font-size:.8rem' }, `সেরা মুহূর্ত: ${secs(s)}`));
+    const sheet = h('div', { class: 'fb-sheet' },
+      h('div', { class: 'fb-row', style: 'justify-content:space-between;margin:0 0 8px' }, h('b', {}, en(j.title)), h('button', { class: 'btn btn--small', onclick: () => modal.remove() }, '✕')),
+      h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px' }, vid(j.first, j.before_s), vid(j.last, j.after_s)),
+      h('div', { class: 'fb-j' },
+        h('div', { class: 'big' }, h('span', { class: 'pct' }, `${j.viral_pct}%`), h('span', {}, 'ভাইরাল হওয়ার সম্ভাবনা', h('br'), h('small', { class: 'muted' }, `বদল কতটা চোখে পড়ে: ${j.score}/10 · ${en(j.days)} দিনের ফুটেজ`))),
+        j.hook && h('div', { class: 'hook' }, '🎬 শুরুর লেখা: ', en(j.hook)),
+        h('p', {}, en(j.story)),
+        h('table', { style: 'width:100%;font-size:.88rem;border-collapse:collapse' }, h('tr', {}, h('th', { style: 'text-align:left' }, ''), h('th', { style: 'text-align:left' }, 'আগে'), h('th', { style: 'text-align:left' }, 'পরে')),
+          ...(j.changes || []).map((c) => h('tr', { style: 'border-top:1px solid #eee' }, h('td', {}, h('b', {}, en(c.what))), h('td', {}, en(c.before)), h('td', {}, en(c.after))))),
+        h('dl', {}, h('dt', {}, 'কীভাবে বানাবেন'), h('dd', { style: 'white-space:pre-wrap' }, en(j.plan)), h('dt', {}, 'কী কম আছে'), h('dd', {}, en(j.weak)))),
+      h('div', { class: 'fb-row' }, h('button', { class: 'btn btn--small', onclick: () => { modal.remove(); f.person = String(p.id); f.view = 'all'; save(); repaintViews(); repaintChips(); load(true); } }, 'এর সব ক্লিপ দেখুন')));
+    const modal = h('div', { class: 'fb-modal', onclick: (e) => { if (e.target === modal) modal.remove(); } }, sheet);
+    document.body.append(modal);
+  }
+
   async function load(reset) {
+    if ((f.view || 'all') === 'journey') return loadJourneys();
     if (reset) { page = 0; lastDay = ''; grid.replaceChildren(h('p', { class: 'muted' }, 'খোঁজা হচ্ছে…')); }
     const view = f.view || 'all';
     const body = { q: f.q, person: f.person || undefined, branch: f.branch || undefined, kind: (view === 'tips' ? 'tip' : f.kind) || undefined, tag: f.tag || undefined, page, best: f.mode === 'best', talk: f.mode === 'talk', unused: f.mode === 'unused', sort: view === 'make' ? 'viral' : view === 'tips' || f.mode === 'score' ? 'score' : 'new' };
