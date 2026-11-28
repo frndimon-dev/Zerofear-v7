@@ -65,6 +65,25 @@ export const gallery = [
   { src: '/images/gallery-proud-moment.webp', alt: 'Family filming a learner’s ride on a quiet tree-lined road' },
 ];
 
+// Stills from real Zero Fear classes (Tollygunge), shown on the /gallery page after the
+// "Training in action" photos. Full size + a smaller copy for the grid.
+export const classPhotos = [
+  { src: '/images/classes/zf-learner-smile.jpg', srcSm: '/images/classes/zf-learner-smile-sm.jpg', alt: "Happy learner talking about her rides. Zero Fear, Tollygunge", w: 900, h: 1600 },
+  { src: '/images/classes/zf-blue-scooty-trainer.jpg', srcSm: '/images/classes/zf-blue-scooty-trainer-sm.jpg', alt: "Learner on a blue scooty with her trainer. Zero Fear, Tollygunge", w: 900, h: 1600 },
+  { src: '/images/classes/zf-trainer-next-step.jpg', srcSm: '/images/classes/zf-trainer-next-step-sm.jpg', alt: "Trainer explaining the next step to a learner on a blue scooty. Zero Fear, Tollygunge", w: 900, h: 1600 },
+  { src: '/images/classes/zf-red-scooty-listening.jpg', srcSm: '/images/classes/zf-red-scooty-listening-sm.jpg', alt: "Learner on a red scooty listening to her trainer. Zero Fear, Tollygunge", w: 900, h: 1600 },
+  { src: '/images/classes/zf-first-push.jpg', srcSm: '/images/classes/zf-first-push-sm.jpg', alt: "Trainer watching a learner start off on a blue scooty. Zero Fear, Tollygunge", w: 900, h: 1600 },
+  { src: '/images/classes/zf-steady-handlebar.jpg', srcSm: '/images/classes/zf-steady-handlebar-sm.jpg', alt: "Trainer steadying the handlebar as a learner gets used to the scooty. Zero Fear, Tollygunge", w: 900, h: 1600 },
+  { src: '/images/classes/zf-balance-talk.jpg', srcSm: '/images/classes/zf-balance-talk-sm.jpg', alt: "Trainer explaining balance to an older learner. Zero Fear, Tollygunge", w: 1600, h: 900 },
+  { src: '/images/classes/zf-first-day.jpg', srcSm: '/images/classes/zf-first-day-sm.jpg', alt: "First-day learner on a blue scooty with his trainer. Zero Fear, Tollygunge", w: 900, h: 1600 },
+  { src: '/images/classes/zf-pink-scooty.jpg', srcSm: '/images/classes/zf-pink-scooty-sm.jpg', alt: "Trainer guiding a learner on a pink scooty. Zero Fear, Tollygunge", w: 900, h: 1600 },
+  { src: '/images/classes/zf-ready-to-ride.jpg', srcSm: '/images/classes/zf-ready-to-ride-sm.jpg', alt: "Learner and trainer with a blue scooty before a ride. Zero Fear, Tollygunge", w: 900, h: 1600 },
+  { src: '/images/classes/zf-handlebar-grip.jpg', srcSm: '/images/classes/zf-handlebar-grip-sm.jpg', alt: "Trainer showing a learner how to hold the handlebar. Zero Fear, Tollygunge", w: 900, h: 1600 },
+  { src: '/images/classes/zf-smiling-learner.jpg', srcSm: '/images/classes/zf-smiling-learner-sm.jpg', alt: "Smiling learner on a blue scooty with her trainer. Zero Fear, Tollygunge", w: 900, h: 1600 },
+  { src: '/images/classes/zf-balance-help.jpg', srcSm: '/images/classes/zf-balance-help-sm.jpg', alt: "Trainer helping a learner balance a blue scooty. Zero Fear, Tollygunge", w: 900, h: 1600 },
+  { src: '/images/classes/zf-black-scooty.jpg', srcSm: '/images/classes/zf-black-scooty-sm.jpg', alt: "Learner on a black scooty listening to her trainer. Zero Fear, Tollygunge", w: 900, h: 1600 },
+];
+
 export type Phase = { title: string; classes: string; text: string; outcome?: string };
 
 export type Course = {

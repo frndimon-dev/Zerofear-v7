@@ -3,17 +3,18 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Lightbox from '../components/Lightbox.astro';
-import { site } from '../data/site';
+import { site, classPhotos } from '../data/site';
 import { trainingGallery, photo, text as t } from '../cms';
 import { getPosts } from '../lib/blog';
 import type { Photo } from '../cms/schema';
 
 // Every class photo on the site, shown uncropped: the "Training in action"
-// photos first, then the mission cards and the photos from blog posts.
+// photos first, then the class stills, then the mission cards and the photos from blog posts.
 const posts = await getPosts();
 const seen = new Set<string>();
 const all: Photo[] = [
   ...trainingGallery,
+  ...classPhotos,
   ...[1, 2, 3, 4].map((i) => photo(`mission.c${i}`)),
   ...posts.flatMap((p) => p.data.gallery),
 ].filter((p) => p.src && !seen.has(p.src) && seen.add(p.src));
