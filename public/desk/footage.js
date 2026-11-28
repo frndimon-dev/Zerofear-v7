@@ -25,6 +25,15 @@ const css = `
 .fb-ppl{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
 .fb-p{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff;display:flex;flex-direction:column;gap:6px}
 .fb-p img{width:72px;height:72px;border-radius:50%;object-fit:cover;background:#ddd}
+.fb-views{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:4px 0 8px}.fb-views button{border:2px solid var(--line);background:#fff;border-radius:12px;padding:10px 6px;font:inherit;font-weight:800;font-size:.95rem;cursor:pointer;line-height:1.2}.fb-views button small{display:block;font-weight:500;font-size:.72rem;color:var(--muted,#667)}
+.fb-views button.on{border-color:#e5254d;background:#fff1f3;color:#b0102f}
+.fb-t .v{left:4px;top:4px;background:#e5254d;font-weight:800}.fb-t .v.mid{background:#d97706}.fb-t .v.low{background:#6b7280}
+.fb-j{border:2px solid #f3c2cb;background:#fff8f9;border-radius:14px;padding:12px;margin:10px 0}
+.fb-j .big{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.fb-j .pct{font-size:2rem;font-weight:900;color:#b0102f;line-height:1}
+.fb-j .vd{border-radius:999px;padding:3px 10px;font-weight:800;font-size:.85rem;color:#fff}.fb-j .vd.make{background:#0a7a3e}.fb-j .vd.fix{background:#d97706}.fb-j .vd.skip{background:#6b7280}
+.fb-j .hook{font-size:1.1rem;font-weight:800;margin:8px 0;background:#111;color:#ffd60a;border-radius:10px;padding:8px 10px}
+.fb-j dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:8px 0;font-size:.9rem}.fb-j dt{font-weight:700}
+.fb-bars{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:.78rem;margin-top:6px}.fb-bars i{display:inline-block;width:14px;height:8px;border-radius:2px;margin-right:2px;background:#e5e7eb}.fb-bars i.f{background:#e5254d}
 .fb-p.named{border-color:#0a7a3e}.fb-p .fb-ph{display:flex;gap:10px;align-items:center}
 .fb-p select,.fb-p input{font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;width:100%}`;
 
@@ -49,6 +58,11 @@ export async function footage({ h, sb, busy, toast }) {
     class: (f[key] ?? '') === v ? 'on' : '', onclick: () => { f[key] = (f[key] ?? '') === v && v !== '' ? '' : v; save(); load(true); repaintChips(); },
   }, label)));
   const chips = h('div', {});
+  f.view ??= 'make';
+  const VIEWS = [['journey', '🦋 আগে → পরে', 'একই জনের দিন-দিন'], ['make', '🔥 বানানোর মতো', 'ভাইরাল সম্ভাবনা আগে'], ['tips', '💡 টিপস ও ট্রিকস', 'শেখানোর ক্লিপ'], ['all', '🎞️ সব ফুটেজ', 'দিন ধরে']];
+  const views = h('div', { class: 'fb-views' });
+  const repaintViews = () => views.replaceChildren(...VIEWS.map(([v, t, sub]) => h('button', { class: f.view === v ? 'on' : '', onclick: () => { f.view = v; save(); repaintViews(); load(true); } }, t, h('small', {}, sub))));
+  repaintViews();
   const repaintChips = () => chips.replaceChildren(
     chipRow([['', 'সব'], ['best', '⭐ সেরা (7+)'], ['talk', '💬 কথা আছে'], ['unused', 'এখনও ব্যবহার হয়নি'], ['score', '↓ সেরা আগে']], 'mode'),
     chipRow([['', 'সব ধরন'], ...Object.entries(KIND)], 'kind'),
@@ -65,24 +79,72 @@ export async function footage({ h, sb, busy, toast }) {
   const dayLabel = (d) => new Date(d + 'T12:00:00').toLocaleDateString('bn-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }).replace(/[০-৯]/g, (x) => '০১২৩৪৫৬৭৮৯'.indexOf(x));
   const secs = (s) => { s = Math.round(s || 0); return s >= 60 ? `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}` : `${s}s`; };
 
+  async function loadJourneys() {
+    grid.replaceChildren(h('p', { class: 'muted' }, 'খোঁজা হচ্ছে…')); more.style.display = 'none';
+    let r; try { r = await call('lib_journeys'); } catch (e) { grid.replaceChildren(h('p', { class: 'toast is-error' }, e.message)); return; }
+    if (!r.people.length) { grid.replaceChildren(h('p', { class: 'muted' }, 'এখনও তৈরি হচ্ছে — একই শিক্ষার্থীর প্রথম আর শেষ দিন মেলানো চলছে। একটু পরে দেখুন।')); return; }
+    grid.replaceChildren(h('p', { class: 'muted' }, `${r.people.length} জন শিক্ষার্থী — যার বদল সবচেয়ে চোখে পড়ে সে আগে`),
+      h('div', { class: 'fb-ppl' }, ...r.people.map((p) => { const j = p.journey;
+        return h('button', { class: 'fb-p', style: 'text-align:left;cursor:pointer;font:inherit', onclick: () => openJourney(p) },
+          h('div', { class: 'fb-ph' }, h('img', { src: p.cover_crop ? `data:image/jpeg;base64,${p.cover_crop}` : '', alt: '' }),
+            h('div', {}, h('b', {}, en(j.title)), h('div', { class: 'muted', style: 'font-size:.8rem' }, `${en(j.days)} দিন ক্যামেরায় · ${dayLabel(j.first.day)} → ${dayLabel(j.last.day)}`))),
+          h('div', {}, h('span', { class: 'chip', style: 'background:#e5254d;color:#fff' }, `🔥 ${j.viral_pct}%`), ' ', h('span', { class: 'chip' }, `বদল ${j.score}/10`)));
+      })));
+  }
+  function openJourney(p) {
+    const j = p.journey;
+    const vid = (c, s) => h('div', {}, h('b', {}, c === j.first ? `প্রথম দিন · ${dayLabel(c.day)}` : `শেষ দিন · ${dayLabel(c.day)}`),
+      h('video', { src: `${c.url}=m22#t=${Math.max(0, (s || 0) - 1)}`, controls: true, playsinline: true, preload: 'metadata', style: 'width:100%;max-height:45vh;background:#000;border-radius:10px' }),
+      h('div', { class: 'muted', style: 'font-size:.8rem' }, `সেরা মুহূর্ত: ${secs(s)}`));
+    const sheet = h('div', { class: 'fb-sheet' },
+      h('div', { class: 'fb-row', style: 'justify-content:space-between;margin:0 0 8px' }, h('b', {}, en(j.title)), h('button', { class: 'btn btn--small', onclick: () => modal.remove() }, '✕')),
+      h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px' }, vid(j.first, j.before_s), vid(j.last, j.after_s)),
+      h('div', { class: 'fb-j' },
+        h('div', { class: 'big' }, h('span', { class: 'pct' }, `${j.viral_pct}%`), h('span', {}, 'ভাইরাল হওয়ার সম্ভাবনা', h('br'), h('small', { class: 'muted' }, `বদল কতটা চোখে পড়ে: ${j.score}/10 · ${en(j.days)} দিনের ফুটেজ`))),
+        j.hook && h('div', { class: 'hook' }, '🎬 শুরুর লেখা: ', en(j.hook)),
+        h('p', {}, en(j.story)),
+        h('table', { style: 'width:100%;font-size:.88rem;border-collapse:collapse' }, h('tr', {}, h('th', { style: 'text-align:left' }, ''), h('th', { style: 'text-align:left' }, 'আগে'), h('th', { style: 'text-align:left' }, 'পরে')),
+          ...(j.changes || []).map((c) => h('tr', { style: 'border-top:1px solid #eee' }, h('td', {}, h('b', {}, en(c.what))), h('td', {}, en(c.before)), h('td', {}, en(c.after))))),
+        h('dl', {}, h('dt', {}, 'কীভাবে বানাবেন'), h('dd', { style: 'white-space:pre-wrap' }, en(j.plan)), h('dt', {}, 'কী কম আছে'), h('dd', {}, en(j.weak)))),
+      h('div', { class: 'fb-row' }, h('button', { class: 'btn btn--small', onclick: () => { modal.remove(); f.person = String(p.id); f.view = 'all'; save(); repaintViews(); repaintChips(); load(true); } }, 'এর সব ক্লিপ দেখুন')));
+    const modal = h('div', { class: 'fb-modal', onclick: (e) => { if (e.target === modal) modal.remove(); } }, sheet);
+    document.body.append(modal);
+  }
+
   async function load(reset) {
+    if ((f.view || 'all') === 'journey') return loadJourneys();
     if (reset) { page = 0; lastDay = ''; grid.replaceChildren(h('p', { class: 'muted' }, 'খোঁজা হচ্ছে…')); }
-    const body = { q: f.q, person: f.person || undefined, branch: f.branch || undefined, kind: f.kind || undefined, tag: f.tag || undefined, page, best: f.mode === 'best', talk: f.mode === 'talk', unused: f.mode === 'unused', sort: f.mode === 'score' ? 'score' : 'new' };
+    const view = f.view || 'all';
+    const body = { q: f.q, person: f.person || undefined, branch: f.branch || undefined, kind: (view === 'tips' ? 'tip' : f.kind) || undefined, tag: f.tag || undefined, page, best: f.mode === 'best', talk: f.mode === 'talk', unused: f.mode === 'unused', sort: view === 'make' ? 'viral' : view === 'tips' || f.mode === 'score' ? 'score' : 'new' };
     let r;
     try { r = await call('lib_list', body); } catch (e) { grid.replaceChildren(h('p', { class: 'toast is-error' }, e.message)); return; }
-    if (reset) grid.replaceChildren(h('p', { class: 'muted' }, `${r.total}টা ক্লিপ`));
+    if (reset) grid.replaceChildren(h('p', { class: 'muted' }, view === 'make' ? `${r.total}টা ক্লিপ বিচার করা হয়েছে — সবচেয়ে ভাইরাল হওয়ার মতো আগে (বিচার চলছে, আরও আসবে)` : `${r.total}টা ক্লিপ`));
     let box = grid.lastElementChild?.classList?.contains('fb-grid') ? grid.lastElementChild : null;
     for (const c of r.clips) {
       if (body.sort === 'new' && c.day !== lastDay) { lastDay = c.day; grid.append(h('div', { class: 'fb-day' }, dayLabel(c.day))); box = null; }
       if (!box) { box = h('div', { class: 'fb-grid' }); grid.append(box); }
       box.append(h('button', { class: 'fb-t', style: `background-image:url('${c.url}=w300-h400-no')`, title: en(c.summary), onclick: () => open(c.id) },
-        c.score != null && h('span', { class: `s ${c.score >= 7 ? 'hi' : ''}` }, `${c.score}`),
+        c.judge?.total != null ? h('span', { class: `v ${c.judge.viral_pct >= 30 ? '' : c.judge.viral_pct >= 12 ? 'mid' : 'low'}` }, `🔥 ${c.judge.viral_pct}%`)
+          : c.score != null && h('span', { class: `s ${c.score >= 7 ? 'hi' : ''}` }, `${c.score}`),
         c.used_in && h('span', { class: 'u' }, 'ব্যবহৃত'),
         h('span', { class: 'k' }, (c.transcript ? '💬 ' : '') + (KIND[c.kind] || '')),
         h('span', { class: 'd' }, secs(c.dur_s))));
     }
     page += 1;
     more.style.display = page * r.size < r.total ? 'block' : 'none';
+  }
+
+  const HIT = { simi: 'Simi (9.48 লাখ)', pa_tullei: '"পা তুললেই পড়ে যাব?" (4.97 লাখ)', cycle: '"Cycle জানা লাগবে না" (11 লাখ)', height: '"4 ফুট 6 ইঞ্চি" (1.53 লাখ)', none: '—' };
+  const LINES = ['প্রথম ফ্রেমে থামাবে', 'প্রথম 3 সেকেন্ড দর্শকের ভয়', 'আসল কথা 8 সেকেন্ডে', 'একটাই কথা', 'ফাঁকা সেকেন্ড নেই', 'আবেগ', 'আসল মানুষ', 'বন্ধুকে পাঠাবে', 'কমেন্ট করবে', 'দৈর্ঘ্য ও শেষ'];
+  function judgeCard(j) {
+    if (!j || j.total == null) return null;
+    const vd = { make: 'বানান ✅', fix: 'ঠিক করে বানান', skip: 'বাদ দিন' }[j.verdict] || j.verdict;
+    return h('div', { class: 'fb-j' },
+      h('div', { class: 'big' }, h('span', { class: 'pct' }, `${j.viral_pct}%`), h('span', {}, 'ভাইরাল হওয়ার সম্ভাবনা', h('br'), h('small', { class: 'muted' }, `আন্দাজ: ${en(j.views)} ভিউ · স্কোর ${j.total}/20`)), h('span', { class: `vd ${j.verdict}` }, vd)),
+      j.title && h('h3', { style: 'margin:8px 0 0' }, en(j.title)),
+      j.hook && h('div', { class: 'hook' }, '🎬 শুরুর লেখা: ', en(j.hook)),
+      h('dl', {}, h('dt', {}, 'কেন চলবে'), h('dd', {}, en(j.why)), h('dt', {}, 'কী কম আছে'), h('dd', {}, en(j.weak)), h('dt', {}, 'কাছাকাছি হিট'), h('dd', {}, HIT[j.closest_hit] || j.closest_hit), h('dt', {}, 'কীভাবে বানাবেন'), h('dd', { style: 'white-space:pre-wrap' }, en(j.plan))),
+      h('details', {}, h('summary', {}, 'স্কোরকার্ড (10 লাইন)'), h('div', { class: 'fb-bars' }, ...LINES.flatMap((l, i) => [h('span', {}, l), h('span', {}, h('i', { class: j.lines[i] >= 1 ? 'f' : '' }), h('i', { class: j.lines[i] >= 2 ? 'f' : '' }))]))));
   }
 
   async function open(id) {
@@ -105,7 +167,8 @@ export async function footage({ h, sb, busy, toast }) {
         v.addEventListener('error', () => { alt.style.display = 'flex'; }, true);
         return h('div', {}, v, alt, h('a', { class: 'muted', style: 'display:block;margin-top:4px;font-size:.8rem', href: `${c.url}=m22`, target: '_blank', rel: 'noopener noreferrer' }, 'ভিডিও না চললে এখানে চাপুন')); })(),
       h('p', {}, en(c.summary)),
-      c.idea && h('div', { class: 'fb-idea' }, '💡 ', en(c.idea)),
+      judgeCard(c.judge),
+      !c.judge?.total && c.idea && h('div', { class: 'fb-idea' }, '💡 ', en(c.idea)),
       h('p', { class: 'muted' }, '📍 ব্রাঞ্চ: ', c.branch ? (Object.fromEntries(BRANCHES)[c.branch] || c.branch) + (c.branch_why === 'default' ? ' (সম্ভবত — কোনো ব্রাঞ্চের ট্রেনার দেখা যায়নি)' : c.branch_why && c.branch_why.startsWith('trainer') ? ` (${c.branch_why.replace('trainer', 'ট্রেনার').trim()})` : c.branch_why === 'same shoot' ? ' (একই শ্যুটের অন্য ক্লিপে সেখানকার ট্রেনার আছে)' : '') : 'এখনও চেনা হয়নি (👤 মানুষ চেনান-এ ট্রেনারের ব্রাঞ্চ দিলে বসবে)'),
       h('div', { class: 'chips' },
         c.kind && h('span', { class: 'chip' }, KIND[c.kind] || c.kind),
@@ -154,7 +217,7 @@ export async function footage({ h, sb, busy, toast }) {
     stats.textContent = `${s.done}টা ক্লিপ দেখা হয়েছে${s.new ? `, আর ${s.new}টা বাকি (পেছনে চলছে)` : ''}${s.sarvam_left != null ? ` · Sarvam-এ ₹${s.sarvam_left} বাকি` : ''}`;
   }).catch(() => { stats.textContent = ''; });
   out.append(
-    h('div', { class: 'card' }, h('h2', { style: 'margin:0 0 6px' }, 'ফুটেজ লাইব্রেরি'), stats,
+    h('div', { class: 'card' }, h('h2', { style: 'margin:0 0 6px' }, 'ফুটেজ লাইব্রেরি'), stats, views,
       h('div', { class: 'fb-top' }, search, h('button', { class: 'btn btn--primary', onclick: () => { f.q = search.value.trim(); save(); load(true); } }, 'খুঁজুন')),
       chips, h('div', { class: 'fb-row' }, pplBtn), pplBox),
     grid, more);
